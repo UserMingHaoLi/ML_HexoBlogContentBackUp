@@ -20,6 +20,8 @@ tags:
 
 <!--more-->
 
+> PS: GitHub使用的语法是 `GitHub-Flavored-Markdown`
+
 ## 标题
 
 使用 `#` 号来表示一个大号加粗的标题, 连续的 `#` 最多支持6个, 约多越小

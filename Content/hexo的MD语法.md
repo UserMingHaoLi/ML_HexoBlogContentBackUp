@@ -7,6 +7,7 @@ categories:
 tags: 
 	- hexo
 ---
+
 # hexo的MD语法
 
 目前我使用vscode进行写作, 为了避免每次使用hexo的指令生成文章模板,我需要知道一点基本的语法来手写hexo模板.
