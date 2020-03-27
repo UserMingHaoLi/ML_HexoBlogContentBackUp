@@ -1,7 +1,7 @@
 ﻿---
-title: Markdown高级
+title: Markdown进阶
 date: 2019-06-05 22:18:00
-updated: 2019-06-05 22:18:00
+updated: 2020-03-27 21:42:00
 categories:
 	- markdown
 tags: 
@@ -188,6 +188,7 @@ T3: 2014-01-02, 9d
 ```
 
 脚注[^j]
+
 
 [^j]: 脚注
 
