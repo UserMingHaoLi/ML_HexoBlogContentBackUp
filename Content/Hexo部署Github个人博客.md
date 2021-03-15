@@ -206,8 +206,13 @@ cmd输入 `ssh-keygen -t rsa -C "Github的注册邮箱地址"`
 
 网上搜索 `Hexo美化`, `hexo主题`, `Hexo themes`, 都可以收获很多内容,这里不细讲了
 
-> [Hexo_Next主题旧][Hexo_Next]  
-> [Hexo_Next主题新][Hexo_Next_New] 
+
+# 使用Next主题
+
+> [Hexo_Next主题(停止维护)][Hexo_Next]  
+> [Hexo_Next主题(社区维护)][Hexo_Next_New] 
+
+
 
 # 完毕
 
