@@ -212,7 +212,81 @@ cmd输入 `ssh-keygen -t rsa -C "Github的注册邮箱地址"`
 > [Hexo_Next主题(停止维护)][Hexo_Next]  
 > [Hexo_Next主题(社区维护)][Hexo_Next_New] 
 
+补一个[Hexo大全][Hexo_All_Link]
 
+首先下载Hexo. 需要保证进入Hexo文件夹.
+这一目录中应当有 `node_modules`、`source`、`themes` 等若干子目录
+
+然后使用如下命令,这将Clone整个GitHub库到 `themes/next` 文件夹
+
+```
+git clone https://github.com/theme-next/hexo-theme-next themes/next
+```
+
+然后在站点的配置文件 `_config.yml` 中找到 `theme` 后添加：
+
+```yml
+theme: next  # 配置成刚下载的next主题
+```
+*之后等待下载完毕即可*
+
+# 配置Next
+
+进入下载的 `next` 文件夹内, 需要设置 `_config.yml`.
+
+> 此时为 `next` 的 `_config.yml` ,而不是 `hexo` 的 `_config.yml`
+
+打开其中的这一块
+
+```
+menu:
+  home: / || home
+  about: /about/ || user
+  tags: /tags/ || tags
+  categories: /categories/ || th
+  archives: /archives/ || archive
+  #schedule: /schedule/ || calendar
+  sitemap: /sitemap.xml || sitemap
+  commonweal: /404/ || heartbeat
+
+```
+
+按需修改即可
+
+*我就打开了 `tags` 和 `categories`*
+
+之后要手动生成这些页面
+
+## 新建一个 tags 页面
+
+使用命令
+
+```
+hexo new page tags
+```
+
+修改创建出来的文件 `hexo/source/tags/index.md` 内容如下
+
+```
+---
+date: 2021-03-15 22:03:00   # 时间随意
+type: "tags"                # 类型一定要为tags
+---
+```
+
+## 新建一个 categories 页面
+
+基本是和上面相同的, 就是 `tags` 替换为了 `categories`
+
+> 吐槽以下, 实际上Hexo已经制动帮你创建好了
+
+> 先到此为止, 后面可能开以下搜索和评论.
+
+# 查看
+
+直接 `clean` `g` `s` 三连查看
+
+没问题就 `d` 部署.
 
 # 完毕
 
@@ -235,5 +309,6 @@ cmd输入 `ssh-keygen -t rsa -C "Github的注册邮箱地址"`
 [Git_Access_Tokens_Link]:https://github.com/settings/tokens "GitHub Access_Tokens编辑"
 [Hexo_Next]:https://github.com/iissnan/hexo-theme-next/blob/master/README.cn.md "HexoNext主题中文文档"
 [Hexo_Next_New]:https://github.com/theme-next/hexo-theme-next "HexoNext主题中文文档"
+[Hexo_All_Link]:https://tding.top/archives/aad98408.html "Hexo博客搭建大全"
 <!-- 水印 -->
 [ML-Blog_Link]:https://userminghaoli.github.io/ "我的博客"
