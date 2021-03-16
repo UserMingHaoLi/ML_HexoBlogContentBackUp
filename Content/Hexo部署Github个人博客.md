@@ -3,7 +3,7 @@ title: Hexo部署Github个人博客
 date: 2021-03-15 22:03:00
 updated: 2021-03-15 22:03:00
 categories:
-	- Hexo
+	- 工具部署
 tags: 
 	- Hexo
 ---

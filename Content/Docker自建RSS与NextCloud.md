@@ -3,8 +3,7 @@ title: Docker自建RSS与NextCloud
 date: 2019-10-09 20:39:00
 updated: 2019-10-09 20:39:00
 categories:
-	- 云服务器
-	- docker
+	- 工具部署
 tags: 
   - 云服务器
 	- docker

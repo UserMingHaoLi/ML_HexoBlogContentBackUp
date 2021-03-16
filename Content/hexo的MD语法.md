@@ -3,7 +3,7 @@ title: hexo的MD语法
 date: 2019-06-05 21:59:00
 updated: 2020-03-27 21:00:01
 categories:
-	- Hexo
+	- 写作基础
 tags: 
 	- Hexo
 ---

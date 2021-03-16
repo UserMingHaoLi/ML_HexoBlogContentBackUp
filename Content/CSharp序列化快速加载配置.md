@@ -3,7 +3,7 @@ title: CSharp序列化快速加载配置
 date: 2019-06-17 22:18:00
 updated: 2019-06-17 22:18:00
 categories:
-	- C#
+	- 小知识
 tags: 
 	- C#
 ---

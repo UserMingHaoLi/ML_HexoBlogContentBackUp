@@ -3,8 +3,7 @@ title: UML类图绘制
 date: 2019-06-15 18:37:00
 updated: 2019-06-15 18:37:00
 categories:
-	- Markdown
-	- UML
+	- 写作基础
 tags: 
 	- Markdown
 	- UML
