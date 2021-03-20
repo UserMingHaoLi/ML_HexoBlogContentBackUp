@@ -2,8 +2,8 @@
 
 ---
 title: hexo模板
-date: 2021-03-12 22:52:00
-updated: 2021-03-12 22:52:00
+date: 2021-03-20 22:52:00
+updated: 2021-03-20 22:52:00
 categories:
 	- hexo
 tags: 
@@ -205,7 +205,7 @@ stars:>=500 fork:true language:php
 按仓库创建或上次更新时间搜索
 * `created`表示创建
 * `pushed`表示推送
->这些时间任然可以精确到秒并且支持区间形式
+>这些时间仍然可以精确到秒并且支持区间形式
 ```c
 webos created:<2011-01-01 
 //匹配具有 "webos" 字样、在 2011 年之前创建的仓库。
@@ -281,7 +281,8 @@ is:not-curated javascript
 //匹配没有额外信息（例如说明或徽标）且含有 "javascript" 字样的主题。
 is:not-featured javascript 
 //匹配 https://github.com/topics/ 上未提供且含有 "javascript" 字样的主题。
-repositories:>5000 匹配超过 5000 个仓库的主题。
+repositories:>5000 
+//匹配超过 5000 个仓库的主题。
 Serverless created:>2019-01-01 
 //匹配含有 "serverless" 字样、在 2018 年之后创建的主题。
 ```
@@ -321,6 +322,8 @@ org:github extension:js
 repo:mozilla/shumway extension:as 
 //匹配来自 @mozilla 的 shumway 项目、以 .as 结尾的代码。
 ```
+
+
 
 # 完毕
 
