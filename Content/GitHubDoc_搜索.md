@@ -21,7 +21,7 @@ cats stars:>=1000
 cats topics:<=5
 ```
 
-或是简写方式,他们呢是等同的
+或是简写方式,他们是等同的
 ```c
 cats stars:1000..* 
 cats topics:*..5
@@ -139,6 +139,8 @@ feature sort:updated
 
 要在搜索结果中包括复刻，您需要将 `fork:true` 或 `fork:only` 添加到查询
 
+> GitHub只为Start数量大于源仓库的复刻添加索引.
+
 通过 `in` 限定符，您可以将搜索限制为仓库名称、仓库说明、自述文件内容或这些的任意组合。 如果省略此限定符，则只搜索仓库名称和说明。
 
 ```c
@@ -153,7 +155,6 @@ repo:octocat/hello-world
 ```
 
 要在特定用户或组织拥有的所有仓库中搜索，您可以使用 `user` 或 `org` 限定符
-
 
 ```c
 user:defunkt forks:>100 
@@ -243,10 +244,10 @@ license:apache-2.0
 ```
 
 据仓库的可见性过滤搜索
+> 这个也用的很多,下面不再重复
 * is:public
 * is:internal
 * is:private
->普通人不太用得上.
 
 基于仓库是否为镜像搜索
 * mirror:true
@@ -311,7 +312,7 @@ octocat in:file,path
 ```
 
 然后是基于用户的搜索
-
+> 后续会经常用到.不再重复
 ```c
 user:defunkt extension:rb 
 //匹配来自 @defunkt、以 .rb 结尾的代码。
@@ -435,21 +436,11 @@ tree:99ca967
 //匹配引用树哈希 99ca967 的提交
 ```
 
-在用户或组织的仓库内搜索,`user`,`org`,`repo`
-
-```c
-gibberish user:defunkt 
-//匹配 @defunkt 拥有的仓库中含有 "gibberish" 字样的提交消息。
-test org:github 
-//匹配 @github 拥有的仓库中含有 "test" 字样的提交消息。
-language repo:defunkt/gibberish 
-//匹配 @defunkt 的 "gibberish" 仓库中含有 "language" 字样的提交消息。
-```
+在用户或组织的仓库内搜索,`user`,`org`,`repo`  
+**老三样 略**
 
 按仓库可见性过滤
-* is:public
-* is:internal
-* is:private
+**老三样 略**
 
 ## 搜索议题或拉取请求
 
@@ -479,7 +470,7 @@ shipit in:comments
 
 `user` 或 `org` 搜索指定用户和仓库
 
-**略...上面讲过**
+**老三样 略**
 
 按开放或关闭状态搜索,`state`,`is`
 
@@ -705,8 +696,7 @@ build no:project
 ## 搜索用户
 
 仅搜索用户或组织
-* type:user
-* type:org
+**老三样 略**
 
 使用 user 或 org 限定符根据个人用户或组织帐户的名称过滤搜索  
 通过 in 限定符，您可以将搜索限制为用户名 (login)、全名、公共电子邮件或这些的任意组合
@@ -765,8 +755,6 @@ data in:email
 仅当复刻具有比父仓库更多的星号时，才会为代码搜索编索引。 您无法在比父项具有更少星号的复刻中搜索代码。 
 
 `fork:true` 限定符查找匹配搜索查询的所有结果，包括复刻。 `fork:only` 限定符仅查找匹配搜索查询的复刻。
-
-
 
 
 # 完毕
