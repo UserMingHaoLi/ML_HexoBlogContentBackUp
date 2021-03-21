@@ -1,13 +1,11 @@
-
-
 ---
-title: hexo模板
-date: 2021-03-12 22:52:00
-updated: 2021-03-12 22:52:00
+title: GitHubDoc
+date: 2021-03-17 22:52:00
+updated: 2021-03-17 22:52:00
 categories:
-	- hexo
+	- Docs
 tags: 
-	- hexo
+	- GitHub
 ---
 
 # 下载GitHubDeskTop

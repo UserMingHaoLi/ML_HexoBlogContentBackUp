@@ -1,11 +1,11 @@
 ---
-title: hexo模板
+title: C#本质论
 date: 2021-03-18 22:52:00
-updated: 2021-03-20 22:52:00
+updated: 2021-03-21 11:54:00
 categories:
-	- hexo
+	- 读书
 tags: 
-	- hexo
+	- C#
 ---
 
 重读C#本质论,还是能发现一些之前没有注意的点,记录以下
