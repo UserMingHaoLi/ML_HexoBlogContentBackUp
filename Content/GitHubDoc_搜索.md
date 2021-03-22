@@ -12,6 +12,8 @@ tags:
 
 可以前往 [GitHub高级搜索](https://github.com/search/advanced)
 
+<!--more-->
+
 ## 搜索语法
 
 你可以使用`>`,`>=`,`<`,`<=`这些来进行过滤

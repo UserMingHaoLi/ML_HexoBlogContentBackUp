@@ -282,6 +282,17 @@ type: "tags"                # 类型一定要为tags
 
 > 先到此为止, 后面可能开以下搜索和评论.
 
+# 为归档页面设置内容
+
+在Hexo设置中添加如下代码
+```yml
+archive_generator:
+  per_page: 50
+  <!-- yearly: true
+  monthly: true -->
+```
+>建议跟在`index_generator`块后面
+
 # 查看
 
 直接 `clean` `g` `s` 三连查看
