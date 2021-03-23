@@ -2,6 +2,7 @@
 title: Hexo部署Github个人博客
 date: 2021-03-15 22:03:00
 updated: 2021-03-15 22:03:00
+id: ml-20210315-220300-g6
 categories:
 	- 工具部署
 tags: 
@@ -299,6 +300,30 @@ archive_generator:
 直接 `clean` `g` `s` 三连查看
 
 没问题就 `d` 部署.
+
+# 使用`permalink`更改链接
+
+更改配置
+```yml
+permalink: :year/:month/:day/:category/:id/
+```
+
+```yml
+category_map:
+  C#: csharp
+```
+
+```yml
+---
+title:
+date:
+id:	#这个是新增的 
+tags: 
+categories: 
+---
+```
+
+建议格式 `id: ml-20210315-220300-g6`
 
 # 完毕
 
