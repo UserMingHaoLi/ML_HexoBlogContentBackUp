@@ -309,11 +309,6 @@ permalink: :year/:month/:day/:category/:id/
 ```
 
 ```yml
-category_map:
-  C#: csharp
-```
-
-```yml
 ---
 title:
 date:

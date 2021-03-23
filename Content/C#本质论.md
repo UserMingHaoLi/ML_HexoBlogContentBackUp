@@ -1,12 +1,12 @@
 ---
-title: C#本质论
+title: CSharp本质论
 date: 2021-03-18 22:52:00
 updated: 2021-03-21 11:54:00
 id: ml-20210318-225200-g11
 categories:
 	- 读书
 tags: 
-	- C#
+	- CSharp
 ---
 
 重读C#本质论,还是能发现一些之前没有注意的点,记录以下

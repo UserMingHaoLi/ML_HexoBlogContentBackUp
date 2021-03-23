@@ -6,7 +6,7 @@ id: ml-20190617-221800-g10
 categories:
 	- 小知识
 tags: 
-	- C#
+	- CSharp
 ---
 # CSharp序列化快速加载配置
 
