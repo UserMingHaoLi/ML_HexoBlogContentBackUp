@@ -191,7 +191,7 @@ $ git remote rm destination
 
 # 在 GitHub 上搜索
 
-请前往 [在 GitHub 上搜索][GitHub_Search_localhost]
+请前往另一篇 `GitHubDoc_搜索`
 
 # 在 GitHub 上使用 Subversion
 
@@ -280,7 +280,6 @@ example.com
 
 [GitHubDeskTop]:https://docs.github.com/cn/desktop "GitHubDeskTop官方文档"
 [GitHubDeskTopDownLoad]:https://desktop.github.com/ "GitHubDeskTop下载"
-[GitHub_Search_localhost]:GitHubDoc_搜索 "ML博客_GitHub搜索"
 <!-- 水印 -->
 [ML-Blog_Link]:https://userminghaoli.github.io/ "我的博客"
 

@@ -538,7 +538,7 @@ public void Main()
 
 # 其他非GitHub支持的MarkDown内容
 
-> 详细可看我的另一篇文章 [Markdown进阶][Markdown进阶]
+> 详细可看我的另一篇文章 `Markdown进阶`
 
 # 拼写提示
 
@@ -570,6 +570,5 @@ public void Main()
 [GitHub_linguist_languages.yml]:https://github.com/github/linguist/blob/master/lib/linguist/languages.yml "GitHub支持的语言渲染格式列表"
 [hello-world.md]:hello-world.md "hello-world.md"
 [github-readme-stats]:https://github.com/anuraghazra/github-readme-stats "github-readme-stats"
-[Markdown进阶]:Markdown进阶.md "Markdown进阶-来自ML"
 <!-- 水印 -->
 [ML-Blog_Link]:https://userminghaoli.github.io/ "我的博客"
