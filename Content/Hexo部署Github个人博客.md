@@ -279,6 +279,7 @@ type: "tags"                # 类型一定要为tags
 基本是和上面相同的, 就是 `tags` 替换为了 `categories`
 
 > 吐槽以下, 实际上Hexo已经制动帮你创建好了
+> 只需要添加 `type: "tags"` 即可 `categories` 同理
 
 > 先到此为止, 后面可能开以下搜索和评论.
 

@@ -3,9 +3,9 @@ title: hexo模板
 date: 2021-03-12 22:52:00
 updated: 2021-03-12 22:52:00
 categories:
-	- hexo
+	- Hexo
 tags: 
-	- hexo
+	- Hexo
 ---
 
 
