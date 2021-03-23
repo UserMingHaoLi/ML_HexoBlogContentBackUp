@@ -301,6 +301,30 @@ archive_generator:
 
 没问题就 `d` 部署.
 
+# 使用`permalink`更改链接
+
+更改配置
+```yml
+permalink: :year/:month/:day/:category/:id/
+```
+
+```yml
+category_map:
+  C#: csharp
+```
+
+```yml
+---
+title:
+date:
+id:	#这个是新增的 
+tags: 
+categories: 
+---
+```
+
+建议格式 `id: ml-20210315-220300-g6`
+
 # 完毕
 
 **感谢您的观看!**  
