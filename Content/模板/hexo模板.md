@@ -13,8 +13,6 @@ tags:
 # hexo模板moreUp
 
 
-[hexo官网][hexoio_Link]
-
 <!--more-->
 
 # 完毕
@@ -25,8 +23,6 @@ tags:
 <!-- 图片 -->
 
 <!-- 链接 -->
-
-[hexoio]:https://hexo.io/  "hexo.io"
 
 <!-- 水印 -->
 [ML-Blog_Link]:https://userminghaoli.github.io/ "我的博客"
