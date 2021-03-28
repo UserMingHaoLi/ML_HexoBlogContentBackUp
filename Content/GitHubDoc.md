@@ -15,6 +15,8 @@ tags:
 
 下载请前往[desktop.github.com][GitHubDeskTopDownLoad]
 
+> 在任何GitHub界面,按下`Shift` + `?`将弹出快捷键列表
+
 <!--more-->
 
 # 参与项目
