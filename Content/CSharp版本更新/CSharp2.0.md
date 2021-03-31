@@ -194,11 +194,13 @@ foreach (var item in actions)
 
 解决办法是在匿名函数内部声明一个变量, 立刻存储一次.
 
-```
+```C#
 for (int i = 0; i < 5; i++)
 {
     int j = i;
 ```
+
+> 这种现象叫做`闭包`
 
 # 可以为 null 的类型
 
