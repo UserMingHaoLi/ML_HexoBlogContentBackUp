@@ -2,6 +2,7 @@
 title: Hexo部署Github个人博客
 date: 2021-03-15 22:03:00
 updated: 2021-03-15 22:03:00
+id: ml-20210315-220300-g6
 categories:
 	- 工具部署
 tags: 
@@ -279,14 +280,45 @@ type: "tags"                # 类型一定要为tags
 基本是和上面相同的, 就是 `tags` 替换为了 `categories`
 
 > 吐槽以下, 实际上Hexo已经制动帮你创建好了
+> 只需要添加 `type: "tags"` 即可 `categories` 同理
 
 > 先到此为止, 后面可能开以下搜索和评论.
+
+# 为归档页面设置内容
+
+在Hexo设置中添加如下代码
+```yml
+archive_generator:
+  per_page: 50
+  <!-- yearly: true
+  monthly: true -->
+```
+>建议跟在`index_generator`块后面
 
 # 查看
 
 直接 `clean` `g` `s` 三连查看
 
 没问题就 `d` 部署.
+
+# 使用`permalink`更改链接
+
+更改配置
+```yml
+permalink: :year/:month/:day/:category/:id/
+```
+
+```yml
+---
+title:
+date:
+id:	#这个是新增的 
+tags: 
+categories: 
+---
+```
+
+建议格式 `id: ml-20210315-220300-g6`
 
 # 完毕
 

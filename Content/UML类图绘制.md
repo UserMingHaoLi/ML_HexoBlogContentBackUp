@@ -2,6 +2,7 @@
 title: UML类图绘制
 date: 2019-06-15 18:37:00
 updated: 2019-06-15 18:37:00
+id: ml-20190615-183700-g2
 categories:
 	- 写作基础
 tags: 
