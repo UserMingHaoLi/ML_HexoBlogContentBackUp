@@ -1,7 +1,5 @@
-
-
 ---
-title: hexo模板
+title: GitHubDoc
 date: 2021-03-12 22:52:00
 updated: 2021-03-12 22:52:00
 categories:
@@ -9,6 +7,9 @@ categories:
 tags: 
 	- hexo
 ---
+
+好像坏了,之前的内容不见了,我也没有ReBase过啊!  
+算了, 之后有时间再补充吧.
 
 # 下载GitHubDeskTop
 
