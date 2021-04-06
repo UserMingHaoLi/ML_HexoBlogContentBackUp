@@ -8,9 +8,6 @@ tags:
 	- hexo
 ---
 
-好像坏了,之前的内容不见了,我也没有ReBase过啊!  
-算了, 之后有时间再补充吧.
-
 # 下载GitHubDeskTop
 
 内容来自 [GitHubDeskTop官方文档][GitHubDeskTop]
@@ -82,7 +79,7 @@ $ git config --global user.name "Mona Lisa"
 
 上述命令添加了`global`标志, 表示他是一个全局命令, 对所有仓库生效.
 
-> 如果想在Git中缓存GitHub凭证,请使用SSH方式.
+> 如果想在Git中缓存GitHub凭证,请使用**SSH方式**.
 
 ## 设置Git编辑器
 
@@ -102,7 +99,7 @@ $ git config --global core.editor "'C:/Program Files (x86)/Notepad++/notepad++.e
 
 不同的操作系统有不同的*结束符*,或者对同一个结束符有不同的处理方式.
 
-在使用 `Git` 和 `GitHub` 协作处理项目时，`Git` 可能产生意外结果，例如，您在 `Windows` 计算机上操作，而您的协作者是在 `OSX` 中做的更改。
+在使用 Git 和 GitHub 协作处理项目时，Git 可能产生意外结果，例如，您在 `Windows` 计算机上操作，而您的协作者是在 `OSX` 中做的更改。
 
 所以我们需要标准化结束符
 
@@ -112,13 +109,15 @@ $ git config --global core.editor "'C:/Program Files (x86)/Notepad++/notepad++.e
 $ git config --global core.autocrlf true
 ``` 
 
-为确保仓库中的所有行结束符与新配置匹配，请使用 `Git` 备份文件，删除仓库中的所有文件（.git 目录除外），然后一次性恢复所有文件。
+为确保仓库中的所有行结束符与新配置匹配，请使用 Git 备份文件，删除仓库中的所有文件（.git 目录除外），然后一次性恢复所有文件。
 
 ## 忽略文件
 
 `.gitignore`指示 Git 在您进行提交时要忽略哪些文件和目录
 
 GitHub的`github/gitignore`库中有一些常见规则可以参考
+
+> 有时间可以逛下用户名为`github`的用户的库, 也就是官方库.
 
 ## 推送提交到远程仓库
 
@@ -179,20 +178,20 @@ $ git remote add origin https://github.com/user/repo.git
 ```shell
 $ git remote rename origin destination  
 ```
-将远程名称从 'origin' 更改为 'destination'  
+*将远程名称从 `origin` 更改为 `destination`*  
 
 ## 删除远程
 
 ```
 $ git remote rm destination  
 ```
-删除远程  
+*删除远程*  
 
 > 它只是从本地仓库中删除远程及其引用,不会删除服务器上的仓库.
 
 # 使用 GitHub Desktop 创建合作提交
 
-在提交栏的左下角有一个带+号的小人,点一下挨个@即可
+在提交栏的左下角有一个带+号的小人,点一下挨个`@`即可
 
 # 在 GitHub 上搜索
 
@@ -200,7 +199,7 @@ $ git remote rm destination
 
 # 在 GitHub 上使用 Subversion
 
-详细请自行查阅文档,感觉没什么必要..
+~~详细请自行查阅文档,感觉没什么必要..~~
 
 # 在 GitHub 上发布项目
 
@@ -244,7 +243,7 @@ permalink: /404.html
 
 要设置 www 或自定义子域，例如 [www.example.com](http://www.example.com/) 或 blog.example.com，您必须在站点的仓库中创建 CNAME 文件，并使用 DNS 提供程序配置 CNAME 记录。
 
-> 警告：我们强烈建议不要使用通配符 DNS 记录，例如 \*.example.com。 通配符 DNS 记录将允许任何人在您的其中一个子域上托管 站点。
+> 警告：我们强烈建议不要使用通配符 DNS 记录，例如 `\*.example.com`。 通配符 DNS 记录将允许任何人在您的其中一个子域上托管 站点。
 
 所以你需要创建一个`CNAME`文件,并提交到GitHub
 
