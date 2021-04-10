@@ -27,7 +27,7 @@ int Myint { get; set;}
 以更简单的方式生成一条属性, 其背后的字段交给编辑器,  
 这种属性由于没有编写代码, 默认实现和一下代码相当
 
-```
+```C#
 int myint;
 int Myint 
 { 
@@ -53,7 +53,7 @@ int Myint
 
 匿名类型和js中的objcet有些相似.
 
-```
+```C#
 var v = new { Amount = 108, Message = "Hello" }; 
 ```
 
@@ -182,7 +182,7 @@ d.ToInt();
 
 `var`, 这就是一个偷懒写法, 如果编辑器可以推断类型, 你为什么要声明他呢.
 
-```
+```C#
 var i = 10;
 int i = 10;
 ```
@@ -194,7 +194,7 @@ int i = 10;
 分布方法可以让你在一处定义方法, 在另一处实现.  
 如果你不实现, 编译器在编译时删除该方法.
 
-```
+```C#
 partial class A
 {
     partial void OnSomethingHappened(string s);
