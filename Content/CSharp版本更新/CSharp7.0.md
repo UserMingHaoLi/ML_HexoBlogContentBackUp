@@ -429,6 +429,14 @@ Func<string, bool> foo = default(Func<string, bool>)
 Func<string, bool> foo = default;
 ```
 
+从规范里面抄了些用法过来
+
+* 声明局部变量 `(ImmutableArray<SomeType> x = default;)`
+* 三元操作 `(var x = flag ? default : ImmutableArray<SomeType>.Empty;)`
+* 在方法和 `lambda` 中返回 `(return default;)`
+* 为可选参数声明默认值 `(void Method(ImmutableArray<SomeType> arrayOpt = default))`
+* 在数组创建表达式中包含默认值 `(var x = new[] { default, ImmutableArray.Create(y) };)`
+
 ## 推断元组元素名称
 
 可以根据右侧名称自动推断名称.
