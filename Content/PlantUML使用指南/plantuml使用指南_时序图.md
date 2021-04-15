@@ -1,5 +1,5 @@
 ---
-title: plantuml汇总
+title: plantuml使用指南_时序图
 date: 2021-04-15 21:33:00
 updated: 2021-04-15 21:33:00
 id: ml-20210415-213300-g120
