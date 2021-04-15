@@ -2,7 +2,7 @@
 title: hexo模板
 date: 2021-03-12 22:52:00
 updated: 2021-03-12 22:52:00
-id: ml-20210415-213300-g120
+id: ml-20210415-213300-g1
 categories:
 	- Hexo
 tags: 
