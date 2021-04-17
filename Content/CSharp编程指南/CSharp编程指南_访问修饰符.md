@@ -67,7 +67,7 @@ class Program
     static void Main()
     {
         var p = new PointTest();
-        p.x = 10;
+        p.x = 10;//完全公开,可访问
         p.y = 15;
         Console.WriteLine($"x = {p.x}, y = {p.y}");
     }
@@ -94,8 +94,8 @@ class B : A
         var a = new A();
         var b = new B();
 
-        // a.x = 10;
-        b.x = 10;
+        // a.x = 10;//外部类不可直接访问
+        b.x = 10;//继承类可以访问
     }
 }
 ```
@@ -126,9 +126,9 @@ public class TestAccess
 {  
    static void Main()
    {  
-		var myBase1 = new BaseClass1();   // CS0122  
-      	var myBase2 = new BaseClass2();   // Ok.  
-      	BaseClass2.intM = 444;    // CS0117  
+		//var myBase1 = new BaseClass1();   // 外部程序集不可访问`internal`
+      	var myBase2 = new BaseClass2();   //可以声明`public` 
+      	//BaseClass2.intM = 444;    // 外部程序集不可访问`internal`
    }  
 }
 ```
@@ -167,9 +167,9 @@ class PrivateTest
     static void Main()
     {
         var e = new Employee2();
-        //    string n = e.name;
+        //    string n = e.name;//外部类不可访问`private`
         //    double s = e.salary;
-        string n = e.GetName();
+        string n = e.GetName();//访问`public`
         double s = e.Salary;
     }
 }
