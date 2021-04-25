@@ -43,6 +43,8 @@ tags:
 
 # add
 
+# remove
+
 `add` 上下文关键字用于定义一个在客户端代码订阅你的事件时调用的自定义事件访问器。 如果提供自定义 `add` 访问器，还必须提供 `remove` 访问器
 ```C#
 class Events : IDrawingObject
@@ -58,7 +60,11 @@ class Events : IDrawingObject
 ```
 大多数情况下，使用声明事件时由编译器自动生成的访问器就足够了
 
+# not
+
 # and
+
+# or
 
  `C# 9.0` 开始，可使用 `not`、`and` 和 `or` 模式连结符来创建以下逻辑模式
 
@@ -154,6 +160,164 @@ if (input is WeightedPoint (> 0, > 0) { Weight: > 0.0 } p)
 这玩意看不出是个上下文类型,好像啥地方都可以用.
 
 就是不受编译器检测的动态运行时类型.
+
+# get
+
+# set
+
+```C#
+class TimePeriod
+{
+     private double _seconds;
+
+     public double Seconds
+     {
+         get { return _seconds; }
+         set { _seconds = value; }
+     }
+}
+```
+
+# global
+
+`global` 别名，该别名是全局命名空间别名  
+与 `::` 限定符一起使用时，`global` 别名始终引用全局命名空间，即使存在用户定义的 `global` 命名空间别名也是如此
+
+```C#
+namespace MyCompany.MyProduct.System
+{
+    class Program
+    {
+        static void Main() => global::System.Console.WriteLine("Using global alias");//如果不适用`global`.那么会访问`MyCompany.MyProduct.System`
+    }
+
+    class Console
+    {
+        string Suggestion => "Consider renaming this class";
+    }
+}
+```
+
+# init
+
+在 `C# 9` 及更高版本中，`init` 关键字在属性或索引器中定义访问器方法。 `init-only` 资源库仅在对象构造期间为属性或索引器元素赋值. 相当于只读.
+
+```C#
+class InitExample
+{
+     private double _seconds;
+
+     public double Seconds
+     {
+         get { return _seconds; }
+         init { _seconds = value; }
+     }
+}
+```
+也可简写
+```C#
+class InitExampleAutoProperty
+{
+    public double Hours { get; init; }
+}
+```
+
+# nint
+
+# unint
+
+实际就是`IntPtr`和`UIntPtr`
+
+# partial
+
+用于指定分布类和分布方法.  
+允许在两个不同文件中书写同一个类或方法.
+
+```C#
+namespace PC
+{
+    partial class A
+    {
+        int num = 0;
+        void MethodA() { }
+        partial void MethodC();
+    }
+}
+namespace PC
+{
+    partial class A
+    {
+        void MethodB() { }
+        partial void MethodC() { }
+    }
+}
+```
+在处理大型项目或自动生成的代码（如 `Windows` 窗体设计器提供的代码）时，在多个文件间拆分类、结构或接口类型可能会非常有用
+
+# record
+
+从 `C# 9` 开始，可以使用 `record` 关键字定义一个引用类型，用来提供用于封装数据的内置功能  
+称作`记录`
+
+如下可以创建具有不可变属性的记录类型
+```C#
+public record Person(string FirstName, string LastName);
+```
+```C#
+public record Person
+{
+    public string FirstName { get; init; }
+    public string LastName { get; init; }
+};
+```
+
+还可以创建具有可变属性和字段的记录类型
+```C#
+public record Person
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+};
+```
+
+虽然记录可以是可变的，但它们主要用于支持不可变的数据模型
+
+* 用于创建具有不可变属性的引用类型的简明语法
+* 内置行为对于以数据为中心的引用类型非常有用：
+  * 值相等性
+  * 非破坏性变化的简明语法
+  * 用于显示的内置格式设置
+* 支持继承层次结构
+
+这些类型提供值相等性，并且很少或没有任何行为。 但对于相对较大的数据模型，结构类型有一些缺点
+
+* 不支持继承
+* 确定值相等性时效率较低
+* 某些情况下，会占用更多内存，因为每个实例都有所有数据的完整副本
+
+> 具体内容参阅微软文档.
+
+# value
+
+上下文关键字 `value` 在属性和索引器声明的 `set` 访问器中使用  
+
+此关键字类似于方法的输入参数。 关键字 value 引用客户端代码尝试分配给属性或索引器的值
+
+```C#
+public virtual int Number
+{
+	get { return num; }
+	set { num = value; }
+}
+```
+
+# var
+
+# when
+
+# where
+
+# yield
 
 # 完毕
 
