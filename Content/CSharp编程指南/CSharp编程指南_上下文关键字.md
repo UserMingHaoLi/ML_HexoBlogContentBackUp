@@ -313,11 +313,77 @@ public virtual int Number
 
 # var
 
+隐式类型本地变量为强类型，就像用户已经自行声明该类型，但编译器决定类型一样
+
+```C#
+var i = 10; // Implicitly typed.
+int i = 10; // Explicitly typed.
+```
+*以上代码其实是等同的*
+
 # when
+
+可以使用上下文关键字 when 在以下上下文中指定筛选条件
+
+* 在 `try/catch` 或 `try/catch/finally` 块的 `catch` 语句中。
+* 在 `switch` 语句的 `case` 标签中。
+* 在 `switch` 表达式中。
+
+```C#
+catch (ExceptionType [e]) when (expr)
+```
+其中，`expr` 是一个表达式，其计算结果为布尔值。 如果该表达式返回 `true`，则执行异常处理程序；如果返回 `false`，则不执行
+
+```C#
+case (expr) when (when-condition):
+```
+仅当筛选条件`when-condition`也为 `true` 时，与其相关联的 `case` 标签才为 `true`
 
 # where
 
+`where` 子句指定对用作泛型参数的约束
+
+```C#
+public class AGenericClass<T> where T : IComparable<T> { }
+```
+*此声明约束`T`实现`IComparable<T>`接口*
+
+更多请看文档.
+
 # yield
+
+使用 `yield` 定义迭代器，可在实现自定义集合类型的 `IEnumerator<T>` 和 `IEnumerable` 模式时无需其他显式类
+```C#
+yield return <expression>;
+yield break;
+```
+
+其中`yield break`类似于其他函数的`return`. 表示方法终止.  
+而 `yield return` 语句则是一次返回一个元素
+
+可通过使用 `foreach` 语句或 `LINQ` 查询来使用从迭代器方法返回的序列。 `foreach` 循环的每次迭代都会调用迭代器方法  
+迭代器方法运行到 `yield return` 语句时,会返回一个 `expression`  
+并保留当前在代码中的位置  
+次调用迭代器函数时，将从该位置重新开始执行
+
+```C#
+IEnumerable<string> elements = MyIteratorMethod();
+foreach (string element in elements)
+{
+   ...
+}
+```
+
+调用 `MyIteratorMethod` 并不执行该方法的主体  
+该调用会将 `IEnumerable<string>` 返回到 `elements`  
+在 `foreach` 循环迭代时，将为 `MoveNext` 调用 `elements` 方法  
+ 此调用将执行 `MyIteratorMethod` 的主体，直至到达下一个 `yield return` 语句
+
+> 这玩意产生CG.
+
+# 查询语句
+
+> `C# 3.0` 中引入的所有查询关键字也都是上下文相关的
 
 # 完毕
 
