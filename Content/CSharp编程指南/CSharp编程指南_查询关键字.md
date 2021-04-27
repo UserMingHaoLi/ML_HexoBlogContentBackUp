@@ -294,9 +294,167 @@ Fruit
 ```
 *比上个例子多出一个`Select`集合,以及`products`以`Name`排序*
 
-
+```C#
+var groupJoinQuery3 =
+    from category in categories
+    join product in products on category.ID equals product.CategoryID into prodGroup
+    from prod in prodGroup
+    orderby prod.CategoryID
+    select new { Category = prod.CategoryID, ProductName = prod.Name };
+Console.WriteLine("GroupJoin3:");
+foreach (var item in groupJoinQuery3)
+{
+    totalItems++;
+    Console.WriteLine("   {0}:{1}", item.ProductName, item.Category);
+}
+/*
+GroupJoin3:
+    Cola:1
+    Tea:1
+    Mustard:2
+    Pickles:2
+    Carrots:3
+    Bok Choy:3
+    Peaches:5
+    Melons:5
+*/
+```
+*指定了一个新集合,按ID排序*
 
 ## 左外部链接
+
+在左外部联接中，将返回左侧源序列中的所有元素，即使右侧序列中没有其匹配元素也是如此。 若要在 LINQ 中执行左外部联接，请结合使用 `DefaultIfEmpty` 方法与分组联接
+
+```C#
+var leftOuterQuery =
+    from category in categories
+    join prod in products on category.ID equals prod.CategoryID into prodGroup
+    select prodGroup.DefaultIfEmpty(new Product() { Name = "Nothing!", CategoryID = category.ID });
+foreach (var prodGrouping in leftOuterQuery)
+{
+    Console.WriteLine("Group:");
+    foreach (var item in prodGrouping)
+    {
+        totalItems++;
+        Console.WriteLine("  {0,-10}{1}", item.Name, item.CategoryID);
+    }
+}
+/*
+Left Outer Join:
+Group:
+    Cola      1
+    Tea       1
+Group:
+    Mustard   2
+    Pickles   2
+Group:
+    Carrots   3
+    Bok Choy  3
+Group:
+    Nothing!  4
+Group:
+    Peaches   5
+    Melons    5
+*/
+```
+*这里的左侧是`category.ID`, 所以生成所有`ID`. 1,2,3,4,5. 但是没有ID为4的商品, 所以需要指定`DefaultIfEmpty(new Product() `为无匹配时的商品*
+
+```C#
+var leftOuterQuery2 =
+    from category in categories
+    join prod in products on category.ID equals prod.CategoryID into prodGroup
+    from item in prodGroup.DefaultIfEmpty()
+    select new { Name = item == null ? "Nothing!" : item.Name, CategoryID = category.ID };
+foreach (var item in leftOuterQuery2)
+{
+    totalItems++;
+    Console.WriteLine("{0,-10}{1}", item.Name, item.CategoryID);
+}
+/*
+Left Outer Join 2:
+Cola      1
+Tea       1
+Mustard   2
+Pickles   2
+Carrots   3
+Bok Choy  3
+Nothing!  4
+Peaches   5
+Melons    5
+*/
+```
+*这里最后的`Select`抹平了`Group`,所以就是一整组*
+
+# let
+
+在查询表达式中，存储子表达式的结果
+
+```C#
+var earlyBirdQuery =
+    from sentence in strings
+    let words = sentence.Split(' ')
+    from word in words
+    let w = word.ToLower()
+    where w[0] == 'a' || w[0] == 'e'
+        || w[0] == 'i' || w[0] == 'o'
+        || w[0] == 'u'
+    select word;
+```
+*就是查询表达式中的变量类型*
+
+# in
+
+在以下上下文中，使用了 in 关键字：
+
+* 泛型接口和委托中的泛型类型参数。
+* 作为参数修饰符，它允许按引用而不是按值向方法传递参数。
+* `foreach` 语句。
+* **`LINQ` 查询表达式中的 `from` 子句。**
+* **`LINQ` 查询表达式中的 `join` 子句。**
+
+# on
+
+`on` 上下文关键字用于在查询表达式的 `join` 子句中指定联接条件
+
+```C#
+join prod in products on category.ID equals prod.CategoryID
+```
+# equals
+
+`equals` 上下文关键字用于在查询表达式的 `join` 子句中比较两个序列的元素
+
+同上
+
+# by
+
+`by` 上下文关键字用于在查询表达式的 `group` 子句中指定应返回项的分组方式
+
+```C#
+var query = from student in students
+    group student by student.LastName[0];
+```
+
+# ascending
+
+查询表达式中的 `orderby` 子句 中使用 `ascending` 上下文关键字指定排序顺序为从小到大。 由于 `ascending` 为默认排序顺序，因此无需加以指定。
+
+```C#
+IEnumerable<string> sortAscendingQuery =
+    from vegetable in vegetables
+    orderby vegetable ascending
+    select vegetable;
+```
+
+# descending
+
+查询表达式中的 `orderby` 子句中使用 `descending` 上下文关键字指定排序顺序为从大到小。
+
+```C#
+IEnumerable<string> sortDescendingQuery =
+    from vegetable in vegetables
+    orderby vegetable descending
+    select vegetable;
+```
 
 # 完毕
 
