@@ -599,6 +599,198 @@ string s3 = "Hello!";
 Console.WriteLine(s1 == s3);  // output: False
 ```
 
+### 委托相等
+
+当两个委托操作数都是 null 或它们的调用列表长度相同并且在每个位置具有相同的条目时，运行时类型相同的两个委托操作数是相等的
+
+```C#
+Action a = () => Console.WriteLine("a");
+Action b = a + a;
+Action c = a + a;
+Console.WriteLine(object.ReferenceEquals(b, c));  // output: False
+Console.WriteLine(b == c);  // output: True
+```
+
+*通过计算语义上相同的 `Lambda` 表达式生成的委托不相等*
+
+## 不等运算符 !=
+
+如果操作数不相等，不等于运算符 `!=` 返回 `true`，否则返回 `false`
+
+其他规定和上面相等一样.
+
+## 运算符可重载性
+
+用户定义类型可以重载`==` 和 `!=` 运算符。 如果某类型重载这两个运算符之一，它还必须重载另一个运算符
+
+记录类型不能显式重载 `==` 和 `!=` 运算符。 如果需要更改记录类型 `T` 的 `==` 和 `!=` 运算符的行为，请使用 `IEquatable<T>.Equals`
+
+# 比较运算符
+
+`<（小于）`、`>（大于）`、`<=（小于或等于）`和 `>=（大于或等于）`比较（也称为关系）运算符比较其操作数
+
+```
+如果所有操作数都不是数字（Double.NaN 或 Single.NaN），则运算结果为 false。 这意味着 NaN 值不大于、小于或等于任何其他 double（或 float）值，包括 NaN
+```
+
+*`char `类型也支持比较运算符。 在使用 `char` 操作数时，将比较对应的字符代码*
+
+## 小于运算符 <
+
+如果左侧操作数小于右侧操作数，`<` 运算符返回 `true`，否则返回 `false`
+
+```C#
+Console.WriteLine(7.0 < 5.1);   // output: False
+Console.WriteLine(5.1 < 5.1);   // output: False
+Console.WriteLine(0.0 < 5.1);   // output: True
+
+Console.WriteLine(double.NaN < 5.1);   // output: False
+Console.WriteLine(double.NaN >= 5.1);  // output: False
+```
+
+## 大于运算符 >
+
+如果左侧操作数大于右侧操作数，`>`运算符返回 `true`，否则返回 `false`
+
+```C#
+Console.WriteLine(7.0 > 5.1);   // output: True
+Console.WriteLine(5.1 > 5.1);   // output: False
+Console.WriteLine(0.0 > 5.1);   // output: False
+
+Console.WriteLine(double.NaN > 5.1);   // output: False
+Console.WriteLine(double.NaN <= 5.1);  // output: False
+```
+
+## 小于或等于运算符 <=
+
+## 大于或等于运算符 >=
+
+略,不水了.
+
+## 运算符可重载性
+
+用户定义类型可以重载`<`、`>`、`<=`和 `>=` 运算符
+
+# 成员访问运算符和表达式
+
+访问类型成员时，可以使用以下运算符和表达式
+
+* `.（成员访问）`：用于访问命名空间或类型的成员
+* `[]（数组元素或索引器访问）`：用于访问数组元素或类型索引器
+* `?. 和 ?[]（null 条件运算符）`：仅当操作数为非 null 时才用于执行成员或元* 素访问运算
+* `()（调用）`：用于调用被访问的方法或调用委托
+* `^（从末尾开始索引`）：指示元素位置来自序列的末尾
+* `..（范围）`：指定可用于获取一系列序列元素的索引范围
+
+## 成员访问表达式
+
+即`.`
+
+```C#
+using System.Collections.Generic;
+```
+
+## 索引器运算符 []
+
+方括号 `[]` 通常用于数组、索引器或指针元素访问
+
+> 方括号还用于指定属性
+
+## Null 条件运算符 ?. 和 ?[]
+
+`Null` 条件运算符在 `C# 6` 及更高版本中可用，仅当操作数的计算结果为非 `null` 时，`null` 条件运算符才会将成员访问 `?.` 或元素访问 `?[]` 运算应用于其操作数；否则，将返回 `null`
+
+* 如果 `a` 的计算结果为 `null`，则 `a?.x` 或 `a?[x]` 的结果为 `null`
+* 如果 `a` 的计算结果为非 `null`，则 `a?.x` 或 `a?[x]` 的结果将分别与 `a.x` 或 `a[x]` 的结果相同
+
+`NULL 条件运算符`采用最小化求值策略。 也就是说，如果条件成员或元素访问运算链中的一个运算返回 null，则链的其余部分**不会执行**
+
+```C#
+PropertyChanged?.Invoke(…)
+```
+*调委托很好用*  
+*这是一种线程安全方法*
+
+## 调用表达式 ()
+
+使用括号 `()` 调用方法或调用委托
+
+> 可以使用括号来调整表达式中计算操作的顺序
+
+## 从末尾运算符 ^ 开始索引
+
+`^` 运算符在 `C# 8.0` 和更高版本中提供，指示序列末尾的元素位置
+
+对于长度为 `length` 的序列，`^n` 指向与序列开头偏移 `length - n` 的元素
+
+```C#
+int[] xs = new[] { 0, 10, 20, 30, 40 };
+int last = xs[^1];
+Console.WriteLine(last);  // output: 40
+
+var lines = new List<string> { "one", "two", "three", "four" };
+string prelast = lines[^2];
+Console.WriteLine(prelast);  // output: three
+
+string word = "Twenty";
+Index toFirst = ^word.Length;
+char first = word[toFirst];
+Console.WriteLine(first);  // output: T
+```
+
+## 范围运算符 .
+
+`..` 运算符在 `C# 8.0` 和更高版本中提供，指定索引范围的开头和末尾作为其操作数
+
+左侧操作数是范围的包含性开头。 右侧操作数是范围的包含性末尾
+
+```C#
+int[] numbers = new[] { 0, 10, 20, 30, 40, 50 };
+int start = 1;
+int amountToTake = 3;
+int[] subset = numbers[start..(start + amountToTake)];
+Display(subset);  // output: 10 20 30
+
+int margin = 1;
+int[] inner = numbers[margin..^margin];
+Display(inner);  // output: 10 20 30 40
+
+string line = "one two three";
+int amountToTakeFromEnd = 5;
+Range endIndices = ^amountToTakeFromEnd..^0;
+string end = line[endIndices];
+Console.WriteLine(end);  // output: three
+
+void Display<T>(IEnumerable<T> xs) => Console.WriteLine(string.Join(" ", xs));
+```
+*实际来自`System.Range类`和`Index 结构`*
+
+可以省略 `..` 运算符的任何操作数来获取无限制范围
+
+* `a..` 等效于 `a..^0`
+* `..b` 等效于 `0..b`
+* `..` 等效于 `0..^0`
+
+```C#
+int[] numbers = new[] { 0, 10, 20, 30, 40, 50 };
+int amountToDrop = numbers.Length / 2;
+
+int[] rightHalf = numbers[amountToDrop..];
+Display(rightHalf);  // output: 30 40 50
+
+int[] leftHalf = numbers[..^amountToDrop];
+Display(leftHalf);  // output: 0 10 20
+
+int[] all = numbers[..];
+Display(all);  // output: 0 10 20 30 40 50
+
+void Display<T>(IEnumerable<T> xs) => Console.WriteLine(string.Join(" ", xs));
+```
+
+# 运算符可重载性
+
+`.`、`()`、`^` 和 `..` 运算符无法进行重载。 `[]` 运算符也被视为非可重载运算符。 使用索引器以支持对用户定义的类型编制索引
+
 # 完毕
 
 **感谢您的观看!**  
