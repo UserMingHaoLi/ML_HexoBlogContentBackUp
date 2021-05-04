@@ -787,9 +787,203 @@ Display(all);  // output: 0 10 20 30 40 50
 void Display<T>(IEnumerable<T> xs) => Console.WriteLine(string.Join(" ", xs));
 ```
 
-# 运算符可重载性
+## 运算符可重载性
 
 `.`、`()`、`^` 和 `..` 运算符无法进行重载。 `[]` 运算符也被视为非可重载运算符。 使用索引器以支持对用户定义的类型编制索引
+
+# 类型测试运算符和强制转换表达式
+
+## is 运算符
+
+`is` 运算符检查表达式结果的运行时类型是否与给定类型兼容
+
+从 `C# 7.0` 开始，`is` 运算符还会对照某个模式测试表达式结果
+
+```C#
+E is T
+```
+*其中 `E` 是返回一个值的表达式，`T` 是类型或类型参数的名称。 `E` 不得为匿名方法或 `Lambda` 表达式*
+
+如果 `E` 的结果为非 `null` 且可以通过引用转换、装箱转换或取消装箱转换来转换为类型 `T`，则 `E is T` 表达式将返回 `true`；否则，它将返回 `false`。  
+**`is` 运算符不会考虑用户定义的转换**
+
+如果表达式结果的运行时类型派生自给定类型，即类型之间存在引用转换，`is` 运算符将返回 `true`
+
+```C#
+object b = new Base();
+Console.WriteLine(b is Base);  // output: True
+Console.WriteLine(b is Derived);  // output: False
+
+object d = new Derived();
+Console.WriteLine(d is Base);  // output: True
+Console.WriteLine(d is Derived); // output: True
+```
+
+`is` 运算符将考虑装箱和取消装箱转换，但不会考虑数值转换
+
+```C#
+int i = 27;
+Console.WriteLine(i is System.IFormattable);  // output: True
+
+object iBoxed = i;
+Console.WriteLine(iBoxed is int);  // output: True
+Console.WriteLine(iBoxed is long);  // output: False
+```
+
+### 有模式匹配的类型测试
+
+```C#
+int i = 23;
+object iBoxed = i;
+int? jNullable = 7;
+if (iBoxed is int a && jNullable is int b)
+{
+    Console.WriteLine(a + b);  // output 30
+}
+```
+
+## as 运算符
+
+`as` 运算符将表达式结果显式转换为给定的引用或可以为 `null` 值的类型。 如果无法进行转换，则 `as` 运算符返回 `null`。 与强制转换表达式 不同，`as` 运算符永远**不会引发异常**
+
+```C#
+E as T
+```
+就如同
+```C#
+E is T ? (T)(E) : (T)null
+```
+*不同的是 `E` 只计算一次*
+
+`as` 运算符仅考虑引用、可以为 `null`、`装箱`和`取消装箱`转换
+
+不能使用 as 运算符执行用户定义的转换,建议使用强制转换.
+
+以下是一个用法示例
+```C#
+IEnumerable<int> numbers = new[] { 10, 20, 30 };
+IList<int> indexable = numbers as IList<int>;
+if (indexable != null)
+{
+    Console.WriteLine(indexable[0] + indexable[indexable.Count - 1]);  // output: 40
+}
+```
+
+你需要将 `as` 表达式的结果与 `null` 进行比较，以检查转换是否成功  
+从 `C# 7.0` 开始，你可以使用 `is` 运算符测试转换是否成功，如果成功，则将其结果分配给新变量
+
+### 强制转换表达式
+
+就是常用的`int a = (int)x;`
+
+*强制转换表达式可能会引发异常*
+
+## typeof 运算符
+
+`typeof` 运算符用于获取某个类型的 `System.Type` 实例
+
+`typeof` 运算符的实参必须是类型或类型形参的名称，如以下示例所示
+
+```C#
+void PrintType<T>() => Console.WriteLine(typeof(T));
+
+Console.WriteLine(typeof(List<string>));
+PrintType<int>();
+PrintType<System.Int32>();
+PrintType<Dictionary<int, char>>();
+// Output:
+// System.Collections.Generic.List`1[System.String]
+// System.Int32
+// System.Int32
+// System.Collections.Generic.Dictionary`2[System.Int32,System.Char]
+```
+
+你还可以使用具有未绑定泛型类型的 `typeof` 运算符。 未绑定泛型类型的名称必须包含适当数量的逗号，且此数量小于类型参数的数量
+
+```C#
+Console.WriteLine(typeof(Dictionary<,>));
+// Output:
+// System.Collections.Generic.Dictionary`2[TKey,TValue]
+```
+
+表达式不能为 `typeof` 运算符的参数。 若要获取表达式结果的运行时类型的 `System.Type` 实例，请使用 `Object.GetType` 方法
+
+### 使用 typeof 运算符进行类型测试
+
+```C#
+object b = new Giraffe();
+Console.WriteLine(b is Animal);  // output: True
+Console.WriteLine(b.GetType() == typeof(Animal));  // output: False
+
+Console.WriteLine(b is Giraffe);  // output: True
+Console.WriteLine(b.GetType() == typeof(Giraffe));  // output: True
+```
+
+## 运算符可重载性
+
+`is`、`as` 和 `typeof` 运算符无法进行重载。
+
+用户定义的类型不能重载 `()` 运算符，但可以定义可由强制转换表达式执行的自定义类型转换
+
+# 用户定义转换运算符
+
+用户定义类型可以定义从或到另一个类型的自定义隐式或显式转换
+
+隐式转换无需调用特殊语法，并且可以在各种情况（例如，在赋值和方法调用中）下发生。 预定义的 C# 隐式转换始终成功，且永远不会引发异常。 用户定义隐式转换也应如此。 如果自定义转换可能会引发异常或丢失信息，请将其定义为显式转换
+
+`is` 和 `as` 运算符不考虑使用用户定义转换。 强制转换表达式用于调用用户定义显式转换
+
+`operator` 和 `implicit` 或 `explicit` 关键字分别用于定义隐式转换或显式转换
+
+```C#
+using System;
+
+public readonly struct Digit
+{
+    private readonly byte digit;
+
+    public Digit(byte digit)
+    {
+        if (digit > 9)
+        {
+            throw new ArgumentOutOfRangeException(nameof(digit), "Digit cannot be greater than nine.");
+        }
+        this.digit = digit;
+    }
+
+    public static implicit operator byte(Digit d) => d.digit;
+    public static explicit operator Digit(byte b) => new Digit(b);
+
+    public override string ToString() => $"{digit}";
+}
+
+public static class UserDefinedConversions
+{
+    public static void Main()
+    {
+        var d = new Digit(7);
+
+        byte number = d;
+        Console.WriteLine(number);  // output: 7
+
+        Digit digit = (Digit)number;
+        Console.WriteLine(digit);  // output: 7
+    }
+}
+```
+*operator 关键字也可用于重载其他预定义的 C# 运算符*
+
+# 指针相关运算符
+
+## Address-of 运算符 &
+
+一元 `&` 运算符返回其操作数的地址
+
+```C#
+int number = 27;
+int* pointerToNumber = &number;
+```
+
 
 # 完毕
 
