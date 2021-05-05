@@ -984,6 +984,48 @@ int number = 27;
 int* pointerToNumber = &number;
 ```
 
+## 指针间接运算符 *
+
+```C#
+char letter = 'A';
+char* pointerToLetter = &letter;
+```
+
+## 指针成员访问运算符 ->
+
+```C#
+x->y
+//等效于 (*x).y
+```
+
+# 赋值运算符
+
+```C#
+a = b = c
+//a = (b = c)
+```
+
+## ref 赋值运算符
+
+从 `C# 7.3` 开始，可以使用 `ref` 赋值运算符 `= ref` 重新分配 `ref local` 或 `ref readonly local` 变量
+
+## 合赋值
+
+```C#
+x op= y
+//x = x op y
+```
+
+## Null 合并赋值
+
+从 `C# 8.0` 开始，只有在左操作数计算为 `null` 时，才能使用 `null` 合并赋值运算符 `??=` 将其右操作数的值分配给左操作数
+
+## 运算符可重载性
+
+用户定义类型不能重载赋值运算符  
+但是可以通过定义为其他类型的隐私转换
+
+
 
 # 完毕
 
