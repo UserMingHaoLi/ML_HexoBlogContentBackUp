@@ -1025,7 +1025,276 @@ x op= y
 用户定义类型不能重载赋值运算符  
 但是可以通过定义为其他类型的隐私转换
 
+# Lambda 表达式
 
+实际上就是匿名方法.
+
+```C#
+(input-parameters) => expression
+(input-parameters) => { <sequence-of-statements> }
+```
+*`{}`表明可以支持语句区块*
+
+## 异步 lambda
+
+通过使用 `async` 和 `await` 关键字，你可以轻松创建包含异步处理的 `lambda` 表达式和语句
+
+```C#
+public partial class Form1 : Form
+{
+    public Form1()
+    {
+        InitializeComponent();
+        button1.Click += button1_Click;
+    }
+
+    private async void button1_Click(object sender, EventArgs e)
+    {
+        await ExampleMethodAsync();
+        textBox1.Text += "\r\nControl returned to Click event handler.\n";
+    }
+
+    private async Task ExampleMethodAsync()
+    {
+        // The following line simulates a task-returning asynchronous process.
+        await Task.Delay(1000);
+    }
+}
+```
+
+```C#
+public partial class Form1 : Form
+{
+    public Form1()
+    {
+        InitializeComponent();
+        button1.Click += async (sender, e) =>
+        {
+            await ExampleMethodAsync();
+            textBox1.Text += "\r\nControl returned to Click event handler.\n";
+        };
+    }
+
+    private async Task ExampleMethodAsync()
+    {
+        // The following line simulates a task-returning asynchronous process.
+        await Task.Delay(1000);
+    }
+}
+```
+
+## lambda 表达式和元组
+
+```C#
+Func<(int, int, int), (int, int, int)> doubleThem = ns => (2 * ns.Item1, 2 * ns.Item2, 2 * ns.Item3);
+```
+
+> 使用匿名函数,**注意闭包**
+
+> 从 `C# 9.0` 开始，可以将 `static` 修饰符应用于 `lambda` 表达式，以防止由 `lambda` 无意中捕获本地变量或实例状态
+
+# 模式
+
+* is表达式
+* switch 语句
+* switch 表达式
+
+* 声明模式：用于检查表达式的运行时类型，如果匹配成功，则将表达式结果分配给声明的变量。 在 C# 7.0 中引入。
+* 类型模式：用于检查表达式的运行时类型。 在 C# 9.0 中引入。
+* 常量模式：用于测试表达式结果是否等于指定常量。 在 C# 7.0 中引入。
+* 关系模式：用于将表达式结果与指定常量进行比较。 在 C# 9.0 中引入。
+* 逻辑模式：用于测试表达式是否与模式的逻辑组合匹配。 在 C# 9.0 中引入。
+* 属性模式：用于测试表达式的属性或字段是否与嵌套模式匹配。 在 C# 8.0 中引入。
+* 位置模式：用于解构表达式结果并测试结果值是否与嵌套模式匹配。 在 C# 8.0 中引入。
+* var 模式：用于匹配任何表达式并将其结果分配给声明的变量。 在 C# 7.0 中引入。
+* 弃元模式：用于匹配任何表达式。 在 C# 8.0 中引入。
+
+## 声明模式
+
+## 类型模式
+
+```C#
+object greeting = "Hello, World!";
+if (greeting is string message)
+{
+    Console.WriteLine(message.ToLower());  // output: hello, world!
+}
+```
+既检查类型,又进行声明.
+
+```C#
+int? xNullable = 7;
+int y = 23;
+object yBoxed = y;
+if (xNullable is int a && yBoxed is int b)
+{
+    Console.WriteLine(a + b);  // output: 30
+}
+```
+
+## 常量模式
+
+```C#
+public static decimal GetGroupTicketPrice(int visitorCount) => visitorCount switch
+{
+    1 => 12.0m,
+    2 => 20.0m,
+    3 => 27.0m,
+    4 => 32.0m,
+    0 => 0.0m,
+    _ => throw new ArgumentException($"Not supported number of visitors: {visitorCount}", nameof(visitorCount)),
+};
+```
+
+或者
+```C#
+if (input is null)
+{
+    return;
+}
+```
+
+## 关系模式
+
+```C#
+static string Classify(double measurement) => measurement switch
+{
+    < -4.0 => "Too low",
+    > 10.0 => "Too high",
+    double.NaN => "Unknown",
+    _ => "Acceptable",
+};
+```
+*看的出来,就是表示两个数之间的关系*
+
+## 逻辑模式
+
+添加额外的`not`,`and`,`or`来进行逻辑组合
+
+```C#
+if (input is not null)
+{
+    // ...
+}
+>= -40.0 and < 0 => "Low",
+9 or 10 or 11 => "autumn"
+```
+
+## 属性模式
+
+```C#
+static bool IsConferenceDay(DateTime date) => date is { Year: 2020, Month: 5, Day: 19 or 20 or 21 };
+```
+
+最后就能写出这么个折磨的玩意.
+```C#
+static string TakeFive(object input) => input switch
+{
+    string { Length: >= 5 } s => s.Substring(0, 5),
+    string s => s,
+
+    ICollection<char> { Count: >= 5 } symbols => new string(symbols.Take(5).ToArray()),
+    ICollection<char> symbols => new string(symbols.ToArray()),
+
+    null => throw new ArgumentNullException(nameof(input)),
+    _ => throw new ArgumentException("Not supported input type."),
+};
+```
+
+## 位置模式
+
+也就是使用元组和解构的模式.
+
+```C#
+public readonly struct Point
+{
+    public int X { get; }
+    public int Y { get; }
+
+    public Point(int x, int y) => (X, Y) = (x, y);
+
+    public void Deconstruct(out int x, out int y) => (x, y) = (X, Y);
+}
+
+static string Classify(Point point) => point switch
+{
+    (0, 0) => "Origin",
+    (1, 0) => "positive X basis end",
+    (0, 1) => "positive Y basis end",
+    _ => "Just a point",
+};
+```
+
+当然,没有元组和解构也可以使用多参数
+```C#
+static decimal GetGroupTicketPriceDiscount(int groupSize, DateTime visitDate)
+    => (groupSize, visitDate.DayOfWeek) switch
+    {
+        (<= 0, _) => throw new ArgumentException("Group size must be positive."),
+        (_, DayOfWeek.Saturday or DayOfWeek.Sunday) => 0.0m,
+        (>= 5 and < 10, DayOfWeek.Monday) => 20.0m,
+        (>= 10, DayOfWeek.Monday) => 30.0m,
+        (>= 5 and < 10, _) => 12.0m,
+        (>= 10, _) => 15.0m,
+        _ => 0.0m,
+    };
+```
+*但本质还是元组*
+
+加上类型就变成这样
+```C#
+static string PrintIfAllCoordinatesArePositive(object point) => point switch
+{
+    Point2D (> 0, > 0) p => p.ToString(),
+    Point3D (> 0, > 0, > 0) p => p.ToString(),
+    _ => string.Empty,
+};
+```
+
+最后这个简直离谱
+```C#
+if (input is WeightedPoint (> 0, > 0) { Weight: > 0.0 } p)
+{
+    // ..
+}
+```
+*如果Input是`WeightedPoint`类型,且`x > 0`, `y > 0`, 那么返回一个`bool`, `weight是否 > 0.0`. 如果是,转化为`WeightedPoint`并赋值给`p`*
+
+> 这玩意还可以递归...
+
+## var模式
+
+```C#
+SimulateDataFetch(id) is var results 
+```
+这表示接受任何转化结果
+
+```C#
+static Point Transform(Point point) => point switch
+{
+    var (x, y) when x < y => new Point(-x, y),
+    var (x, y) when x > y => new Point(x, -y),
+    var (x, y) => new Point(x, y),
+};
+```
+* `var (x, y)` 等效于位置模式 `(var x, var y)`*
+
+## 弃元模式
+
+可使用弃元模式 _ 来匹配任何表达式，包括 null.
+
+一般用作最后, 当作`default`使用
+
+## 带括号模式
+
+从 C# 9.0 开始，可在任何模式两边加上括号。 通常，这样做是为了强调或更改逻辑模式中的优先级
+
+```C#
+if (input is not (float or double))
+{
+    return;
+}
+```
 
 # 完毕
 
