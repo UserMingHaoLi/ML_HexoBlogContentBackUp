@@ -1296,6 +1296,515 @@ if (input is not (float or double))
 }
 ```
 
+# + +=
+
+可用于链接字符串,不过现在推荐`字符串内插`
+
+```C#
+Console.WriteLine("Probably the oldest constant: " + Math.PI);
+```
+
+```C#
+Console.WriteLine($"Probably the oldest constant: {Math.PI:F2}");
+```
+
+还可增加委托链
+```C#
+Action a = () => Console.Write("a");
+Action b = () => Console.Write("b");
+Action ab = a + b;
+ab();  // output: ab
+```
+
+# - -=
+
+委托删除, 具体同上
+
+还支持`=`赋值的操作.
+
+```C#
+Action a = () => Console.Write("a");
+Action b = () => Console.Write("b");
+
+var abbaab = a + b + b + a + a + b;
+abbaab();  // output: abbaab
+Console.WriteLine();
+
+var ab = a + b;
+var abba = abbaab - ab;
+abba();  // output: abba
+Console.WriteLine();
+
+var nihil = abbaab - abbaab;
+Console.WriteLine(nihil is null);  // output: True
+```
+
+不连续的话,就删不掉
+
+```C#
+Action a = () => Console.Write("a");
+Action b = () => Console.Write("b");
+
+var abbaab = a + b + b + a + a + b;
+var aba = a + b + a;
+
+var first = abbaab - aba;
+first();  // output: abbaab
+Console.WriteLine();
+Console.WriteLine(object.ReferenceEquals(abbaab, first));  // output: True
+
+Action a2 = () => Console.Write("a");
+var changed = aba - a;
+changed();  // output: ab
+Console.WriteLine();
+var unchanged = aba - a2;
+unchanged();  // output: aba
+Console.WriteLine();
+Console.WriteLine(object.ReferenceEquals(aba, unchanged));  // output: True
+```
+
+还有`null`的情况,实际上是区分左右符号的
+```C#
+Action a = () => Console.Write("a");
+
+var nothing = null - a;
+Console.WriteLine(nothing is null);  // output: True
+
+var first = a - null;
+a();  // output: a
+Console.WriteLine();
+Console.WriteLine(object.ReferenceEquals(first, a));  // output: True
+```
+
+# ?: 
+
+根据布尔表达式的计算结果为 `true` 还是 `false` 来返回两个表达式中的一个结果
+
+```C#
+string GetWeatherDisplay(double tempInCelcius) => tempInCelcius < 20.0 ? "Cold." : "Perfect!";
+
+Console.WriteLine(GetWeatherDisplay(15));  // output: Cold.
+Console.WriteLine(GetWeatherDisplay(27));  // output: Perfect!
+```
+
+可以嵌套
+```C#
+a ? b : c ? d : e
+//等同于
+a ? b : (c ? d : e)
+```
+
+> 实际上就是另类的`if..else`
+
+# x! (null包容运算符)
+
+`null 包容运算符`在运行时不起作用。 它仅通过更改表达式的 `null` 状态来影响编译器的静态流分析
+
+```C#
+#nullable enable
+public class Person
+{
+    public Person(string name) => Name = name ?? throw new ArgumentNullException(nameof(name));
+
+    public string Name { get; }
+}
+[TestMethod, ExpectedException(typeof(ArgumentNullException))]
+public void NullNameShouldThrowTest()
+{
+    var person = new Person(null!);
+}
+```
+
+如果不使用 `null 包容运算符`，编译器将为前面的代码生成以下警告：*Warning CS8625: Cannot convert null literal to non-nullable reference type*
+
+```C#
+public static void Main()
+{
+    Person? p = Find("John");
+    if (IsValid(p))
+    {
+        Console.WriteLine($"Found {p!.Name}");
+    }
+}
+
+public static bool IsValid(Person? person)
+    => person is not null && person.Name is not null;
+```
+如果没有 `null 包容运算符`，编译器将为 `p.Name` 代码生成以下警告：*Warning CS8602: Dereference of a possibly null reference*
+
+# ?? 和 ??=
+
+如果左操作数的值不为 `null`，则 null 合并运算符 `??` 返回该值；否则，它会计算右操作数并返回其结果  
+如果左操作数的计算结果为非 `null`，则 `??` 运算符不会计算其右操作数
+
+`C# 8.0` 及更高版本中可使用空合并赋值运算符 `??=`，该运算符仅在左侧操作数的求值结果为 `null` 时，才将其右侧操作数的值赋值给左操作数。 如果左操作数的计算结果为非 `null`，则 `??=` 运算符不会计算其右操作数
+
+```C#
+List<int> numbers = null;
+int? a = null;
+
+(numbers ??= new List<int>()).Add(5);
+Console.WriteLine(string.Join(" ", numbers));  // output: 5
+
+numbers.Add(a ??= 0);
+Console.WriteLine(string.Join(" ", numbers));  // output: 5 0
+Console.WriteLine(a);  // output: 0
+```
+
+null 合并运算符是右结合运算符。
+```C#
+a ?? b ?? c
+d ??= e ??= f
+//求值顺序为
+a ?? (b ?? c)
+d ??= (e ??= f)
+```
+
+*运算符 `??` 和 `??=` 无法进行重载*
+
+# =>
+
+`=>` 令牌支持两种形式：作为 `lambda` 运算符、作为成员名称的分隔符和表达式主体定义中的成员实现
+
+两者都属于匿名函数一类.
+
+```C#
+int minimalLength = words
+  .Where(w => w.StartsWith("a"))
+  .Min(w => w.Length);
+```
+
+```C#
+public override string ToString() => $"{fname} {lname}".Trim();
+```
+
+# ::
+
+使用命名空间别名限定符 `::` 访问已设置别名的命名空间的成员
+
+```C#
+using forwinforms = System.Drawing;
+using forwpf = System.Windows;
+
+public class Converters
+{
+    public static forwpf::Point Convert(forwinforms::Point point) => new forwpf::Point(point.X, point.Y);
+}
+```
+
+`global` 别名，该别名是全局命名空间别名
+
+```C#
+namespace MyCompany.MyProduct.System
+{
+    class Program
+    {
+        static void Main() => global::System.Console.WriteLine("Using global alias");
+    }
+
+    class Console
+    {
+        string Suggestion => "Consider renaming this class";
+    }
+}
+```
+
+# await
+
+`await` 运算符暂停对其所属的 `async` 方法的求值，直到其操作数表示的异步操作完成
+
+```C#
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+public class AwaitOperator
+{
+    public static async Task Main()
+    {
+        Task<int> downloading = DownloadDocsMainPageAsync();
+        Console.WriteLine($"{nameof(Main)}: Launched downloading.");
+
+        int bytesLoaded = await downloading;
+        Console.WriteLine($"{nameof(Main)}: Downloaded {bytesLoaded} bytes.");
+    }
+
+    private static async Task<int> DownloadDocsMainPageAsync()
+    {
+        Console.WriteLine($"{nameof(DownloadDocsMainPageAsync)}: About to start downloading.");
+
+        var client = new HttpClient();
+        byte[] content = await client.GetByteArrayAsync("https://docs.microsoft.com/en-us/");
+
+        Console.WriteLine($"{nameof(DownloadDocsMainPageAsync)}: Finished downloading.");
+        return content.Length;
+    }
+}
+// Output similar to:
+// DownloadDocsMainPageAsync: About to start downloading.
+// Main: Launched downloading.
+// DownloadDocsMainPageAsync: Finished downloading.
+// Main: Downloaded 27700 bytes.
+```
+
+# default value 表达式
+
+## default 运算符
+
+```C#
+Console.WriteLine(default(int));  // output: 0
+Console.WriteLine(default(object) is null);  // output: True
+
+void DisplayDefaultOf<T>()
+{
+    var val = default(T);
+    Console.WriteLine($"Default value of {typeof(T)} is {(val == null ? "null" : val.ToString())}.");
+}
+
+DisplayDefaultOf<int?>();
+DisplayDefaultOf<System.Numerics.Complex>();
+DisplayDefaultOf<System.Collections.Generic.List<int>>();
+// Output:
+// Default value of System.Nullable`1[System.Int32] is null.
+// Default value of System.Numerics.Complex is (0, 0).
+// Default value of System.Collections.Generic.List`1[System.Int32] is null.
+```
+
+## default 文本
+
+`T`可推断时,可以省略.
+
+```C#
+System.Numerics.Complex fillValue = default;
+//同
+System.Numerics.Complex fillValue = default(System.Numerics.Complex);
+```
+
+# delegate
+
+`delegate` 运算符创建一个可以转换为委托类型的匿名方法
+
+```C#
+Func<int, int, int> sum = delegate (int a, int b) { return a + b; };
+Console.WriteLine(sum(3, 4));  // output: 7
+```
+
+> 现在一般都用`=>`表达了.
+```C#
+Func<int, int, int> sum = (a, b) => a + b;
+Console.WriteLine(sum(3, 4));  // output: 7
+```
+
+使用 `delegate` 运算符时，可以省略参数列表。 如果这样做，可以将创建的匿名方法转换为具有任何参数列表的委托类型  
+这是 `lambda` 表达式不支持的匿名方法的唯一功能
+
+```C#
+Action greet = delegate { Console.WriteLine("Hello!"); };
+greet();
+Action<int, double> introduce = delegate { Console.WriteLine("This is world!"); };
+introduce(42, 2.7);
+```
+
+# is
+
+详细请参阅上方的`模式`
+
+# nameof
+
+`nameof` 表达式可生成变量、类型或成员的名称作为字符串常量
+
+```C#
+Console.WriteLine(nameof(System.Collections.Generic));  // output: Generic
+Console.WriteLine(nameof(List<int>));  // output: List
+Console.WriteLine(nameof(List<int>.Count));  // output: Count
+Console.WriteLine(nameof(List<int>.Add));  // output: Add
+
+var numbers = new List<int> { 1, 2, 3 };
+Console.WriteLine(nameof(numbers));  // output: numbers
+Console.WriteLine(nameof(numbers.Count));  // output: Count
+Console.WriteLine(nameof(numbers.Add));  // output: Add
+```
+
+在逐字标识符的情况下，@ 字符不是名称的一部分
+```C#
+var @new = 5;
+Console.WriteLine(nameof(@new));  // output: new
+```
+
+*`nameof` 表达式在编译时进行求值，在运行时无效*
+
+# new
+
+`new` 运算符创建类型的新实例  
+`new` 关键字还可用作成员声明修饰符或泛型类型约束
+
+# sizeof
+
+不安全的上下文中,返回给定类型的变量所占用的字节数
+
+但下表中的表达式在编译时被计算为相应的常数值，并不需要*不安全*的上下文
+
+| Expression      | 常量值 |
+| --------------- | ------ |
+| sizeof(sbyte)   | 1      |
+| sizeof(byte)    | 1      |
+| sizeof(short)   | 2      |
+| sizeof(ushort)  | 2      |
+| sizeof(int)     | 4      |
+| sizeof(uint)    | 4      |
+| sizeof(long)    | 8      |
+| sizeof(ulong)   | 8      |
+| sizeof(char)    | 2      |
+| sizeof(float)   | 4      |
+| sizeof(double)  | 8      |
+| sizeof(decimal) | 16     |
+| sizeof(bool)    | 1      |
+
+# stackalloc
+
+`stackalloc` 表达式在堆栈上分配内存块
+
+# switch
+
+switch 更多内容,可以参考`模式`
+
+# true 和 false 运算符
+
+就是`bool`的定值. 这也属于运算符,而不是值.但又类似于值,因为他们本身就返回`true`和`false`
+
+# with 表达式
+
+`with` 表达式在 `C# 9.0` 及更高版本中可用，使用修改的特定属性和字段生成其记录操作数的副本
+
+```C#
+using System;
+public class WithExpressionBasicExample
+{
+    public record NamedPoint(string Name, int X, int Y);
+
+    public static void Main()
+    {
+        var p1 = new NamedPoint("A", 0, 0);
+        Console.WriteLine($"{nameof(p1)}: {p1}");  // output: p1: NamedPoint { Name = A, X = 0, Y = 0 }
+        
+        var p2 = p1 with { Name = "B", X = 5 };
+        Console.WriteLine($"{nameof(p2)}: {p2}");  // output: p2: NamedPoint { Name = B, X = 5, Y = 0 }
+        
+        var p3 = p1 with 
+            { 
+                Name = "C", 
+                Y = 4 
+            };
+        Console.WriteLine($"{nameof(p3)}: {p3}");  // output: p3: NamedPoint { Name = C, X = 0, Y = 4 }
+
+        Console.WriteLine($"{nameof(p1)}: {p1}");  // output: p1: NamedPoint { Name = A, X = 0, Y = 0 }
+    }
+}
+```
+*如上一个示例所示，你可以使用对象初始值设定项语法来指定要修改的成员及其新值*
+
+对于引用类型成员，在复制记录时仅复制对实例的引用。 副本和原始记录都具有对同一引用类型实例的访问权限
+
+下面的示例使用显式复制构造函数更新前面的示例。 复制记录时，新的复制行为是复制列表项而不是列表引用
+
+```C#
+using System;
+using System.Collections.Generic;
+
+public class UserDefinedCopyConstructorExample
+{
+    public record TaggedNumber(int Number, List<string> Tags)
+    {
+        protected TaggedNumber(TaggedNumber original)
+        {
+            Number = original.Number;
+            Tags = new List<string>(original.Tags);
+        }
+
+        public string PrintTags() => string.Join(", ", Tags);
+    }
+
+    public static void Main()
+    {
+        var original = new TaggedNumber(1, new List<string> { "A", "B" });
+
+        var copy = original with { Number = 2 };
+        Console.WriteLine($"Tags of {nameof(copy)}: {copy.PrintTags()}");
+        // output: Tags of copy: A, B
+
+        original.Tags.Add("C");
+        Console.WriteLine($"Tags of {nameof(copy)}: {copy.PrintTags()}");
+        // output: Tags of copy: A, B
+    }
+}
+```
+
+# 运算符重载
+
+用户定义的类型可重载预定义的 C# 运算符。 也就是说，当一个或两个操作数都是某类型时，此类型可提供操作的自定义实现
+
+使用 `operator` 关键字来声明运算符
+
+* 同时包含 `public` 和 `static` 修饰符。
+* 一元运算符有一个输入参数。 二元运算符有两个输入参数。 在每种情况下，都至少有一个参数必须具有类型 `T` 或 `T?`，其中 `T` 是包含运算符声明的类型
+
+```C#
+using System;
+
+public readonly struct Fraction
+{
+    private readonly int num;
+    private readonly int den;
+
+    public Fraction(int numerator, int denominator)
+    {
+        if (denominator == 0)
+        {
+            throw new ArgumentException("Denominator cannot be zero.", nameof(denominator));
+        }
+        num = numerator;
+        den = denominator;
+    }
+
+    public static Fraction operator +(Fraction a) => a;
+    public static Fraction operator -(Fraction a) => new Fraction(-a.num, a.den);
+
+    public static Fraction operator +(Fraction a, Fraction b)
+        => new Fraction(a.num * b.den + b.num * a.den, a.den * b.den);
+
+    public static Fraction operator -(Fraction a, Fraction b)
+        => a + (-b);
+
+    public static Fraction operator *(Fraction a, Fraction b)
+        => new Fraction(a.num * b.num, a.den * b.den);
+
+    public static Fraction operator /(Fraction a, Fraction b)
+    {
+        if (b.num == 0)
+        {
+            throw new DivideByZeroException();
+        }
+        return new Fraction(a.num * b.den, a.den * b.num);
+    }
+
+    public override string ToString() => $"{num} / {den}";
+}
+
+public static class OperatorOverloading
+{
+    public static void Main()
+    {
+        var a = new Fraction(5, 4);
+        var b = new Fraction(1, 2);
+        Console.WriteLine(-a);   // output: -5 / 4
+        Console.WriteLine(a + b);  // output: 14 / 8
+        Console.WriteLine(a - b);  // output: 6 / 8
+        Console.WriteLine(a * b);  // output: 5 / 8
+        Console.WriteLine(a / b);  // output: 10 / 4
+    }
+}
+```
+
 # 完毕
 
 **感谢您的观看!**  
