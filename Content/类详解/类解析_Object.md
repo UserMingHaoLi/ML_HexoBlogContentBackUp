@@ -101,6 +101,16 @@ public override bool Equals(Object obj)
 # GetHashCode
 
 作为默认哈希函数
+```C#
+public virtual int GetHashCode()
+{
+	return RuntimeHelpers.GetHashCode(this);
+}
+[System.Security.SecuritySafeCritical]
+[ResourceExposure(ResourceScope.None)]
+[MethodImplAttribute(MethodImplOptions.InternalCall)]
+public static extern int GetHashCode(Object o);
+```
 
 生成哈希代码的一种方法是使用操作来合并这些字段 
 
@@ -159,10 +169,149 @@ public override int GetHashCode()
 
 `GetHashCode()` 方法不应引发异常
 
+# GetType
+
+```C#
+[System.Security.SecuritySafeCritical]
+[Pure]
+[ResourceExposure(ResourceScope.None)]
+[MethodImplAttribute(MethodImplOptions.InternalCall)]
+public extern Type GetType();
+```
+
+获取当前实例的 Type
+
+返回当前实例的准确运行时类型
+
+因为 `System.Object` 是 `.net` 类型系统中所有类型的基类，所以 `GetType` 方法可用于返回 `Type` 表示所有 `.net` 类型的对象
+
+如果两个对象 `x`,  `y` 具有相同的运行时类型，则 `Object.ReferenceEquals(x.GetType(),y.GetType())` 返回 `true`  
+*也就是说,得到的`Type`是相同的*
+
+# ToString
+
+返回表示当前对象的字符串
+
+```C#
+public virtual String ToString()
+{
+	return GetType().ToString();
+}
+//Type.ToString如下
+public override String ToString()
+{
+	return "Type: " + Name;
+}
+```
+*这意味着,如果不实现自己的`ToString`, 默认实现会返回对象类型的完全限定名称*
+
+基础类型中`结构`和`枚举`都默认重写了`ToString`
+
+许多类型还重载 `ToString` 方法以提供接受多种参数的版本
+
+下面的示例调用重载 `Decimal.ToString(String, IFormatProvider)` 的方法，以显示货币值的区分区域性的格式设置
+
+```C#
+using System;
+using System.Globalization;
+
+public class Example
+{
+   public static void Main()
+   {
+      string[] cultureNames = { "en-US", "en-GB", "fr-FR",
+                                "hr-HR", "ja-JP" };
+      Decimal value = 1603.49m;
+      foreach (var cultureName in cultureNames) {
+         CultureInfo culture = new CultureInfo(cultureName);
+         Console.WriteLine("{0}: {1}", culture.Name,
+                           value.ToString("C2", culture));
+      }
+   }
+}
+// The example displays the following output:
+//       en-US: $1,603.49
+//       en-GB: £1,603.49
+//       fr-FR: 1 603,49 €
+//       hr-HR: 1.603,49 kn
+//       ja-JP: ¥1,603.49
+```
+
+## 扩展对象 ToString 方法
+
+尽管可能需要 `ToString` 数组或集合类来显示其成员的值，但它将显示类型完全限定的类型名称.  
+这不是我们希望的. 所以可以有以下几个方式.
+
+* 对象或实现 `IEnumerable` 或 `IEnumerable<T>` ，则可以使用 `foreach`, 遍历每个单位输出  
+* 如果类不 `sealed`, 则可以继承并重写`ToString`方法.
+* 使用`扩展方法`
+
+```C#
+public class CList<T> : List<T>
+{
+   public CList(IEnumerable<T> collection) : base(collection)
+   { }
+
+   public CList() : base()
+   {}
+
+   public override string ToString()
+   {
+      string retVal = string.Empty;
+      foreach (T item in this) {
+         if (string.IsNullOrEmpty(retVal))
+            retVal += item.ToString();
+         else
+            retVal += string.Format(", {0}", item);
+      }
+      return retVal;
+   }
+}
+```
+
+```C#
+public static string ToString2<T>(this List<T> l)
+{
+	string retVal = string.Empty;
+	foreach (T item in l)
+		retVal += string.Format("{0}{1}", string.IsNullOrEmpty(retVal) ?
+													"" : ", ",
+								item);
+	return string.IsNullOrEmpty(retVal) ? "{}" : "{ " + retVal + " }";
+}
+```
+
+> 不推荐自己实现`IStringable`
+
+需要更好地控制格式设置的派生类 `ToString()` 可以实现 `IFormattable` 接口
+
+方法的重写 `ToString()` 应遵循以下准则
+
+* 返回的字符串应该是友好的，可供人们阅读。
+* 返回的字符串应唯一标识对象实例的值。
+* 返回的字符串应尽可能短，以便调试器能够显示它。
+* `ToString()` 重写不应返回 `Empty` 或为空字符串。
+* `ToString()` 重写不应引发异常。
+* 如果实例的字符串表示形式区分区域性或可通过多种方式进行格式化，则实现 `IFormattable` 接口
+* 如果返回的字符串包含敏感信息，则应首先请求适当的权限。 如果请求成功，则可以返回敏感信息;否则，应返回排除敏感信息的字符串
+* `ToString()` 重写应没有可观察到的副作用，以避免调试中的复杂。 例如，对方法的调用 `ToString()` 不应更改实例字段的值
+* 如果你的类型可以通过构造函数或从字符串实例化,则应确保该方法返回的字符串 `ToString()` 可转换为对象实例
+
 # Windows运行时
 
 有些类可能不是继承自`Object`, 但是会由 `.NET Framework` 提供这些方法的默认行为
 
+# MemberwiseClone
+
+# 静态Equals
+
+# 静态ReferenceEquals
+
+# 构造
+
+# 析构
+
+# private
 
 # 完毕
 
