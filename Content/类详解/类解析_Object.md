@@ -303,15 +303,236 @@ public static string ToString2<T>(this List<T> l)
 
 # MemberwiseClone
 
+```C#
+[System.Security.SecuritySafeCritical] 
+[ResourceExposure(ResourceScope.None)]
+[MethodImplAttribute(MethodImplOptions.InternalCall)]
+protected extern Object MemberwiseClone();
+```
+
+执行浅表复制操作  
+
+将当前对象的非静态字段复制到新的对象。 如果字段是值类型，则执行字段的逐位副本。 如果字段是引用类型，则会复制引用，但不会复制引用的对象;因此，原始对象及其复本引用相同的对象。
+
+浅层复制不能满足需要,则
+
+* 使用构造函数创建一个新的
+* 调用 `MemberwiseClone` 后手动赋值引用类型
+* 序列化要深层复制的对象，然后将序列化的数据还原到其他对象变量
+* 使用带有递归的反射来执行深层复制操作
+
 # 静态Equals
+
+```C#
+public static bool Equals(Object objA, Object objB) 
+{
+   if (objA==objB) {
+      return true;
+   }
+   if (objA==null || objB==null) {
+      return false;
+   }
+   return objA.Equals(objB);
+}
+```
+
+可见,先判断引用相同,在判断`Null`,最后是本体的`Equals`.
+
+所以两个`null`可以返回`true`
+
+*如果 `objA` 重写 `Object.Equals(Object)` 方法，则将调用此重写*
 
 # 静态ReferenceEquals
 
+```C#
+[ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+[System.Runtime.Versioning.NonVersionable]
+public static bool ReferenceEquals (Object objA, Object objB) {
+   return objA == objB;
+}
+```
+
+可见,只比较了`==`
+
+`ReferenceEquals` 在这两种情况下，方法的返回值可能看起来是异常的
+
+* 比较值类型时, 由于装箱,会返回`false`
+* 比较字符串时, 取决于该字符串是否是缓存.
+
+```C#
+String s1 = "String1";
+String s2 = "String1";
+Console.WriteLine("s1 = s2: {0}", Object.ReferenceEquals(s1, s2));
+Console.WriteLine("{0} interned: {1}", s1,
+                  String.IsNullOrEmpty(String.IsInterned(s1)) ? "No" : "Yes");
+
+String suffix = "A";
+String s3 = "String" + suffix;
+String s4 = "String" + suffix;
+Console.WriteLine("s3 = s4: {0}", Object.ReferenceEquals(s3, s4));
+Console.WriteLine("{0} interned: {1}", s3,
+                  String.IsNullOrEmpty(String.IsInterned(s3)) ? "No" : "Yes");
+
+// The example displays the following output:
+//       s1 = s2: True
+//       String1 interned: Yes
+//       s3 = s4: False
+//       StringA interned: No
+```
+*s3和s4不是缓存,引用不同,则返回`false`*
+
 # 构造
+
+```C#
+[ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+[System.Runtime.Versioning.NonVersionable]
+public Object()
+{            
+}
+```
+啥也没做,就创建一个空`Object`
 
 # 析构
 
+```C#
+[ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+[System.Runtime.Versioning.NonVersionable]
+~Object()
+{
+}
+```
+`Finalize`方法用于在销毁对象之前对当前对象占用的非托管资源执行清理操作。 方法是受保护的，因此只能通过此类或派生类访问
+
+`Object`类不提供方法的实现
+
+`Finalize` 操作具有以下限制
+
+* 不确定终结器执行时的准确时间。 若要确保类的实例的资源的确定性版本，请实现 Close 方法或提供 IDisposable.Dispose 实现
+* 不能保证两个对象的终结器以任何特定顺序运行
+* 不指定终结器在其上运行的线程
+
+在 `Finalize` 以下异常情况下，该方法可能无法运行到完成或根本不会运行
+
+* 如果另一个终结器无限期地阻止 (进入无限循环，则尝试获取它永远无法获取的锁，依此类推) 。 因为运行时尝试运行终结器来完成，所以如果终结器无限期阻塞，则可能不会调用其他终结器
+* 如果进程终止，无需给运行时提供清理的机会。 在这种情况下，运行时的进程终止通知是 DLL_PROCESS_DETACH 通知
+
+如果 `Finalize` 或的替代 `Finalize` 引发了异常，并且运行时不是由覆盖默认策略的应用程序承载，则运行时将终止进程，并且不会执行任何活动的 `try / finally` 块或终结器
+
+---
+
+应为 `Finalize` 使用非托管资源的类,因为垃圾回收器会自动释放托管资源
+
+`C #` 编译器不允许重写 `Finalize` 方法。 而是通过实现类的 析构函数 来提供终结器。 `C #` 析构函数自动调用其基类的析构函数
+
 # private
+
+```C#
+// Sets the value specified in the variant on the field
+// 
+[System.Security.SecurityCritical]  // auto-generated
+private void FieldSetter(String typeName, String fieldName, Object val)
+{
+   Contract.Requires(typeName != null);
+   Contract.Requires(fieldName != null);
+
+   // Extract the field info object
+   FieldInfo fldInfo = GetFieldInfo(typeName, fieldName);
+
+   if (fldInfo.IsInitOnly)
+      throw new FieldAccessException(Environment.GetResourceString("FieldAccess_InitOnly"));
+
+   // Make sure that the value is compatible with the type
+   // of field
+#if FEATURE_REMOTING        
+   System.Runtime.Remoting.Messaging.Message.CoerceArg(val, fldInfo.FieldType);    
+#else
+   Type pt=fldInfo.FieldType;
+   if (pt.IsByRef) 
+   {
+      pt = pt.GetElementType();
+   }
+
+   if (!pt.IsInstanceOfType(val))
+   {
+      val = Convert.ChangeType(val, pt, CultureInfo.InvariantCulture);
+   }
+
+#endif
+
+   // Set the value            
+   fldInfo.SetValue(this, val);
+}
+
+// Gets the value specified in the variant on the field
+// 
+private void FieldGetter(String typeName, String fieldName, ref Object val)
+{
+   Contract.Requires(typeName != null);
+   Contract.Requires(fieldName != null);
+
+   // Extract the field info object
+   FieldInfo fldInfo = GetFieldInfo(typeName, fieldName);
+
+   // Get the value
+   val = fldInfo.GetValue(this);            
+}
+
+// Gets the field info object given the type name and field name.
+// 
+private FieldInfo GetFieldInfo(String typeName, String fieldName)
+{
+   Contract.Requires(typeName != null);
+   Contract.Requires(fieldName != null);
+   Contract.Ensures(Contract.Result<FieldInfo>() != null);
+
+   Type t = GetType();
+   while(null != t)
+   {
+      if(t.FullName.Equals(typeName))
+      {
+            break;
+      }
+
+      t = t.BaseType;
+   }
+   
+   if (null == t)
+   {
+#if FEATURE_REMOTING         
+      throw new RemotingException(String.Format(
+            CultureInfo.CurrentCulture, Environment.GetResourceString("Remoting_BadType"),
+                                          typeName));
+#else
+      throw new ArgumentException();
+#endif
+   }
+
+   FieldInfo fldInfo = t.GetField(fieldName, BindingFlags.Public | 
+                                             BindingFlags.Instance | 
+                                             BindingFlags.IgnoreCase);
+   if(null == fldInfo)
+   {
+#if FEATURE_REMOTING 
+      throw new RemotingException(String.Format(
+            CultureInfo.CurrentCulture, Environment.GetResourceString("Remoting_BadField"),
+                                          fieldName, typeName));            
+#else
+      throw new ArgumentException();
+#endif
+
+   }
+   
+   return fldInfo;
+}
+```
+
+搜了一圈没找到是干啥用的,推测可能是反射或者泛型使用.
+
+## 内部方法 __Canon
+
+用于实例化`规范化`的方法列表,来具现泛型实例
+
+用户不会看到他们,但堆栈或者反编译工具经常能见到他.
 
 # 完毕
 
