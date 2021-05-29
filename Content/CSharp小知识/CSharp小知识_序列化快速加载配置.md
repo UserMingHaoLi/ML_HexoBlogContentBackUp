@@ -1,11 +1,12 @@
 ---
-title: CSharp序列化快速加载配置
+title: CSharp小知识_序列化快速加载配置
 date: 2019-06-17 22:18:00
 updated: 2019-06-17 22:18:00
 id: ml-20190617-221800-g10
 categories:
-	- 小知识
+	- CSharp小知识
 tags: 
+	- CSharp小知识
 	- CSharp
 ---
 # CSharp序列化快速加载配置
