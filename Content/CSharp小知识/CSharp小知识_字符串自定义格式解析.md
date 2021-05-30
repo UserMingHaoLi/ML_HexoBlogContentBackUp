@@ -14,6 +14,73 @@ tags:
 
 <!--more-->
 
+```C#
+static void Main(string[] args)
+{
+	MyFormattable pFormattable = new MyFormattable();
+	string printString;
+	MyFormatProvider myFormater = new MyFormatProvider();
+	printString = string.Format(myFormater, "{0}", pFormattable);
+	Console.WriteLine("{0}", printString);
+	printString = string.Format(myFormater, "{0:C}", pFormattable);
+	Console.WriteLine("{0}", printString);
+	printString = string.Format(myFormater, "{0:MyFormater}", pFormattable);
+	Console.WriteLine("{0}", printString);
+
+	Console.Read();
+}
+}
+public class MyFormatProvider : IFormatProvider
+{
+public object GetFormat(Type format)
+{
+	if (format == typeof(ICustomFormatter))
+		return new MyCustomFormatter();
+	return null;
+}
+}
+public class MyCustomFormatter : ICustomFormatter
+{
+public string Format(string format, object arg, IFormatProvider provider)
+{
+	if (format == null)
+	{
+		if (arg is IFormattable)
+			return ((IFormattable)arg).ToString(format, provider);
+		return arg.ToString();
+	}
+	else
+	{
+		if (format == "MyFormater")
+		{
+			return "CustomFormatter Case MyFormater + " + arg.ToString();
+		}
+		else
+		{
+			if (arg is IFormattable)
+				return ((IFormattable)arg).ToString(format, provider);
+			return arg.ToString();
+		}
+	}
+}
+}
+public class MyFormattable : IFormattable
+{
+public string ToString(string format, IFormatProvider formatProvider)
+{
+	if(format == "C")
+	{
+		return "Formattable Case C";
+	}
+	return "Formattable Case Default";
+}
+
+public override string ToString()
+{
+	return "Override Object ToString";
+}
+}
+```
 
 # 完毕
 
