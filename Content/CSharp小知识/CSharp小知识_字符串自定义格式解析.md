@@ -258,8 +258,260 @@ public string ToString(string format)
 
 # 自定义格式字符串
 
+如果格式字符串仅包含一个自定义格式说明符，则此格式说明符前面应带有百分比 (%) 符号，以免与标准格式说明符混淆
+```C#
+DateTime date1 = new DateTime(2009, 9, 8);
+Console.WriteLine(date1.ToString("%M"));       // Displays 9
+```
+日期和时间值的许多标准格式字符串均是由 `DateTimeFormatInfo` 对象的属性所定义的自定义格式字符串的别名
 
+```C#
+string customFormat = "MMMM dd, yyyy (dddd)";
+DateTime date1 = new DateTime(2009, 8, 28);
+Console.WriteLine(date1.ToString(customFormat));
+// The example displays the following output if run on a system
+// whose language is English:
+//       August 28, 2009 (Friday)
+```
+```C#
+using System;
 
+public class Example
+{
+   public static void Main()
+   {
+      long number = 8009999999;
+      string fmt = "000-000-0000";
+      Console.WriteLine(number.ToString(fmt));
+   }
+}
+// The example displays the following output:
+//        800-999-9999
+```
+
+在 .NET 中，此附加格式设置信息通过 `IFormatProvider` 接口提供
+
+`IFormatProvider` 接口包含一个 `GetFormat(Type)`方法，该方法只有一个参数，该参数指定提供格式设置信息的对象类型。 如果该方法可以提供该类型的对象，则返回它。 否则，它返回空引用
+
+这对应开篇代码块中的`MyFormatProvider`类,其中的`if`可以扩充为更多选择
+
+`GetFormat` 方法负责将提供所需格式设置信息的对象返回给 `ToString` 方法,也就是说实际上是一个由`ToString`调用的回调方法.
+
+> 如果方法没有 `IFormatProvider` 类型的参数，则改为传递 `CultureInfo.CurrentCulture` 属性所返回的对象。 例如，对默认 `Int32.ToString()` 方法的调用最终将导致诸如以下的方法调用： `Int32.ToString("G", System.Globalization.CultureInfo.CurrentCulture)`
+
+.NET 提供了三个实现 `IFormatProvider` 的类
+
+* `DateTimeFormatInfo` 类，提供特定区域性的日期和时间值的格式设置信息
+* `NumberFormatInfo` 类，提供特定区域性的数字格式设置信息
+* `CultureInfo` 。 其 `IFormatProvider.GetFormat` 实现可以返回一个 `NumberFormatInfo` 对象（可提供数字格式设置信息）或一个 `DateTimeFormatInfo` 对象（可提供日期和时间值的格式设置信息）
+ 
+# 数值的区分区域性的格式设置
+
+默认情况下，数值的格式设置是区分区域性的。 如果在调用格式设置方法时不指定区域性，则将使用当前线程区域性的格式设置约定
+
+```C#
+using System;
+using System.Globalization;
+using System.Threading;
+
+public class Example
+{
+   public static void Main()
+   {
+      string[] cultureNames = { "en-US", "fr-FR", "es-MX", "de-DE" };
+      Decimal value = 1043.17m;
+
+      foreach (var cultureName in cultureNames) {
+         // Change the current thread culture.
+         Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(cultureName);
+         Console.WriteLine("The current culture is {0}",
+                           Thread.CurrentThread.CurrentCulture.Name);
+         Console.WriteLine(value.ToString("C2"));
+         Console.WriteLine();
+      }
+   }
+}
+// The example displays the following output:
+//       The current culture is en-US
+//       $1,043.17
+//
+//       The current culture is fr-FR
+//       1 043,17 €
+//
+//       The current culture is es-MX
+//       $1,043.17
+//
+//       The current culture is de-DE
+//       1.043,17 €
+```
+
+# 日期和时间值的区分区域性的格式设置
+
+默认情况下，日期和时间值的格式设置是区分区域性的。 如果在调用格式设置方法时不指定区域性，则将使用当前线程区域性的格式设置约定
+
+```C#
+using System;
+using System.Globalization;
+using System.Threading;
+
+public class Example
+{
+   public static void Main()
+   {
+      string[] cultureNames = { "en-US", "fr-FR", "es-MX", "de-DE" };
+      DateTime dateToFormat = new DateTime(2012, 5, 28, 11, 30, 0);
+
+      foreach (var cultureName in cultureNames) {
+         // Change the current thread culture.
+         Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(cultureName);
+         Console.WriteLine("The current culture is {0}",
+                           Thread.CurrentThread.CurrentCulture.Name);
+         Console.WriteLine(dateToFormat.ToString("F"));
+         Console.WriteLine();
+      }
+   }
+}
+// The example displays the following output:
+//       The current culture is en-US
+//       Monday, May 28, 2012 11:30:00 AM
+//
+//       The current culture is fr-FR
+//       lundi 28 mai 2012 11:30:00
+//
+//       The current culture is es-MX
+//       lunes, 28 de mayo de 2012 11:30:00 a.m.
+//
+//       The current culture is de-DE
+//       Montag, 28. Mai 2012 11:30:00
+```
+
+# IFormattable 接口
+
+通常 `IFormatProvider` 方法的类型还实现 `IFormattable` 接口
+
+此接口具有一个成员 `IFormattable.ToString(String, IFormatProvider)`，该成员同时将格式字符串和格式提供程序作为参数
+
+对应用程序定义的类实现 `IFormattable` 接口具有两大优势
+
+* 支持使用 `Convert` 类进行字符串转换。 对 `Convert.ToString(Object)` 和 `Convert.ToString(Object, IFormatProvider)` 方法的调用会自动调用 `IFormattable` 实现
+
+* 支持复合格式设置。 如果使用包含格式字符串的格式项设置自定义类型的格式，则公共语言运行时自动调用 IFormattable 实现，并向其传递该格式字符串
+
+```C#
+public string ToString(string format, IFormatProvider provider)
+{
+	// Handle null or empty arguments.
+	if (String.IsNullOrEmpty(format))
+		format = "G";
+	// Remove any white space and covert to uppercase.
+	format = format.Trim().ToUpperInvariant();
+
+	if (provider == null)
+		provider = NumberFormatInfo.CurrentInfo;
+
+	switch (format)
+	{
+		// Convert temperature to Fahrenheit and return string.
+		case "F":
+		return this.Fahrenheit.ToString("N2", provider) + "°F";
+		// Convert temperature to Kelvin and return string.
+		case "K":
+		return this.Kelvin.ToString("N2", provider) + "K";
+		// Return temperature in Celsius.
+		case "C":
+		case "G":
+		return this.Celsius.ToString("N2", provider) + "°C";
+		default:
+		throw new FormatException(String.Format("The '{0}' format string is not supported.", format));
+	}
+}
+
+public static void Main()
+{
+	CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+	Temperature temp = new Temperature(22m);
+	Console.WriteLine(Convert.ToString(temp, new CultureInfo("ja-JP")));
+	Console.WriteLine("Temperature: {0:K}", temp);
+	Console.WriteLine("Temperature: {0:F}", temp);
+	Console.WriteLine(String.Format(new CultureInfo("fr-FR"), "Temperature: {0:F}", temp));
+}
+```
+
+# 复合格式设置
+
+一些方法（如 `String.Format` 和 `StringBuilder.AppendFormat`）支持复合格式设置。 复合格式字符串是一种模板，该模板返回合并了零个、一个或多个对象的字符串表示形式的单一字符串
+
+```C#
+String.Format("On {0:d}, the inventory of {1} was worth {2:C2}.",
+                       thatDate, item1, item1.Value);
+```
+
+> 如果版本允许,官方推荐使用`字符串内插`
+
+所以,可使用格式化字符串的方式由`%X`和`{0:X}`这两种格式
+
+> 还可以使用`,`来限制宽度和对齐
+
+```C#
+DateTime startDate = new DateTime(2015, 8, 28, 6, 0, 0);
+decimal[] temps = { 73.452m, 68.98m, 72.6m, 69.24563m,
+                   74.1m, 72.156m, 72.228m };
+Console.WriteLine("{0,-20} {1,11}\n", "Date", "Temperature");
+for (int ctr = 0; ctr < temps.Length; ctr++)
+   Console.WriteLine("{0,-20:g} {1,11:N1}", startDate.AddDays(ctr), temps[ctr]);
+
+// The example displays the following output:
+//       Date                 Temperature
+//
+//       8/28/2015 6:00 AM           73.5
+//       8/29/2015 6:00 AM           69.0
+//       8/30/2015 6:00 AM           72.6
+//       8/31/2015 6:00 AM           69.2
+//       9/1/2015 6:00 AM            74.1
+//       9/2/2015 6:00 AM            72.2
+//       9/3/2015 6:00 AM            72.2
+```
+
+使用 `ICustomFormatter` 进行自定义格式设置
+
+两种复合格式设置方法`（ String.Format(IFormatProvider, String, Object[])` 和 `StringBuilder.AppendFormat(IFormatProvider, String, Object[])）`都包括一个支持自定义格式设置的格式提供程序
+
+当调用其中一种格式设置方法时，该方法会将表示 `Type` 接口的 `ICustomFormatter` 对象传递到格式提供程序的 `GetFormat` 方法
+
+表现为`GetFormat(typeof(ICustomFormatter))`
+
+然后 `GetFormat` 方法负责返回提供自定义格式设置功能的 `ICustomFormatter` 实现
+
+`ICustomFormatter` 接口具有一个方法 `Format(String, Object, IFormatProvider)`，复合格式设置方法为复合格式字符串中的每一格式项自动调用一次该方法.  
+也就是每个`%X`或每个`{0:X}`
+
+`Format(String, Object, IFormatProvider)` 方法具有三个参数：一个格式字符串、一个要设置格式的对象和一个提供格式设置服务的 `IFormatProvider` 对象  
+通常，实现 `ICustomFormatter` 的类还会实现 `IFormatProvider，因此上述最后一个参数是对自定义格式设置类自身的引用`  
+该方法返回要设置格式的对象的带格式自定义字符串表示形式。 如果该方法无法设置对象的格式，则应返回空引用
+
+对于开篇的代码段来说,三个参数分别如下
+```C#
+printString = string.Format(myFormater, "{0}", pFormattable);
+//null, pFormattable, myFormater
+printString = string.Format(myFormater, "{0:C}", pFormattable);
+//C, pFormattable, myFormater
+printString = string.Format(myFormater, "{0:MyFormater}", pFormattable);
+//MyFormater, pFormattable, myFormater
+```
+*也就是格式字符, 被转化者, 转化提供者*
+
+# 关键字
+
+格式字符串,用于匹配到转化函数,通常为`%G`,`{0:G}`, 匹配成功会后会有两个参数,一个要转化的对象,也就是`Object`,另一个就是下面的格式说明符,指示如何转化
+
+格式说明符,指`Format(string, object, IFormatProvider)`中的`String`参数, 用于代指怎么转化,如`G`通常转化
+
+# 流程
+
+整套转化流程都依赖外界的回调调用,最先被调用的是`myFormater`,用于通过`type`参数筛选出一个符合外界需求的格式化器(`ICustomFormatter`).  
+之后格式化器被调用,并将筛选器也透传到里面,方便进一步透传,此时的`object arg`就是被`{0}`所解析到的数据源. 依据解析器的能力, 决定如何解析,或者使用该类型的默认解析,或者返回null,都由解析器自己决定,反正最后`return string`来生成结果即可
+
+> 解析器可能调用另外的其他解析器,形成套娃.
 
 # 完毕
 
