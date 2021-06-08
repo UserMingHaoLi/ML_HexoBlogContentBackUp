@@ -15,7 +15,6 @@ tags:
 
 <!--more-->
 
-摸一天
 
 
 ![UML类图模板][UMLClassMode]

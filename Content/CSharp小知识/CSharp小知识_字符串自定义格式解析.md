@@ -513,6 +513,55 @@ printString = string.Format(myFormater, "{0:MyFormater}", pFormattable);
 
 > 解析器可能调用另外的其他解析器,形成套娃.
 
+
+# 标准数字格式字符串
+
+标准数字格式字符串用于格式化通用数值类型。 标准数字格式字符串采用 `Axx` 的形式，其中
+
+* `A` 是称为“格式说明符”的单个字母字符。 任何包含一个以上字母字符（包括空白）的数字格式字符串都被解释为自定义数字格式字符串
+* `xx` 是称为“精度说明符”的可选整数。 精度说明符的范围从 0 到 99，并且影响结果中的位数
+  *  请注意，精度说明符控制数字的字符串表示形式中的数字个数。 它不舍入该数字。 若要执行舍入运算，请使用 `Math.Ceiling`、`Math.Floor` 或 `Math.Round` 方法
+
+> 若要使用前导或尾随空格填充结果字符串，请使用 *复合格式*设置功能，并在格式项中定义 *对齐组件*
+
+下列支持标准数字格式字符串
+
+* 所有数字类型的一些 `ToString` 方法重载。 例如 `Int32.ToString(String)` 和 `Int32.ToString(String, IFormatProvider)`
+* .NET 复合格式功能，由 `Console` 和 `StreamWriter` 类的一些 `Write` 和 `WriteLine` 方法、`String.Format` 方法以及 `StringBuilder.AppendFormat` 方法使用
+* `内插字符串`，与*复合格式字符串*相比，语法更简化
+
+* “C”或“c”	货币
+  * 123.456 ("C", en-US) -> $123.46
+  * 123.456 ("C", fr-FR) -> 123,46 €
+* “D”或“d”	十进制
+  * 1234 ("D") -> 1234
+  * -1234 ("D6") -> -001234
+* “E”或“e”	指数（科学型）
+* “F”或“f”	定点
+* “G”或“g”	常规
+* “N”或“n”	数字
+* “P”或“p”	百分比
+* “R”或“r”	往返过程
+* “X”或“x”	十六进制
+* 任何其他单个字符	未知说明符	结果:在运行时引发 `FormatException。`
+
+```C#
+decimal value = 123.456m;
+Console.WriteLine(value.ToString("C2"));
+// Displays $123.46
+```
+*此例子中,默认区域为`en-US`*
+
+```C#
+decimal[] amounts = { 16305.32m, 18794.16m };
+Console.WriteLine("   Beginning Balance           Ending Balance");
+Console.WriteLine("   {0,-28:C2}{1,14:C2}", amounts[0], amounts[1]);
+// Displays:
+//        Beginning Balance           Ending Balance
+//        $16,305.32                      $18,794.16
+```
+*此例子中,在 28 位字符的字段中左对齐货币值，在 14 位字符的字段中右对齐货币值,并都是用两位小数点*
+
 # 完毕
 
 **感谢您的观看!**  
