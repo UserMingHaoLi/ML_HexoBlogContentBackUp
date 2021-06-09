@@ -816,6 +816,19 @@ Console.WriteLine(value2);
 如果格式字符串不包含小数点，数字被舍入为最接近的整数  
 如果数字位数多于小数点左边数字占位符的个数，多余的数字被复制到结果字符串中紧挨着第一个数字占位符的前面
 
+### 使用特定数目的前导零填充整数
+
+```C#
+int value = 160934;
+int decimalLength = value.ToString("D").Length + 5;
+int hexLength = value.ToString("X").Length + 5;
+Console.WriteLine(value.ToString("D" + decimalLength.ToString()));
+Console.WriteLine(value.ToString("X" + hexLength.ToString()));
+// The example displays the following output:
+//       00000160934
+//       00000274A6
+```
+
 # 完毕
 
 **感谢您的观看!**  
