@@ -562,6 +562,260 @@ Console.WriteLine("   {0,-28:C2}{1,14:C2}", amounts[0], amounts[1]);
 ```
 *此例子中,在 28 位字符的字段中左对齐货币值，在 14 位字符的字段中右对齐货币值,并都是用两位小数点*
 
+## 自定义数字格式字符串
+
+### “0”自定义说明符
+
+“0”自定义格式说明符用作零占位符符号。 如果要设置格式的值在格式字符串中出现零的位置有一个数字，则将此数字复制到结果字符串中；否则，在结果字符串中显示零
+
+小数点前最左边的零的位置和小数点后最右边的零的位置确定总在结果字符串中出现的数字范围
+
+“00”说明符使得值被舍入到小数点前最近的数字，其中零位总被舍去。 例如，用“00”格式化 34.5 将得到值 35
+
+```C#
+value = 123;
+Console.WriteLine(value.ToString("00000"));
+Console.WriteLine(String.Format("{0:00000}", value));
+// Displays 00123
+```
+
+### “#”自定义说明符
+
+"#"符号的位置有一个数字，则此数字被复制到结果字符串中。 否则，结果字符串中的此位置不存储任何值
+
+请注意，如果零不是有效数字，此说明符永不显示零，即使零是字符串中的唯一数字也是如此。 仅当零是所显示的数字中的有效数字时，才会显示零
+
+“##”格式字符串使得值被舍入到小数点前最近的数字，其中零总被舍去。 例如，用“##”格式化 34.5 将得到值 35
+
+```C#
+value = 1.2;
+Console.WriteLine(value.ToString("#.##", CultureInfo.InvariantCulture));
+Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
+                                "{0:#.##}", value));
+// Displays 1.2
+value = 123456;
+Console.WriteLine(value.ToString("[##-##-##]"));
+Console.WriteLine(String.Format("{0:[##-##-##]}", value));
+ // Displays [12-34-56]
+```
+
+若要返回空缺数字或前导零替换为空格的结果字符串，请使用 *复合格式功能* 并指定字段宽度，如以下示例所示
+```C#
+Double value = .324;
+Console.WriteLine("The value is: '{0,5:#.###}'", value);
+//The value is: ' .324'
+```
+*包含了`索引组件`0, `对齐组件`5, `格式字符串组件` #.##*
+
+### “.”自定义说明符
+
+插入本地化的小数分隔符  
+格式字符串中的第一个小数点确定设置了格式的值中的小数分隔符的位置；任何其他小数点会被忽略
+
+在结果字符串中用作小数分隔符的字符并非总是小数点；它由控制格式设置的 `NumberDecimalSeparator` 对象的 `NumberFormatInfo` 属性确定
+
+```C#
+value = 1.2;
+Console.WriteLine(value.ToString("0.00", CultureInfo.InvariantCulture));
+Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
+                                "{0:0.00}", value));
+// Displays 1.20
+
+Console.WriteLine(value.ToString("00.00", CultureInfo.InvariantCulture));
+Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
+                                "{0:00.00}", value));
+// Displays 01.20
+```
+
+### “,”自定义说明符
+
+组分隔符和数字比例换算说明符
+
+如果在两个设置数字的整数位格式的数字占位符（0 或 #）之间指定一个或多个逗号，则在输出的整数部分中的每个数字组之间插入一个组分隔符字符
+
+当前 `NumberGroupSeparator` 对象的 `NumberGroupSizes` 和 `NumberFormatInfo` 属性将确定用作数字组分隔符的字符以及每个数字组的大小  
+例如，如果使用字符串“#,#”和固定区域性对数字 1000 进行格式化，则输出为“1,000”
+
+如果在紧邻显式或隐式小数点的左侧指定一个或多个逗号，则对于每个逗号，将要设置格式的数字除以 1000
+
+如果使用字符串“0,,”对数字 100000000 进行格式化，则输出为“100”
+
+```C#
+double value = 1234567890;
+Console.WriteLine(value.ToString("#,#", CultureInfo.InvariantCulture));
+Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
+                                "{0:#,#}", value));
+// Displays 1,234,567,890
+
+Console.WriteLine(value.ToString("#,##0,,", CultureInfo.InvariantCulture));
+Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
+                                "{0:#,##0,,}", value));
+// Displays 1,235
+```
+### “%”自定义说明符
+
+将使数字在设置格式之前乘以 100
+
+本地化的百分比符号插入到数字在格式字符串中出现 % 的位置。 使用的百分比字符由当前 `PercentSymbol` 对象的 `NumberFormatInfo` 属性定义
+
+```C#
+double value = .086;
+Console.WriteLine(value.ToString("#0.##%", CultureInfo.InvariantCulture));
+Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
+                                "{0:#0.##%}", value));
+// Displays 8.6%
+```
+
+### “‰”自定义说明符
+
+基本同上
+```C#
+double value = .00354;
+string perMilleFmt = "#0.## " + '\u2030';
+Console.WriteLine(value.ToString(perMilleFmt, CultureInfo.InvariantCulture));
+Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
+                                "{0:" + perMilleFmt + "}", value));
+// Displays 3.54‰
+```
+
+### “E”和“e”自定义说明符
+
+如果“E”、“E+”、“E-”、“e”、“e+”或“e-”中的任何一个字符串出现在格式字符串中，而且后面紧跟至少一个零，则数字用科学记数法来设置格式
+
+跟在科学记数法指示符后面的零的数目确定指数输出的最小位数
+
+```C#
+double value = 86000;
+Console.WriteLine(value.ToString("0.###E+0", CultureInfo.InvariantCulture));
+Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
+                                "{0:0.###E+0}", value));
+// Displays 8.6E+4
+
+Console.WriteLine(value.ToString("0.###E+000", CultureInfo.InvariantCulture));
+Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
+                                "{0:0.###E+000}", value));
+// Displays 8.6E+004
+
+Console.WriteLine(value.ToString("0.###E-000", CultureInfo.InvariantCulture));
+Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
+                                "{0:0.###E-000}", value));
+// Displays 8.6E004
+```
+
+### “\”转义字符
+
+若要防止某个字符被解释为格式说明符，你可以在该字符前面加上反斜杠（即转义字符）
+
+若在要结果字符串中包括反斜杠，必须使用另一个反斜杠 (`\\`)
+
+```C#
+Console.WriteLine(value.ToString(@"\#\#\# ##0 dollars and \0\0 cents \#\#\#"));
+Console.WriteLine(String.Format(@"{0:\#\#\# ##0 dollars and \0\0 cents \#\#\#}",
+                                value));
+// Displays ### 123 dollars and 00 cents ###
+
+Console.WriteLine(value.ToString("\\\\\\\\\\\\ ##0 dollars and \\0\\0 cents \\\\\\\\\\\\"));
+Console.WriteLine(String.Format("{0:\\\\\\\\\\\\ ##0 dollars and \\0\\0 cents \\\\\\\\\\\\}",
+                                value));
+// Displays \\\ 123 dollars and 00 cents \\\
+```
+
+### “;”部分分隔符
+
+对数字应用不同的格式设置，具体取决于值为正、为负还是为零  
+类似于`if-else`的控制机制
+
+第一部分应用于正值，第二部分应用于负值，第三部分应用于零。
+
+第二部分可以留空（分号间没有任何内容），在这种情况下，第一部分应用于所有非零值。
+
+如果要设置格式的数字为非零值，但根据第一部分或第二部分中的格式舍入后为零，则最终的零根据第三部分进行格式设置。
+
+```C#
+double posValue = 1234;
+double negValue = -1234;
+double zeroValue = 0;
+
+string fmt2 = "##;(##)";
+string fmt3 = "##;(##);**Zero**";
+
+Console.WriteLine(posValue.ToString(fmt2));
+Console.WriteLine(String.Format("{0:" + fmt2 + "}", posValue));
+// Displays 1234
+
+Console.WriteLine(negValue.ToString(fmt2));
+Console.WriteLine(String.Format("{0:" + fmt2 + "}", negValue));
+// Displays (1234)
+
+Console.WriteLine(zeroValue.ToString(fmt3));
+Console.WriteLine(String.Format("{0:" + fmt3 + "}", zeroValue));
+// Displays **Zero**
+```
+
+### 字符文本
+
+所有其他字符始终解释为字符文本，在格式设置操作中，将按原样包含在结果字符串中
+
+```C#
+double n = 123.8;
+Console.WriteLine($"{n:#,##0.0K}");
+// The example displays the following output:
+//      123.8K
+```
+*K就是文本直接包含在字符串中*
+
+如果想使用特殊字符为文本形式,则需要
+
+* 通过对格式字符进行转义处理`\`
+* 通过将整个文本字符串括在单引号中
+
+```C#
+double n = 9.3;
+Console.WriteLine($@"{n:##.0\%}");
+Console.WriteLine($@"{n:\'##\'}");
+Console.WriteLine($@"{n:\\##\\}");
+Console.WriteLine();
+Console.WriteLine($"{n:##.0'%'}");
+Console.WriteLine($@"{n:'\'##'\'}");
+// The example displays the following output:
+//      9.3%
+//      '9'
+//      \9\
+//
+//      9.3%
+//      \9\
+```
+
+## 说明
+
+```C#
+double number1 = 1234567890;
+string value1 = number1.ToString("(###) ###-####");
+Console.WriteLine(value1);
+
+int number2 = 42;
+string value2 = number2.ToString("My Number = #");
+Console.WriteLine(value2);
+// The example displays the following output:
+//       (123) 456-7890
+//       My Number = 42
+```
+
+### 浮点型无穷大和 NaN
+
+格式字符串就分别是当前适用的 PositiveInfinitySymbol对象指定的 NegativeInfinitySymbol、 NaNSymbol 或 NumberFormatInfo 属性的值。
+
+### 控制面板设置
+
+控制面板中 “区域和语言选项” 项中的设置会影响由格式化操作产生的结果字符串  
+因为这是不指定区域的默认区域
+
+### 舍入和定点格式字符串
+
+对于固定点格式字符串（即不包含科学记数法格式字符的格式字符串），数字被舍入为与小数点右边的数字占位符数目相同的小数位数  
+如果格式字符串不包含小数点，数字被舍入为最接近的整数  
+如果数字位数多于小数点左边数字占位符的个数，多余的数字被复制到结果字符串中紧挨着第一个数字占位符的前面
+
 # 完毕
 
 **感谢您的观看!**  
