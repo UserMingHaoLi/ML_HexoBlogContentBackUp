@@ -829,6 +829,81 @@ Console.WriteLine(value.ToString("X" + hexLength.ToString()));
 //       00000274A6
 ```
 
+> 标准格式字符串只是自定义格式字符串的别名  
+> 即`G`可以表示`###`也可以表示`##.##`,取决于具体实现  
+> **这很重要，因为日期和时间值的字符串表示形式通常会因区域性而异**
+
+例如，“d”标准格式字符串指示应使用短日期模式显示日期和时间值。 对于固定区域性，此模式为“MM/dd/yyyy”。 对于 fr-FR 区域性，此模式为“dd/MM/yyyy”。 对于 ja-JP 区域性，此模式为“yyyy/MM/dd”
+
+# 标准日期和时间格式字符串
+
+定义 `DateTime` 或 `DateTimeOffset` 值的文本表示形式
+
+* "d"	短日期模式。
+  * 2009-06-15T13:45:30 -> 6/15/2009 (en-US)
+* “D”	长日期模式
+  * 2009-06-15T13:45:30 -> Monday, June 15, 2009 (en-US)
+* “f”	完整日期/时间模式（短时间）
+  * 2009-06-15T13:45:30 -> Monday, June 15, 2009 1:45 PM (en-US)
+* “F”	完整日期/时间模式（长时间）。
+  * 2009-06-15T13:45:30 -> Monday, June 15, 2009 1:45:30 PM (zh-CN)
+* “g”	常规日期/时间模式（短时间）。
+  * 2009-06-15T13:45:30 -> 6/15/2009 1:45 PM (en-US)
+* “G”	常规日期/时间模式（长时间）。
+  * 2009-06-15T13:45:30 -> 6/15/2009 1:45:30 PM (en-US)
+* “M”、“m”	月/日模式。
+  * 2009-06-15T13:45:30 -> June 15 (en-US)
+* “O”、“o”	往返日期/时间模式。
+  * 2009-06-15T13:45:30 (DateTimeKind.Local) --> 2009-06-15T13:45:30.0000000-07:00
+* “R”、“r”	RFC1123 模式。
+  * 2009-06-15T13:45:30 -> Mon, 15 Jun 2009 20:45:30 GMT
+* “s”	可排序日期/时间模式。
+  * 2009-06-15T13:45:30 (DateTimeKind.Local) -> 2009-06-15T13:45:30
+* “t”	短时间模式。
+  * 2009-06-15T13:45:30 -> 1:45 PM (en-US)
+* “T”	长时间模式。
+  * 2009-06-15T13:45:30 -> 1:45:30 PM (en-US)
+* “u”	通用可排序日期/时间模式。
+  * 带有 DateTime 值：2009-06-15T13:45:30 -> 2009-06-15 13:45:30Z
+  * 带有 DateTimeOffset 值：2009-06-15T13:45:30 -> 2009-06-15 20:45:30Z
+* “U”	通用完整日期/时间模式
+  * 2009-06-15T13:45:30 -> Monday, June 15, 2009 8:45:30 PM (en-US)
+* “Y”、“y”	年月模式。
+  * 2009-06-15T13:45:30 -> June 2009 (en-US)
+
+*注意这里区分大小写g和G*
+
+“O”（或“o”）、“R”（或“r”）、“s”和“u”。 这些字符串表示形式在各个区域性中都应是相同的
+
+* “O”或“o”		
+  * yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffffzz
+* “R”或“r”		
+  * ddd, dd MMM yyyy HH':'mm':'ss 'GMT'
+* “s”		
+  * *yyyy'-'MM'-'dd'T'HH':'mm':'ss
+* “u”		
+  * yyyy'-'MM'-'dd HH':'mm':'ss'Z'
+
+通过调用 `DateTimeFormatInfo.GetAllDateTimePatterns(Char)` 方法，你可以确定与标准格式字符串对应的自定义格式字符串
+
+```C#
+Console.WriteLine("'d' standard format string:");
+foreach (var customString in DateTimeFormatInfo.CurrentInfo.GetAllDateTimePatterns('d'))
+	Console.WriteLine("   {0}", customString);
+// The example displays the following output:
+//       'd' standard format string:
+//          M/d/yyyy
+//          M/d/yy
+//          MM/dd/yy
+//          MM/dd/yyyy
+//          yy/MM/dd
+//          yyyy-MM-dd
+//          dd-MMM-yy
+```
+
+
+## 自定义日期和时间格式字符串
+
 # 完毕
 
 **感谢您的观看!**  
