@@ -904,6 +904,83 @@ foreach (var customString in DateTimeFormatInfo.CurrentInfo.GetAllDateTimePatter
 
 ## 自定义日期和时间格式字符串
 
+```C#
+DateTime thisDate1 = new DateTime(2011, 6, 10);
+Console.WriteLine("Today is " + thisDate1.ToString("MMMM dd, yyyy") + ".");
+
+DateTimeOffset thisDate2 = new DateTimeOffset(2011, 6, 10, 15, 24, 16,
+                                              TimeSpan.Zero);
+Console.WriteLine("The current date and time: {0:MM/dd/yy H:mm:ss zzz}",
+                   thisDate2);
+// The example displays the following output:
+//    Today is June 10, 2011.
+//    The current date and time: 06/10/11 15:24:16 +00:00
+```
+*前文说到,格式化字符串实际就是对于自定义格式字符串的一种包装.*
+
+下表描述自定义日期和时间格式说明符并显示由每个格式说明符生成的结果字符串
+
+* "d"	一个月中的某一天（1 到 31）。
+* “dd”	一个月中的某一天（01 到 31）。
+* “ddd”	一周中某天的缩写名称。
+* “dddd”	一周中某天的完整名称。
+* “f”	日期和时间值的十分之几秒。
+* “ff”	日期和时间值的百分之几秒。
+* “fff”	日期和时间值的千分之几秒。
+* “ffff”	日期和时间值的万分之几秒。
+* “fffff”	日期和时间值的十万分之几秒。
+* “ffffff”	日期和时间值的百万分之几秒。
+* “fffffff”	日期和时间值的千万分之几秒。
+* “F”	如果非零，则为日期和时间值的十分之几秒
+* “FF”	如果非零，则为日期和时间值的百分之几秒
+* “FFF”	如果非零，则为日期和时间值的千分之几秒
+* “FFFF”	如果非零，则为日期和时间值的万分之几秒
+* “FFFFF”	如果非零，则为日期和时间值的十万分之几秒
+* “FFFFFF”	如果非零，则为日期和时间值的百万分之几秒
+* “FFFFFFF”	如果非零，则为日期和时间值的千万分之几秒
+* “g”、“gg”	时期或纪元。
+* “h”	采用 12 小时制的小时（从 1 到 12）
+* “hh”	采用 12 小时制的小时（从 01 到 12）
+* “H”	采用 24 小时制的小时（从 0 到 23）。
+* “HH”	采用 24 小时制的小时（从 00 到 23）
+* “K”	时区信息。
+* “m”	分钟（0 到 59）。
+* “mm”	分钟（00 到 59）
+* “M”	月份（1 到 12）。
+* “MM”	月份（1 到 12）。
+* “MMM”	月份的缩写名称。
+* “MMMM”	月份的完整名称。
+* “s”	秒（0 到 59）。
+* “ss”	秒（00 到 59）。
+* “t”	AM/PM 指示符的第一个字符。
+* “tt”	AM/PM 指示符。
+* “y”	年份（0 到 99）。
+* “yy”	年份（00 到 99）。
+* “yyyy”	由四位数字表示的年份。
+* “yyyyy”	由五位数字表示的年份。
+* “z”	相对于 UTC 的小时偏移量，无前导零。
+* “zz”	相对于 UTC 的小时偏移量，带有表示一位数值的前导零。
+* “zzz”	相对于 UTC 的小时和分钟偏移量。
+* ":"	时间分隔符。
+* "/"	日期分隔符。
+* "string" 文本字符串分隔符。
+  * 2009-06-15T13:45:30 ("arr:" h:m t) -> arr:1:45 P 
+  * 也就是自定义
+* %	将下面的字符定义为自定义格式说明符
+* \	转义字符
+* 任何其他字符	字符将复制到未更改的结果字符串
+  * 2009-06-15T01:45:30 (arr hh:mm t) -> arr 01:45 A
+
+# 标准 TimeSpan 格式字符串
+
+
+
+## 自定义 TimeSpan 格式字符串
+
+
+
+
+
 # 完毕
 
 **感谢您的观看!**  
