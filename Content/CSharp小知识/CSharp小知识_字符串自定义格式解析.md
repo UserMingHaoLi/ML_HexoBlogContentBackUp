@@ -973,12 +973,43 @@ Console.WriteLine("The current date and time: {0:MM/dd/yy H:mm:ss zzz}",
 
 # 标准 TimeSpan 格式字符串
 
+```C#
+TimeSpan duration = new TimeSpan(1, 12, 23, 62);
+string output = "Time of Travel: " + duration.ToString("c");
+Console.WriteLine(output);
+Console.WriteLine("Time of Travel: {0:c}", duration);
+// The example displays the following output:
+//       Time of Travel: 1.12:24:02
+//       Time of Travel: 1.12:24:02
+```
 
+* “c”	常量（固定）格式
+  * 此说明符不区分区域性。 它的形式是 [-][d'.']hh':'mm':'ss['.'fffffff]。（“t”格式与“T”格式字符串产生的结果相同。）
+  * New TimeSpan(3, 17, 25, 30, 500) -> 3.17:25:30.5000000
+* “g”	常规短格式
+  * 该说明符仅输出需要的内容。 它区分区域性并采用 [-][d':']h':'mm':'ss[.FFFFFFF] 形式。
+  * New TimeSpan(1, 3, 16, 50, 599) -> 1:3:16:50.599 (en-US)
+* “G”	常规长格式
+  * 此说明符始终输出天数和七个小数位。 它区分区域性并采用 [-]d':'hh':'mm':'ss.fffffff 形式。
+  * New TimeSpan(18, 30, 0) -> 0:18:30:00.0000000 (en-US)
+
+方括号 ([ and ]) 中的元素是可选的。 句点 (.) 和冒号 (:) 是文字符号。 下表介绍了剩余的元素
+
+| 元素    | 描述                                                                                                                                        |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| -       | 可选负号，指示负时间间隔。                                                                                                                  |
+| d       | 不带前导零的可选天数。                                                                                                                      |
+| hh      | 小时数，范围为“00”到“23”。                                                                                                                  |
+| mm      | 分钟数，范围为“00”到“59”。                                                                                                                  |
+| ss      | 秒数，范围为“0”到“59”。                                                                                                                     |
+| fffffff | 秒的可选小数部分。 其值的范围为“0000001”（一刻度或一秒的一千万分之一）到“9999999”（一秒的一千万分之九百九十九万九千九百九或一秒少一刻度）。 |
+
+> “c”格式说明符不区分区域性
 
 ## 自定义 TimeSpan 格式字符串
 
 
-
+# 总结
 
 
 # 完毕
