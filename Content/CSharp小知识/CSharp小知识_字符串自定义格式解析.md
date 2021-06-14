@@ -1008,6 +1008,75 @@ Console.WriteLine("Time of Travel: {0:c}", duration);
 
 ## 自定义 TimeSpan 格式字符串
 
+任何不是标准 TimeSpan 格式字符串的字符串都会解释为自定义 TimeSpan 格式字符串
+
+> 标准,即预留的字符串关键字  
+> 自定义,即原样显示的部分
+
+自定义 TimeSpan 格式说明符不包含占位符分隔符符号，如分隔天与小时、小时与分钟或秒与秒若干分之一的符号。 相反，这些符号必须以字符串形式包含在自定义格式字符串中。 例如，"dd\.hh\:mm" 将句点 (.) 定义为天与小时之间的分隔符，将冒号 (:) 定义为小时与分钟之间的分隔符
+
+自定义 TimeSpan 格式说明符还不包括正负符号，无法区分正负时间间隔。 若要包含正负符号，必须使用条件逻辑构造格式字符串。
+
+```C#
+using System;
+
+public class Example
+{
+   public static void Main()
+   {
+      TimeSpan duration = new TimeSpan(1, 12, 23, 62);
+
+      string output = null;
+      output = "Time of Travel: " + duration.ToString("%d") + " days";
+      Console.WriteLine(output);
+      output = "Time of Travel: " + duration.ToString(@"dd\.hh\:mm\:ss");
+      Console.WriteLine(output);
+
+      Console.WriteLine("Time of Travel: {0:%d} day(s)", duration);
+      Console.WriteLine("Time of Travel: {0:dd\\.hh\\:mm\\:ss} days", duration);
+   }
+}
+// The example displays the following output:
+//       Time of Travel: 1 days
+//       Time of Travel: 01.12:24:02
+//       Time of Travel: 1 day(s)
+//       Time of Travel: 01.12:24:02 days
+```
+*简单例子*
+
+下表列出了自定义日期和时间格式说明符
+
+* “d”，“%d”	时间间隔中的整天数。
+* "dd"-"dddddddd"	时间间隔中的整天数，根据需要使用前导零填充。
+* “h”，“%h”	时间间隔中不计为天数一部分的整小时数。 一位数小时数没有前导零。
+* “hh”	时间间隔中不计为天数一部分的整小时数。 一位数小时具有前导零
+* “m”，“%m”	时间间隔中不包含在小时或天数中的整分钟数。 一位数分钟数没有前导零。
+* “mm”	时间间隔中不包含在小时或天数中的整分钟数。 一位数分钟具有前导零。
+* “s”，“%s”	时间间隔中不包含在小时、天数或分钟中的整秒数。 一位数秒数没有前导零。
+* “ss”	时间间隔中不包含在小时、天数或分钟中的整秒数。 一位数秒具有前导零。
+* “f”，“%f”	时间间隔中的十分之几秒。
+* “ff”	时间间隔中的百分之几秒。
+* “fff”	时间间隔中的毫秒。
+* “ffff”	时间间隔中的万分之几秒。
+* “fffff”	时间间隔中的十万分之几秒。
+* “ffffff”	时间间隔中的百万分之几秒。
+* “fffffff”	时间间隔中的千万分之几秒（或小数时钟周期）。
+* “F”，“%F”	时间间隔中的十分之几秒。 如果该数字为零，则不显示任何内容
+* “FF”	时间间隔中的百分之几秒。 不包含任何小数尾随零或两个零位
+* “FFF”	时间间隔中的毫秒。 不包含任何小数尾随零。
+* “FFFF”	时间间隔中的万分之几秒。 不包含任何小数尾随零。
+* “FFFFF”	时间间隔中的十万分之几秒。 不包含任何小数尾随零。
+* “FFFFFF”	时间间隔中的百万分之几秒。 不显示任何小数尾随零。
+* “FFFFFFF”	时间间隔中的千万分之几秒。 不显示任何小数尾随零或七个零。
+  * TimeSpan.Parse("00:00:06.3291791") => FFFFFF：3291791
+  * TimeSpan.Parse("0:0:3.1900000") => ss\.FFFFFF：03.19
+* 'string'	文本字符串分隔符。
+  * hh':'mm':'ss --> "14:32:17" 
+* \	转义字符。
+  * hh\:mm\:ss --> "14:32:17"
+* 任何其他字符	任何其他未转义字符会解释为自定义格式说明符。
+  * hh\:mm\:ss --> "14:32:17"
+
 
 # 总结
 
