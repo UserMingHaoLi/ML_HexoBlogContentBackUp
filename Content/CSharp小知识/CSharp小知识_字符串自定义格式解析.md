@@ -1077,9 +1077,214 @@ public class Example
 * 任何其他字符	任何其他未转义字符会解释为自定义格式说明符。
   * hh\:mm\:ss --> "14:32:17"
 
+# 枚举格式字符串
+
+* G 或 g
+  * 如果枚举使用 Flags 属性集进行定义，则每个有效项的字符串值会连接在一起（以逗号分隔）。 如果未设置 Flags 属性，则将无效值显示为数字项
+```C#
+Console.WriteLine(ConsoleColor.Red.ToString("G"));         // Displays Red
+FileAttributes attributes = FileAttributes.Hidden |
+                            FileAttributes.Archive;
+Console.WriteLine(attributes.ToString("G"));   // Displays Hidden, Archive
+```
+
+* F 或 f
+  * 如果值可以完全显示为枚举中项的总和（即使未提供 Flags 属性），则每个有效项的字符串值会连接在一起（以逗号分隔）。 如果值不能由枚举项完全确定，则值会格式化为整数值
+```C#
+Console.WriteLine(ConsoleColor.Blue.ToString("F"));       // Displays Blue
+FileAttributes attributes = FileAttributes.Hidden |
+                            FileAttributes.Archive;
+Console.WriteLine(attributes.ToString("F"));   // Displays Hidden, Archive
+```
+
+* D 或 d
+  * 以尽可能短的表示形式将枚举项显示为整数值
+```C#
+Console.WriteLine(ConsoleColor.Cyan.ToString("D"));         // Displays 11
+FileAttributes attributes = FileAttributes.Hidden |
+                            FileAttributes.Archive;
+Console.WriteLine(attributes.ToString("D"));                // Displays 34
+```
+
+* X 或 x
+  * 将枚举项显示为十六进制值。 根据需要以前导零表示此值，以确保在枚举类型的基础数值类型中，结果字符串的每个字节都有两个字符
+```C#
+Console.WriteLine(ConsoleColor.Cyan.ToString("X"));   // Displays 0000000B
+FileAttributes attributes = FileAttributes.Hidden |
+                            FileAttributes.Archive;
+Console.WriteLine(attributes.ToString("X"));          // Displays 00000022
+```
+*在示例中，这两者的基础类型 ConsoleColor 和 FileAttributes 为 Int32，或 32 位（或 4 字节）整数，它将生成 8 个字符的结果字符串*
+
+# 复合格式设置
+
+复合格式字符串由固定文本和索引占位符混和组成  
+
+一般像是 `%d, %f` 或者 `{0}, {1}` 这样
+
+> 官方建议在支持的版本上尽量使用`内插字符串`, 即使用`$`开头并直接调用内容`{name}, {arg}`这样
+
+复合格式设置功能受诸如以下方法的支持：
+
+* `String.Format`
+  * 常用格式化字符串函数
+* `StringBuilder.AppendFormat`
+  * 拼接字符串
+* `Console.WriteLine` 
+  * 控制台显示
+* `TextWriter.WriteLine`
+  * 写入文件流
+  * 派生自 `TextWriter` 的类（如 `StreamWriter` 和 `HtmlTextWriter`）也共享此功能
+* `Debug.WriteLine(String, Object[])`
+* `Trace.TraceError(String, Object[]), Trace.TraceInformation(String, Object[]) 和 Trace.TraceWarning(String, Object[]) `
+* TraceSource.TraceInformation(String, Object[])
+  * 都是DeBug信息
+
+====
+
+复合格式字符串由零个或多个固定文本段与一个或多个格式项混和组成
+
+固定文本是所选择的任何字符串，并且每个格式项对应于列表中的一个对象或装箱的结构  
+复合格式设置功能返回新的结果字符串，其中每个格式项都被列表中相应对象的字符串表示形式取代
+
+```C#
+string name = "Fred";
+String.Format("Name = {0}, hours = {1:hh}", name, DateTime.Now);
+```
+*固定文本为“`Name =`”和“, `hours =`”*  
+*格式项为“`{0}`”和“`{1:hh}`”*
+
+每个格式项都采用下面的形式并包含以下组件：
+
+`{index[,alignment][:formatString]}`
+
+必须使用成对的大括号（“{”和“}”）。
+
+> 可见区分为, 1.索引组件, 2.对齐组件(可选), 3.可选额外格式化参数(参数)
+
+## 索引组件
+
+必需的 
+
+从 0 开始的数字，可标识对象列表中对应的项
+
+```C#
+string primes;
+primes = String.Format("Prime numbers less than 10: {0}, {1}, {2}, {3}",
+                       2, 3, 5, 7 );
+Console.WriteLine(primes);
+// The example displays the following output:
+//      Prime numbers less than 10: 2, 3, 5, 7
+```
+*只有索引组件*
+
+## 对齐组件
+
+可选
+
+带符号的整数, 指示首选的设置了格式的字段宽度
+
+ 如果 `alignment` 值小于设置了格式的字符串的长度，alignment 将被忽略，并使用设置了格式的字符串的长度作为字段宽度  
+如果 `alignment` 为正数，字段中设置了格式的数据为右对齐；  
+如果 `alignment` 为负数，字段中的设置了格式的数据为左对齐  
+如果需要填充，则使用空白。 
+ 
+ **如果指定 `alignment`，则需要使用逗号**
+
+
+```C#
+string[] names = { "Adam", "Bridgette", "Carla", "Daniel",
+                    "Ebenezer", "Francine", "George" };
+decimal[] hours = { 40, 6.667m, 40.39m, 82, 40.333m, 80,
+                            16.75m };
+Console.WriteLine("{0,-20} {1,5}\n", "Name", "Hours");
+for (int ctr = 0; ctr < names.Length; ctr++)
+    Console.WriteLine("{0,-20} {1,5:N1}", names[ctr], hours[ctr]);
+// The example displays the following output:
+//       Name                 Hours
+//
+//       Adam                  40.0
+//       Bridgette              6.7
+//       Carla                 40.4
+//       Daniel                82.0
+//       Ebenezer              40.3
+//       Francine              80.0
+//       George                16.8
+```
+*输出的内容对齐了*  
+*注意逗号的使用*
+
+## 格式字符串组件
+
+可选
+
+指定标准或自定义格式字符串.  
+对于数字,日期,时间,枚举,之前说明过的官方预定标准格式字符串都可以使用.
+
+**如果指定 `formatString`，则需要使用冒号**
+
+## 转义大括号
+
+两个表示一个
+
+按照在格式项中遇到大括号的顺序依次解释它们。 不支持解释嵌套的大括号
+
+解释转义大括号的方式会导致意外的结果。 例如，假设格式项为“{{{0:D}}}”  
+按照以下方式解释该格式项
+
+1. 前两个左大括号 ("{{") 被转义，生成一个左大括号
+2. 之后的三个字符 ("{0:") 被解释为格式项的开始
+3. 下一个字符 ("D") 将被解释为 Decimal 标准数值格式说明符，但后面的两个转义大括号 ("}}") 生成单个大括号
+   1. 所以的到的整个字符串为`D}`
+   2. 不是标准数值格式说明符号
+   3. 用于显示字符串`D}`的自定义格式字符串
+4. 最后一个大括号 ("}") 被解释为格式项的结束
+5. 显示的最终结果是字符串“{D}”。 不会显示本来要设置格式的数值
+
+在编写代码时，避免错误解释转义大括号和格式项的一种方法是单独设置大括号和格式项的格式
+
+```C#
+int value = 6324;
+string output = string.Format("{0}{1:D}{2}",
+                             "{", value, "}");
+Console.WriteLine(output);
+// The example displays the following output:
+//       {6324}
+```
+
+> 前面(开头代码)已经讲过复杂格式的内部怎么运作了  
+> 实际都是自定义格式
+
+# 处理顺序
+
+激动人心的工作流终于来了  
+一下内容可能涉及到官方实现的自定义格式字符串,手动定义可能更改一些结果,比如可接受`Null`
+
+
+如果对复合格式设置方法的调用包括其值*不为* `null` 的 `IFormatProvider` 参数   
+则运行时会*调用*其 `IFormatProvider.GetFormat` 方法来请求 `ICustomFormatter` 实现  
+如果此方法能够返回 `ICustomFormatter` 实现，那么它将在复合格式方法调用期间*缓存*
+
+如果要设置格式的值为 `null`，则将返回空字符串 `String.Empty`
+
+如果 `ICustomFormatter` 实现可用，则运行时将调用其 Format 方法。 它向方法传递格式项的 `formatString` 值（若有）或 `null`（若无）以及 `IFormatProvider` 实现  
+*此时就进入了自定义处理流程*
+
+如果对 `ICustomFormatter.Format` 方法的调用返回 `null`，则继续执行下一步骤，将返回 `ICustomFormatter.Format` 调用的结果
+
+如果该值实现 `IFormattable` 接口，则调用此接口的 `ToString(String, IFormatProvider)` 方法
+
+如果格式项中存在 `formatString` 值，则向方法传递该值；如果不存在该值，则传递 `null`  
+按如下方式确定 `IFormatProvider` 自变量
+
+* 对于数字,日期和时间,枚举,都是用官方给定的`IFormatProvider`类
+* 对于其他类型的对象，如果调用带 `IFormatProvider` 参数的复合格式设置方法，它的值会直接传递到 `IFormattable.ToString` 实现,这个值可能为`null`
+
+随着几项内容都为null,最终的保底方案是`Object.ToString()`方法,他不接受任何参数,如果没有`Object`,那么返回`String.Empty`
 
 # 总结
 
+全篇看完,知识细讲了很多官方预留的标准格式化字符串,具体流程其实就在开头的代码里.
 
 # 完毕
 
