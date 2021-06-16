@@ -29,6 +29,8 @@ tags:
 - [IEquatable<T>](#iequatablet)
 - [IFormatProvider](#iformatprovider)
 - [IFormattable](#iformattable)
+- [IObservable<T>](#iobservablet)
+- [IObserver<T>](#iobservert)
 - [完毕](#完毕)
 
 
@@ -438,7 +440,161 @@ public string ToString(string format, IFormatProvider provider)
 
 > 类似于`Equals`的扩种,这些接口也可以看作是`ToString`的扩充
 
-<!-- TODO 需要新的ToString专辑 -->
+# IObservable<T>
+
+定义基于推送的通知的提供程序  
+`IObserver<T>` 和 `IObservable<T>` 接口为基于推送的通知（也称为观察者设计模式）提供通用机制
+
+* Subscribe(IObserver<T>)	
+  * 参数
+    * IObserver<T>
+    * 将接收通知的对象。
+  * 返回
+    * IDisposable
+    * 对接口的引用，它允许观察程序在提供程序完成发送通知前停止接收通知
+
+```C#
+private List<IObserver<Location>> observers;
+
+public IDisposable Subscribe(IObserver<Location> observer)
+{
+   if (! observers.Contains(observer))
+      observers.Add(observer);
+   return new Unsubscriber(observers, observer);
+}
+
+private class Unsubscriber : IDisposable
+{
+   private List<IObserver<Location>>_observers;
+   private IObserver<Location> _observer;
+
+   public Unsubscriber(List<IObserver<Location>> observers, IObserver<Location> observer)
+   {
+      this._observers = observers;
+      this._observer = observer;
+   }
+
+   public void Dispose()
+   {
+      if (_observer != null && _observers.Contains(_observer))
+         _observers.Remove(_observer);
+   }
+}
+```
+
+# IObserver<T>
+
+提供用于接收基于推送的通知的机制
+
+
+* OnCompleted()	
+  * 通知观察者提供程序已完成发送基于推送的通知。
+* OnError(Exception)	
+  * 通知观察者提供程序遇到错误情况。
+* OnNext(T)	
+  * 向观察者提供新数据。
+
+```C#
+using System;
+
+public class LocationReporter : IObserver<Location>
+{
+   private IDisposable unsubscriber;
+   private string instName;
+
+   public LocationReporter(string name)
+   {
+      this.instName = name;
+   }
+
+   public string Name
+   {  get{ return this.instName; } }
+
+   public virtual void Subscribe(IObservable<Location> provider)
+   {
+      if (provider != null)
+         unsubscriber = provider.Subscribe(this);
+   }
+
+   public virtual void OnCompleted()
+   {
+      Console.WriteLine("The Location Tracker has completed transmitting data to {0}.", this.Name);
+      this.Unsubscribe();
+   }
+
+   public virtual void OnError(Exception e)
+   {
+      Console.WriteLine("{0}: The location cannot be determined.", this.Name);
+   }
+
+   public virtual void OnNext(Location value)
+   {
+      Console.WriteLine("{2}: The current location is {0}, {1}", value.Latitude, value.Longitude, this.Name);
+   }
+
+   public virtual void Unsubscribe()
+   {
+      unsubscriber.Dispose();
+   }
+}
+```
+
+```C#
+public class LocationTracker : IObservable<Location>
+{
+   public LocationTracker()
+   {
+      observers = new List<IObserver<Location>>();
+   }
+
+   private List<IObserver<Location>> observers;
+
+   public IDisposable Subscribe(IObserver<Location> observer)
+   {
+      if (! observers.Contains(observer))
+         observers.Add(observer);
+      return new Unsubscriber(observers, observer);
+   }
+
+   private class Unsubscriber : IDisposable
+   {
+      private List<IObserver<Location>>_observers;
+      private IObserver<Location> _observer;
+
+      public Unsubscriber(List<IObserver<Location>> observers, IObserver<Location> observer)
+      {
+         this._observers = observers;
+         this._observer = observer;
+      }
+
+      public void Dispose()
+      {
+         if (_observer != null && _observers.Contains(_observer))
+            _observers.Remove(_observer);
+      }
+   }
+
+   public void TrackLocation(Nullable<Location> loc)
+   {
+      foreach (var observer in observers) {
+         if (! loc.HasValue)
+            observer.OnError(new LocationUnknownException());
+         else
+            observer.OnNext(loc.Value);
+      }
+   }
+
+   public void EndTransmission()
+   {
+      foreach (var observer in observers.ToArray())
+         if (observers.Contains(observer))
+            observer.OnCompleted();
+
+      observers.Clear();
+   }
+}
+```
+*以上两段代码演示了这两个接口是如何协同工作的*
 
 # 完毕
 
