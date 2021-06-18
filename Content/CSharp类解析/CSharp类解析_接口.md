@@ -31,6 +31,8 @@ tags:
 - [IFormattable](#iformattable)
 - [IObservable<T>](#iobservablet)
 - [IObserver<T>](#iobservert)
+- [IProgress<T>](#iprogresst)
+- [IServiceProvider](#iserviceprovider)
 - [完毕](#完毕)
 
 
@@ -595,6 +597,26 @@ public class LocationTracker : IObservable<Location>
 }
 ```
 *以上两段代码演示了这两个接口是如何协同工作的*
+
+# IProgress<T>
+
+定义进度更新的提供程序
+
+* Report(T)	
+  * 报告进度更新。
+  * T 进度更新之后的值
+
+# IServiceProvider
+
+定义用于检索服务对象的机制；也即，向其他对象提供自定义支持的对象
+
+* object? GetService(Type)	
+  * 获取指定类型的服务对象
+  * 参数: 指定要获取什么对象
+  * 返回: 返回指定的对象,或`null`
+
+IServiceProvider接口由多种类型实现  
+`System.Web.HttpContext` `System.ComponentModel.LicenseContext` `System.ComponentModel.MarshalByValueComponent` `System.ComponentModel.Design.ServiceContainer` 
 
 # 完毕
 
