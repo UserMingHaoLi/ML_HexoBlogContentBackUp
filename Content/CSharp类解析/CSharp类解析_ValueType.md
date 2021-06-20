@@ -92,6 +92,14 @@ public override String ToString()
 ```
 *也是返回一个Type*
 
+# GetHashCode()
+
+如果调用派生类型的 `GetHashCode` 方法，则返回值不可能适合用作哈希表中的键
+
+如果其中一个或多个字段的值发生更改，则返回值可能不适合用作哈希表中的键
+
+考虑编写您自己的方法的实现 GetHashCode 
+
 # 完毕
 
 **感谢您的观看!**  
