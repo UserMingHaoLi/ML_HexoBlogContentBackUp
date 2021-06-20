@@ -80,14 +80,17 @@ public override bool Equals (Object obj) {
    return true;
 }
 ```
-
-
-
-# GetHashCode()	
-
-# MemberwiseClone()	
+*可以看到使用了反射进行逐个比较,所以推荐重写*
 
 # ToString()	
+
+```C#
+public override String ToString()
+{
+    return this.GetType().ToString();
+}
+```
+*也是返回一个Type*
 
 # 完毕
 
