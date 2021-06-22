@@ -233,7 +233,43 @@ var n = (2 + foo?.N) + (foo2.N ?? 1);//0+1
 如`1 + foo?.N + foo2?.N + 2 + foo2?.N  + foo?.N + 1 ?? 1`  
 将会执行所有foo2?.N
 
-# 
+# 模式匹配
+
+```C#
+class B
+{
+public static int operator &(B left, B right) => 1;
+public static int operator >(B left, B right) => 2;
+public static int operator <(B left, B right) => 3;
+
+public static int operator &(bool left, B right) => 5;
+public static int operator >(bool left, B right) => 6;
+public static int operator <(bool left, B right) => 7;
+}
+
+private static B B { get; }
+
+static void Main(string[] args)
+{
+	object a = null;
+	B c = null;
+	Console.WriteLine(a is B b & c);
+	Console.WriteLine(a is B b1 > c);
+	Console.WriteLine(a is B b2 < c);
+
+	a = new B();
+
+	Console.WriteLine(a is B b5 & c);
+	Console.WriteLine(a is B b6 > c);
+	Console.WriteLine(a is B b7 < c);
+
+}
+```
+*输出567567*
+
+因为`a is B b`此语句返回bool值, 表示是否转化成功,并在转化成功时,将结果填充到b.
+
+所以匹配的函数为`bool, B`
 
 # 完毕
 
