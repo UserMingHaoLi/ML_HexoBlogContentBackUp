@@ -271,6 +271,362 @@ static void Main(string[] args)
 
 所以匹配的函数为`bool, B`
 
+# 使用 using 关键词省略长的定义
+
+```C#
+using HvcnrclHnlfk = System.Collections.Generic.Dictionary<System.Collections.Generic.List<System.Collections.Generic.List<string>>,string>;
+var foo = new HvcnrclHnlfk();
+```
+*类似于别名*
+
+# Lambda 嵌套
+
+```C#
+Func<string,string, EventHandler> foo = (x, y) => (s, e) =>
+{
+	var button = (Button) s;
+	button.Left = x;
+	button.Top = y;
+};
+
+Button1.Click += foo(0, -1);
+```
+*这里一个委托返回另一个委托
+
+另外,如下是一个委托加减法
+```C#
+((a + b + c) - (a + c))();
+```
+此式子结果依赖于`ac`是否等同于`ab`或者`bc`. 如果可以等同,则减法生效, 否则使用左侧式子.
+
+```C#
+static int nd = 1;
+public static void Add(int n)
+{
+	Console.WriteLine(n * nd);
+	nd *= 10;
+}
+
+Action<int> a = Add;
+Action<int> b = Add;
+Action<int> c = Add;
+((a + b + c) - (a + c))(5);
+Action<int> a = (a) => Add(a);
+Action<int> b = (a) => Add(a);
+Action<int> c = (a) => Add(a);
+((a + b + c) - (a + c))(5);
+```
+
+## 委托组合
+
+```C#
+Action a = () => Console.Write("a");
+Action b = () => Console.Write("b");
+Action ab = a + b;
+ab();  // output: ab
+```
+
+## 委托删除
+
+如果两个操作数都为非空，并且右侧操作数的调用列表是左侧操作数调用列表的正确连续子列表，则该操作的结果是通过从左侧操作数的调用列表中删除右侧操作数的条目而获得的新调用列表
+
+果右侧操作数的列表与左侧操作数列表中的多个连续子列表匹配，则仅删除最右侧的匹配子列表
+
+如果删除行为导致出现空列表，则结果为 `null`
+
+```C#
+Action a = () => Console.Write("a");
+Action b = () => Console.Write("b");
+
+var abbaab = a + b + b + a + a + b;
+abbaab();  // output: abbaab
+Console.WriteLine();
+
+var ab = a + b;
+var abba = abbaab - ab;
+abba();  // output: abba
+Console.WriteLine();
+
+var nihil = abbaab - abbaab;
+Console.WriteLine(nihil is null);  // output: True
+```
+
+如果右侧操作数的调用列表不是左侧操作数调用列表的正确连续子列表，则该操作的结果是左侧操作数。 例如，删除不属于多播委托的委托不会执行任何操作，从而导致不变的多播委托
+```C#
+Action a = () => Console.Write("a");
+Action b = () => Console.Write("b");
+
+var abbaab = a + b + b + a + a + b;
+var aba = a + b + a;
+
+var first = abbaab - aba;
+first();  // output: abbaab
+Console.WriteLine();
+Console.WriteLine(object.ReferenceEquals(abbaab, first));  // output: True
+
+Action a2 = () => Console.Write("a");
+var changed = aba - a;
+changed();  // output: ab
+Console.WriteLine();
+var unchanged = aba - a2;
+unchanged();  // output: aba
+Console.WriteLine();
+Console.WriteLine(object.ReferenceEquals(aba, unchanged));  // output: True
+```
+
+如果左侧操作数为 null，则操作结果为 null。 如果右侧操作数为 null，则操作的结果是左侧操作数
+```C#
+Action a = () => Console.Write("a");
+
+var nothing = null - a;
+Console.WriteLine(nothing is null);  // output: True
+
+var first = a - null;
+a();  // output: a
+Console.WriteLine();
+Console.WriteLine(object.ReferenceEquals(first, a));  // output: True
+```
+
+# 冲突的类型
+
+一样是使用别名
+
+```C#
+using web = System.Web.UI.WebControls;
+using win = System.Windows.Forms;
+web::Control webControl = new web::Control();
+win::Control formControl = new win::Control();
+```
+
+# extern alias
+
+也是为了解决命名冲突
+
+```C#
+//a.dll
+
+namespace F
+{
+	public class Foo
+	{
+
+	}
+}
+
+//b.dll
+
+namespace F
+{
+	public class Foo
+	{
+		
+	}
+}
+```
+
+使用编辑器指令`csc /r:Gva=a.dll /r:Gvb=b.dll mygrid.cs`
+
+```C#
+extern alias Gva;
+
+extern alias Gvb;
+
+Gva::F.Foo …
+
+Gvb::F.Foo …
+```
+
+# 使用 Unions 
+
+这样值公用内存
+
+```C#
+[StructLayout(LayoutKind.Explicit)]
+public class A
+{
+    [FieldOffset(0)]
+    public byte One;
+
+    [FieldOffset(1)]
+    public byte Two;
+
+    [FieldOffset(2)]
+    public byte Three;
+
+    [FieldOffset(3)]
+    public byte Four;
+
+    [FieldOffset(0)]
+    public int Int32;
+}
+static void Main(string[] args)
+{
+	A a = new A { Int32 = int.MaxValue };
+
+	Console.WriteLine(a.Int32);
+	Console.WriteLine("{0:X} {1:X} {2:X} {3:X}", a.One, a.Two, a.Three, a.Four);
+
+	a.Four = 0;
+	a.Three = 0;
+	Console.WriteLine(a.Int32);
+}
+/*
+2147483647
+FF FF FF 7F
+65535
+*/
+```
+
+# 接口默认方法
+
+C#支持在接口中使用默认方法,以便更新接口,不需要使用者强制实现.
+
+# stackalloc
+
+不安全代码，从栈申请空间
+
+```C#
+int* block = stackalloc int[100]; 
+```
+
+# 指定编译
+
+```C#
+[Conditional("DEBUG")]
+public void F2()
+{
+	Console.WriteLine("F2");
+}
+```
+*如果此函数不生效,则与此函数连续运算的式子也都不生效, 如` foo.F1().F2();`, `F1()`不执行*
+
+# true 判断
+
+可以重写`true`和`falase`
+
+```C#
+public static bool operator true(Foo mt)
+{
+	return mt._count > 0;
+}
+
+public static bool operator false(Foo mt)
+{
+	return mt._count < 0;
+}
+```
+
+# 重写运算返回
+
+重写`==`可以更改返回类型,不一定要返回bool
+
+```C#
+public static string operator !=(Foo f1, Foo f2)
+{
+	return "";
+}
+```
+
+# 变量名使用中文
+
+实际上支持所有`Unicode 字符`
+```C#
+public string H\u00e5rføner()
+{
+	return "可以编译";
+}
+```
+
+# 表达式树获取函数命名
+
+表达式树功能很强大
+
+```C#
+static void Main(string[] args)
+{
+	GetMethodName<Foo>(foo => foo.KzcSevfio());
+}
+
+private static void GetMethodName<T>(Expression<Action<T>> action) where T : class
+{
+	if (action.Body is MethodCallExpression expression)
+	{
+		Console.WriteLine(expression.Method.Name);
+	}
+}
+```
+
+# DebuggerDisplay
+
+重写`ToString`可以让你获得更多调试信息,但有时候`ToString`已用作别处,所以需要`DebuggerDisplay`
+
+```C#
+[DebuggerDisplay("{DebuggerDisplay}")]
+public sealed class Foo
+{
+	public int Count { get; set; }
+
+	private string DebuggerDisplay => $"(count {Count})";
+}
+```
+
+# 数字格式
+
+实际上这些是微软定义的一些格式,你自己也可以通过接口实现这些.
+
+```C#
+string format = "000;-#;(0)";
+
+string pos = 1.ToString(format);     // 001
+string neg = (-1).ToString(format);  // -1
+string zer = 0.ToString(format);     // (0)
+```
+
+# 调用堆栈
+
+```C#
+var stackTrace = new StackTrace();
+var n = stackTrace.FrameCount;
+for (int i = 0; i < n; i++)
+{
+	Console.WriteLine(stackTrace.GetFrame(i).GetMethod().Name);
+}
+```
+
+# 在 try 和 finally 抛异常会发生什么
+
+```C#
+try
+{
+	throw new ArgumentException("lindexi is doubi");
+}
+finally
+{
+	throw new FileNotFoundException("lsj is doubi");
+}
+```
+*在 finally 抛出的 FileNotFoundException 将会替换掉 ArgumentException 抛给了 外界*
+
+# 如果在构造函数抛出异常 析构函数是否会执行
+
+```C#
+class Foo
+{
+	public Foo()
+	{
+		throw new Exception("lindexi is doubi");
+	}
+
+	~Foo()
+	{
+	}
+}
+```
+*可以进入*  
+*.NET 运行时，是先创建出对象，然后再调用对象的构造函数。而在创建出对象时，此对象就需要被加入垃圾回收，加入垃圾回收，自然就会调用到析构函数*
+
+因为构造函数也不一定是一句话都没有跑的, .Net会在前面跑很多其他内容.
+
 # 完毕
 
 **感谢您的观看!**  
