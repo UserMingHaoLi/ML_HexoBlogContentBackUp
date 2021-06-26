@@ -15,9 +15,6 @@ tags:
 
 <!--more-->
 
-请假一天,先睡了.
-
-
 
 
 ![UML类图模板][UMLClassMode]
