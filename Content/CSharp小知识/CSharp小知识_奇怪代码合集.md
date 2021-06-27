@@ -627,6 +627,44 @@ class Foo
 
 因为构造函数也不一定是一句话都没有跑的, .Net会在前面跑很多其他内容.
 
+# 泛基
+
+```C#
+public abstract class MyBase<T> where T :MyBase <T>
+{
+
+	public static string DataForThisType {get;set;}
+	public static T Instance{get;protected set;}
+	//每次调用时反射取当前类的所有Members
+	public static readonly IReadOnlyDictionary<string,MemberInfo> Members
+		=typeof(T)
+			.GetMembers()
+			.ToDictionary(x=>x.Name);
+
+}
+
+
+
+public class MyClass:MyBase<MyClass>
+{
+
+	static MyClass()
+	{ 
+		DataForThisType =string.Format(
+			"MyClass got {0} members",Members.Count);
+		Instance = new MyClass();
+	}
+
+}
+```
+*让父类可以静态化地知道当前子类*  
+方法是在父类定义的,但是子类
+
+希望在父类规定一些行为，让子类无法修改  
+实现是依赖一个子类才能获取的值  
+不可能知道所有的子类  
+不知道子类具体类型的情况下，让父类利用泛型参数先替未来的子类做一些事情
+
 # 完毕
 
 **感谢您的观看!**  
