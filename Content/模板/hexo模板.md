@@ -15,7 +15,7 @@ tags:
 
 <!--more-->
 
-
+最近应该都摸了, 要转型到算法和实战.
 
 ![UML类图模板][UMLClassMode]
 
