@@ -665,6 +665,129 @@ public class MyClass:MyBase<MyClass>
 不可能知道所有的子类  
 不知道子类具体类型的情况下，让父类利用泛型参数先替未来的子类做一些事情
 
+# 左值条件运算符（C# 7）
+
+```C#
+int a = 2, b = 3, c = default, d = default;
+(a > b ? ref c : ref d) = 1;
+```
+*如此便完成有条件的左侧赋值*  
+此式子中`d=1`;
+
+# 复合空合赋值运算符 ??= （C# 8）
+
+```C#
+a ??= b
+```
+*等同于 `a = a ?? b`*
+```C#
+if (a is null)
+{
+    a = b;
+}
+```
+
+# true switch 表达式（C# 8）
+
+```C#
+int b = 36;
+int a = true switch
+{
+    _ when b < 0 => 1,
+    _ when b < 10 => 2,
+    _ when b < 30 => 3,
+    _ when b < 60 => 4,
+    _ => 5
+};
+```
+*为a赋值*
+
+# 传递的弃元（C# 7）
+
+```C#
+int a = 3, b;
+b = _ = _ = _ = _ = _ = a;
+```
+*a和b都为3*
+
+# __arglist 关键字兼容早期编程语言的可变长参数序列
+
+```C#
+[DllImport(...)]
+static int printf(string format, __arglist);
+```
+*大多数时候用于接受外界Dll函数*
+
+# 扩展方法还可以引用传递
+
+```C#
+static void Flip(this ref bool @this)
+{
+    @this = !@this;
+}
+```
+*直接改写值类型*
+
+# string a1 = a + "";
+
+怎样都不会报错...
+
+# Internal Interface
+
+自己用但不给别人用的接口
+
+```C#
+internal interface IInternalSomething : ISomething
+{
+    string GetDebugString();
+}
+public class A : IInternalSomething 
+{
+    public void DoSomething() { }
+    string IInternalSomething.GetDebugString() { return "A"; }
+}
+```
+*也就是显示实现接口,然后接口类型`internal`*
+
+# 一个异步流
+
+```C#
+作者：「已注销」
+链接：https://www.zhihu.com/question/27421302/answer/99752969
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+private static BufferBlock<User> userFlow = new BufferBlock<User>();
+
+static void Main(string[] args)
+{
+	Task.Factory.StartNew(async () => await NewData());
+	Task.Factory.StartNew(ProcessData);
+	ReadLine();
+}
+
+
+private static async Task NewData()
+{
+	for (int index = 1; index < 10001; index++)
+	{
+		userFlow.Post(new User { Name = "张三丰", Number = index });
+	}
+
+	await userFlow.Completion;
+}
+
+private static void ProcessData()
+{
+	while (userFlow.Completion.Status != TaskStatus.RanToCompletion)
+	{
+		User _receiveData = userFlow.Receive();
+		_receiveData.IsProcess = (0 == _receiveData.Number % 2);
+		WriteLine($"Number : {_receiveData.Number } Name : {_receiveData.Name}  Process : {_receiveData.IsProcess} Process Time : { DateTime.Now }");
+	}
+}
+```
+
 # 完毕
 
 **感谢您的观看!**  
