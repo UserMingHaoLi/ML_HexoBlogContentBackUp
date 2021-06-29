@@ -788,6 +788,15 @@ private static void ProcessData()
 }
 ```
 
+# GC.GetAllocatedBytesForCurrentThread
+
+```C#
+var beforeAllocatedBytesForCurrentThread = GC.GetAllocatedBytesForCurrentThread();
+var invocationList = action.GetInvocationList();
+var afterAllocatedBytesForCurrentThread = GC.GetAllocatedBytesForCurrentThread();
+Console.WriteLine(afterAllocatedBytesForCurrentThread - beforeAllocatedBytesForCurrentThread);
+```
+
 # 完毕
 
 **感谢您的观看!**  
