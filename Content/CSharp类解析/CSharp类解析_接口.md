@@ -24,15 +24,17 @@ tags:
   - [IComparable](#icomparable)
   - [IComparable<T>](#icomparablet)
   - [IConvertible](#iconvertible)
-- [ICustomFormatter](#icustomformatter)
-- [IDisposable](#idisposable)
-- [IEquatable<T>](#iequatablet)
-- [IFormatProvider](#iformatprovider)
-- [IFormattable](#iformattable)
-- [IObservable<T>](#iobservablet)
-- [IObserver<T>](#iobservert)
-- [IProgress<T>](#iprogresst)
-- [IServiceProvider](#iserviceprovider)
+  - [ICustomFormatter](#icustomformatter)
+  - [IDisposable](#idisposable)
+  - [IEquatable<T>](#iequatablet)
+  - [IFormatProvider](#iformatprovider)
+  - [IFormattable](#iformattable)
+  - [IObservable<T>](#iobservablet)
+  - [IObserver<T>](#iobservert)
+  - [IProgress<T>](#iprogresst)
+  - [IServiceProvider](#iserviceprovider)
+- [System.Collections中的接口](#systemcollections中的接口)
+  - [ICollection](#icollection)
 - [完毕](#完毕)
 
 
@@ -175,7 +177,7 @@ public bool IsCompleted { get; }
 
 大多数转换方法具有类型为的参数 `IFormatProvider` ，该参数表示当前区域性 (`CurrentCulture`) 或特定区域性。 大多数情况下， `IConvertible` 基类型的实现会忽略此参数。 但是，你自己实现的话可以选择是否在代码中使用它
 
-# ICustomFormatter
+## ICustomFormatter
 
 定义一个方法，该方法支持自定义对象值的格式
 
@@ -208,7 +210,7 @@ Console.WriteLine(String.Format(new BinaryFormatter(),"{0} (binary: {0:B}) (hex:
 
 它们不能与类型的现有格式字符串冲突。 例如，如果要扩展类型的格式 `Int32` ，则不应实现 *"C"、"D"、"E"、"F" 和 "G"* 格式说明符
 
-# IDisposable
+## IDisposable
 
 提供一种用于释放非托管资源的机制
 
@@ -337,7 +339,7 @@ protected override void Dispose(bool disposing)
 ```
 *可以看到,这次是先销毁子类,再销毁父类*
 
-# IEquatable<T>
+## IEquatable<T>
 
 泛型,常用于和补充Object的`Equals`
 
@@ -354,7 +356,7 @@ protected override void Dispose(bool disposing)
 
 如果你的类型实现 `IComparable<T>` ，你几乎始终都实现 `IEquatable<T>`
 
-# IFormatProvider
+## IFormatProvider
 
 提供一种机制，用于检索对象以控制格式化
 
@@ -395,7 +397,7 @@ public Object GetFormat(Type formatType)
 }
 ```
 
-# IFormattable
+## IFormattable
 
 提供一种功能，用以将对象的值格式化为字符串表示形式
 
@@ -442,7 +444,7 @@ public string ToString(string format, IFormatProvider provider)
 
 > 类似于`Equals`的扩种,这些接口也可以看作是`ToString`的扩充
 
-# IObservable<T>
+## IObservable<T>
 
 定义基于推送的通知的提供程序  
 `IObserver<T>` 和 `IObservable<T>` 接口为基于推送的通知（也称为观察者设计模式）提供通用机制
@@ -484,7 +486,7 @@ private class Unsubscriber : IDisposable
 }
 ```
 
-# IObserver<T>
+## IObserver<T>
 
 提供用于接收基于推送的通知的机制
 
@@ -598,7 +600,7 @@ public class LocationTracker : IObservable<Location>
 ```
 *以上两段代码演示了这两个接口是如何协同工作的*
 
-# IProgress<T>
+## IProgress<T>
 
 定义进度更新的提供程序
 
@@ -606,7 +608,7 @@ public class LocationTracker : IObservable<Location>
   * 报告进度更新。
   * T 进度更新之后的值
 
-# IServiceProvider
+## IServiceProvider
 
 定义用于检索服务对象的机制；也即，向其他对象提供自定义支持的对象
 
@@ -617,6 +619,12 @@ public class LocationTracker : IObservable<Location>
 
 IServiceProvider接口由多种类型实现  
 `System.Web.HttpContext` `System.ComponentModel.LicenseContext` `System.ComponentModel.MarshalByValueComponent` `System.ComponentModel.Design.ServiceContainer` 
+
+# System.Collections中的接口
+
+## ICollection
+
+定义所有非泛型集合的大小、枚举数和同步方法
 
 # 完毕
 
