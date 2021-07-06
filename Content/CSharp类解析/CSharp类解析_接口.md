@@ -35,6 +35,7 @@ tags:
   - [IServiceProvider](#iserviceprovider)
 - [System.Collections中的接口](#systemcollections中的接口)
   - [ICollection](#icollection)
+  - [IComparer](#icomparer)
 - [完毕](#完毕)
 
 
@@ -626,30 +627,44 @@ IServiceProvider接口由多种类型实现
 
 定义所有非泛型集合的大小、枚举数和同步方法
 
-属性
-属性
-Count	
-获取 ICollection 中包含的元素数。
-IsSynchronized	
-获取一个值，该值指示是否同步对 ICollection 的访问（线程安全）。
-SyncRoot	
-获取可用于同步对 ICollection 的访问的对象。
-方法
-方法
-CopyTo(Array, Int32)	
-从特定的 ICollection 索引开始，将 Array 的元素复制到一个 Array 中。
-GetEnumerator()	
-返回循环访问集合的枚举数。(继承自 IEnumerable)
-扩展方法
-扩展方法
-Cast<TResult>(IEnumerable)	
-将 IEnumerable 的元素强制转换为指定的类型。
-OfType<TResult>(IEnumerable)	
-根据指定类型筛选 IEnumerable 的元素。
-AsParallel(IEnumerable)	
-启用查询的并行化。
-AsQueryable(IEnumerable)	
-将 IEnumerable 转换为 IQueryable。
+**属性**
+* Count	
+  * 获取 `ICollection` 中包含的元素数。
+* IsSynchronized	
+  * 获取一个值，该值指示是否同步对 `ICollection` 的访问（线程安全）。
+* SyncRoot	
+  * 获取可用于同步对 `ICollection` 的访问的对象。
+
+**方法**
+* CopyTo(Array, Int32)	
+  * 从特定的 `ICollection` 索引开始，将 `Array` 的元素复制到一个 `Array` 中。
+* GetEnumerator()	
+  * 返回循环访问集合的枚举数。(继承自 `IEnumerable`)
+
+**扩展方法**
+* Cast<TResult>(IEnumerable)	
+  * 将 `IEnumerable` 的元素强制转换为指定的类型。
+* OfType<TResult>(IEnumerable)	
+  * 根据指定类型筛选 `IEnumerable` 的元素。
+* AsParallel(IEnumerable)	
+  * 启用查询的并行化。
+* AsQueryable(IEnumerable)	
+  * 将 `IEnumerable` 转换为 `IQueryable。`
+
+它的泛型等效项是 `System.Collections.Generic.ICollection<T>` 接口
+
+集合本质上不是一个线程安全的,所以需要`IsSynchronized`来标志访问是同步的(接口实现者处理了多线程问题)
+
+如果你需要处理锁,可以使用`SyncRoot`
+```C#
+lock(myCollection.SyncRoot)
+```
+
+`GetEnumerator`是迭代器的基础,`IEnumerator`包含整个迭代器,后面讲.
+
+其他扩展方法都属于工具类型.
+
+## IComparer
 
 # 完毕
 
