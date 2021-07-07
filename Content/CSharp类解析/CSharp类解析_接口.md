@@ -36,6 +36,8 @@ tags:
 - [System.Collections中的接口](#systemcollections中的接口)
   - [ICollection](#icollection)
   - [IComparer](#icomparer)
+  - [IDictionary](#idictionary)
+- [System.Collections.Generic中的接口](#systemcollectionsgeneric中的接口)
 - [完毕](#完毕)
 
 
@@ -665,6 +667,74 @@ lock(myCollection.SyncRoot)
 其他扩展方法都属于工具类型.
 
 ## IComparer
+
+提供比较两个对象的方法。
+
+* Compare(Object, Object)	
+  * 比较两个对象并返回一个值，该值指示一个对象小于、等于还是大于另一个对象
+
+一般是各种比较方法要用到此接口
+
+返回`Int32`
+
+一个带符号整数，指示 x 和y 的相对值：
+- 如果小于 0，则 x 小于 y。
+- 如果为 0，则 x 等于 y。
+- 如果大于 0，则 x 大于 y。
+
+`null`允许与任何类型进行比较，并且在使用时不会生成异常 `IComparable` 。 进行排序时， `null` 视为小于任何其他对象
+
+> 首选的实现方法是使用 `Compare` 其中一个参数的方法.
+
+也有一个泛型版本
+
+> 这种泛型补充都是后来添加的,所以他们有一个自己的命名空间`System.Collections.Generic`
+
+## IDictionary
+
+表示键/值对的非通用集合
+
+**属性**
+* Count	
+  * 获取 ICollection 中包含的元素数。(继承自 ICollection)
+* IsFixedSize	
+  * 获取一个值，该值指示 IDictionary 对象是否具有固定大小。
+* IsReadOnly	
+  * 获取一个值，该值指示 IDictionary 对象是否为只读。
+* IsSynchronized	
+  * 获取一个值，该值指示是否同步对 ICollection 的访问（线程安全）。(继承自 ICollection)
+* Item[Object]	
+  * 获取或设置具有指定键的元素。
+* Keys	
+  * 获取 ICollection 对象，它包含 IDictionary 对象的键。
+* SyncRoot	
+  * 获取可用于同步对 ICollection 的访问的对象。(继承自 ICollection)
+* Values	
+  * 获取 ICollection 对象，它包含 IDictionary 对象中的值。
+**方法**
+* Add(Object, Object)	
+  * 在 IDictionary 对象中添加一个带有所提供的键和值的元素。
+* Clear()	
+  * 从 IDictionary 对象中移除所有元素。
+* Contains(Object)	
+  * 确定 IDictionary 对象是否包含具有指定键的元素。
+* CopyTo(Array, Int32)	
+  * 从特定的 ICollection 索引开始，将 Array 的元素复制到一个 Array 中。(继承自 ICollection)
+* GetEnumerator()	
+  * 返回 IDictionary 对象的 IDictionaryEnumerator 对象。
+* Remove(Object)	
+  * 从 IDictionary 对象中移除具有指定键的元素。
+**扩展方法**
+* Cast<TResult>(IEnumerable)	
+  * 将 IEnumerable 的元素强制转换为指定的类型。
+* OfType<TResult>(IEnumerable)	
+  * 根据指定类型筛选 IEnumerable 的元素。
+* AsParallel(IEnumerable)	
+  * 启用查询的并行化。
+* AsQueryable(IEnumerable)	
+  * 将 IEnumerable 转换为 IQueryable。
+
+# System.Collections.Generic中的接口
 
 # 完毕
 
