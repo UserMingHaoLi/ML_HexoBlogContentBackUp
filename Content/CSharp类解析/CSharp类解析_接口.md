@@ -38,6 +38,9 @@ tags:
   - [IComparer](#icomparer)
   - [IDictionary](#idictionary)
   - [IDictionaryEnumerator](#idictionaryenumerator)
+  - [IEnumerable](#ienumerable)
+  - [IEnumerator](#ienumerator)
+  - [IEqualityComparer](#iequalitycomparer)
 - [System.Collections.Generic中的接口](#systemcollectionsgeneric中的接口)
 - [完毕](#完毕)
 
@@ -736,6 +739,59 @@ lock(myCollection.SyncRoot)
   * 将 IEnumerable 转换为 IQueryable。
 
 ## IDictionaryEnumerator
+
+枚举非泛型字典中的元素
+
+**属性**
+* Current	
+  * 获取集合中位于枚举数当前位置的元素。(继承自 IEnumerator)
+* Entry	
+  * 同时获取当前字典项的键和值。
+* Key	
+  * 获取当前字典项的键。
+* Value	
+  * 获取当前字典项的值。
+**方法**
+* MoveNext()	
+  * 将枚举数推进到集合的下一个元素。(继承自 IEnumerator)
+* Reset()	
+  * 将枚举数设置为其初始位置，该位置位于集合中第一个元素之前。(继承自 IEnumerator)
+
+## IEnumerable
+
+支持简单迭代
+
+**方法**
+* GetEnumerator()	
+  * 返回循环访问集合的枚举数。
+**扩展方法**
+* Cast<TResult>(IEnumerable)	
+  * 将 IEnumerable 的元素强制转换为指定的类型。
+* OfType<TResult>(IEnumerable)	
+  * 根据指定类型筛选 IEnumerable 的元素。
+* AsParallel(IEnumerable)	
+  * 启用查询的并行化。
+* AsQueryable(IEnumerable)	
+  * 将 IEnumerable 转换为 IQueryable。
+
+## IEnumerator
+
+支持简单迭代
+
+**属性**
+* Current	
+  * 获取集合中位于枚举数当前位置的元素。
+**方法**
+* MoveNext()	
+  * 将枚举数推进到集合的下一个元素。
+* Reset()	
+  * 将枚举数设置为其初始位置，该位置位于集合中第一个元素之前。
+
+*从头到尾对一个集合进行枚举在本质上不是一个线程安全的过程*
+
+## IEqualityComparer 
+
+定义用于支持比较对象是否相等的方法
 
 # System.Collections.Generic中的接口
 
