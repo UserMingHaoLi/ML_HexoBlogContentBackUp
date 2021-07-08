@@ -37,6 +37,7 @@ tags:
   - [ICollection](#icollection)
   - [IComparer](#icomparer)
   - [IDictionary](#idictionary)
+  - [IDictionaryEnumerator](#idictionaryenumerator)
 - [System.Collections.Generic中的接口](#systemcollectionsgeneric中的接口)
 - [完毕](#完毕)
 
@@ -734,7 +735,11 @@ lock(myCollection.SyncRoot)
 * AsQueryable(IEnumerable)	
   * 将 IEnumerable 转换为 IQueryable。
 
+## IDictionaryEnumerator
+
 # System.Collections.Generic中的接口
+
+
 
 # 完毕
 
