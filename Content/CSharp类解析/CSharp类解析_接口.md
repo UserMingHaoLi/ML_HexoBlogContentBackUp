@@ -41,6 +41,7 @@ tags:
   - [IEnumerable](#ienumerable)
   - [IEnumerator](#ienumerator)
   - [IEqualityComparer](#iequalitycomparer)
+  - [IHashCodeProvider](#ihashcodeprovider)
 - [System.Collections.Generic中的接口](#systemcollectionsgeneric中的接口)
 - [完毕](#完毕)
 
@@ -792,6 +793,24 @@ lock(myCollection.SyncRoot)
 ## IEqualityComparer 
 
 定义用于支持比较对象是否相等的方法
+
+**方法**
+* Equals(Object, Object)	
+  * 确定指定的对象是否相等。
+* GetHashCode(Object)	
+  * 返回指定对象的哈希代码。
+
+此接口允许实现**集合**的自定义相等性比较
+
+## IHashCodeProvider 
+
+使用自定义哈希函数为对象提供哈希代码。
+
+**方法**
+* GetHashCode(Object)	
+  * 返回指定对象的哈希代码。
+
+其建议的替换是 `System.Collections.IEqualityComparer` 或 `System.Collections.Generic.IEqualityComparer<T>` 接口。
 
 # System.Collections.Generic中的接口
 
