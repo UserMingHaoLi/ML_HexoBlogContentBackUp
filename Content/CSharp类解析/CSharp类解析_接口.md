@@ -42,6 +42,7 @@ tags:
   - [IEnumerator](#ienumerator)
   - [IEqualityComparer](#iequalitycomparer)
   - [IHashCodeProvider](#ihashcodeprovider)
+  - [IList](#ilist)
 - [System.Collections.Generic中的接口](#systemcollectionsgeneric中的接口)
 - [完毕](#完毕)
 
@@ -811,6 +812,50 @@ lock(myCollection.SyncRoot)
   * 返回指定对象的哈希代码。
 
 其建议的替换是 `System.Collections.IEqualityComparer` 或 `System.Collections.Generic.IEqualityComparer<T>` 接口。
+
+## IList 
+
+**属性**
+* Count	
+  * 获取 ICollection 中包含的元素数。(继承自ICollection)
+* IsFixedSize	
+  * 获取一个值，该值指示 IList 是否具有固定大小。
+* IsReadOnly	
+  * 获取一个值，该值指示 IList 是否为只读。
+* IsSynchronized	
+  * 获取一个值，该值指示是否同步对 ICollection * 的访问（线程安全）。(继承自 ICollection)
+* Item[Int32]	
+  * 获取或设置指定索引处的元素。
+* SyncRoot	
+  * 获取可用于同步对 ICollection 的访问的对象。(继承自 ICollection)
+**方法**
+* Add(Object)	
+  * 将某项添加到 IList 中。
+* Clear()	
+  * 从 IList 中移除所有项。
+* Contains(Object)	
+  * 确定 IList 是否包含特定值。
+* CopyTo(Array, Int32)	
+  * 从特定的 ICollection 索引开始，将 Array 的元* 素复制到一个 Array 中。(继承自 ICollection)
+* GetEnumerator()	
+  * 返回循环访问集合的枚举数。(继承自 * IEnumerable)
+* IndexOf(Object)	
+  * 确定 IList 中特定项的索引。
+* Insert(Int32, Object)	
+  * 在 IList 中的指定索引处插入一个项。
+* Remove(Object)	
+  * 从 IList 中移除特定对象的第一个匹配项。
+* RemoveAt(Int32)	
+  * 移除位于指定索引处的 IList 项。
+**扩展方法**
+* Cast<TResult>(IEnumerable)	
+  * 将 IEnumerable 的元素强制转换为指定的类型。
+* OfType<TResult>(IEnumerable)	
+  * 根据指定类型筛选 IEnumerable 的元素。
+* AsParallel(IEnumerable)	
+  * 启用查询的并行化。
+* AsQueryable(IEnumerable)	
+  * 将 IEnumerable 转换为 IQueryable。
 
 # System.Collections.Generic中的接口
 
