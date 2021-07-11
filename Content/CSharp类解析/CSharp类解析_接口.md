@@ -43,6 +43,7 @@ tags:
   - [IEqualityComparer](#iequalitycomparer)
   - [IHashCodeProvider](#ihashcodeprovider)
   - [IList](#ilist)
+  - [IStructuralComparable](#istructuralcomparable)
 - [System.Collections.Generic中的接口](#systemcollectionsgeneric中的接口)
 - [完毕](#完毕)
 
@@ -856,6 +857,14 @@ lock(myCollection.SyncRoot)
   * 启用查询的并行化。
 * AsQueryable(IEnumerable)	
   * 将 IEnumerable 转换为 IQueryable。
+
+## IStructuralComparable
+
+支持集合对象的结构化比较
+
+**方法**
+* CompareTo(Object, IComparer)	
+  * 确定当前集合对象在排序顺序中的位置是位于另一个对象之前、之后还是与其位置相同
 
 # System.Collections.Generic中的接口
 
