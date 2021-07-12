@@ -44,6 +44,7 @@ tags:
   - [IHashCodeProvider](#ihashcodeprovider)
   - [IList](#ilist)
   - [IStructuralComparable](#istructuralcomparable)
+  - [IStructuralEquatable](#istructuralequatable)
 - [System.Collections.Generic中的接口](#systemcollectionsgeneric中的接口)
 - [完毕](#完毕)
 
@@ -865,6 +866,16 @@ lock(myCollection.SyncRoot)
 **方法**
 * CompareTo(Object, IComparer)	
   * 确定当前集合对象在排序顺序中的位置是位于另一个对象之前、之后还是与其位置相同
+
+## IStructuralEquatable
+
+支持比较对象是否在结构上相等
+
+**方法**
+* Equals(Object, IEqualityComparer)	
+  * 确定某个对象与当前实例在结构上是否相等。
+* GetHashCode(IEqualityComparer)	
+  * 返回当前实例的哈希代码。
 
 # System.Collections.Generic中的接口
 
