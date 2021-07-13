@@ -877,6 +877,29 @@ lock(myCollection.SyncRoot)
 * GetHashCode(IEqualityComparer)	
   * 返回当前实例的哈希代码。
 
+某些情况下，你可能希望比较 `NaN` 相等性的值以返回 `false` 
+
+```C#
+public new bool Equals(object x, object y)
+{
+  if (x is float)
+      return (float) x == (float) y;
+  else if (x is double)
+      return (double) x == (double) y;
+  else
+      return EqualityComparer<object>.Default.Equals(x, y);
+}
+
+public int GetHashCode(object obj)
+{
+  return EqualityComparer<object>.Default.GetHashCode(obj);
+}
+```
+
+泛型元组类, Array 类,显式实现 `IStructuralEquatable` 
+
+`IStructuralEquatable` 接口仅支持结构相等性的自定义比较。 `IStructuralComparable` 接口支持用于排序和排序的自定义结构比较。
+
 # System.Collections.Generic中的接口
 
 
