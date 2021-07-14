@@ -859,6 +859,8 @@ lock(myCollection.SyncRoot)
 * AsQueryable(IEnumerable)	
   * 将 IEnumerable 转换为 IQueryable。
 
+相比于`ICollection `多出了`Item[Int32]`和对此集合的一系列便捷操作
+
 ## IStructuralComparable
 
 支持集合对象的结构化比较
