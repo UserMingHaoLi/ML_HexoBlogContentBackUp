@@ -793,6 +793,49 @@ lock(myCollection.SyncRoot)
 
 *从头到尾对一个集合进行枚举在本质上不是一个线程安全的过程*
 
+*协程管理器(接受自定义,底层还是Unity)*
+```C#
+//所有扩展的WaitForXXX的接口
+public interface IWaitable
+{
+    bool IsReady();
+}
+​
+public class CCoroutineMgr : CSingletonBehaviour<CCoroutineMgr>
+{
+    //开启一个协程，用户传进来的iter传入协程调度器中，协程调度器本身也是一个协程，被Unity管理
+    public new WaitForCoroutine StartCoroutine(IEnumerator iter)
+    {
+        WaitForCoroutine wait = new WaitForCoroutine();
+        //开启协程调度器，使用base.StartCoroutine可以开启Unity自带协程
+        Coroutine co = base.StartCoroutine(CoScheduler(iter, wait));
+        mCoroutines.Add(wait, co);
+        return wait;
+    }
+    
+    //核心：协程调度
+    private IEnumerator CoScheduler(IEnumerator iter, WaitForCoroutine wait)
+    {
+        while (iter.MoveNext())
+        {
+            var res = iter.Current;
+            if (res is IWaitable) //iter中返回了一个IWaitable
+            {
+                IWaitable waitable = res as IWaitable;
+                while (!waitable.IsReady())
+                    yield return null;
+            }
+            else //iter中返回了一个Unity自带的协程条件
+            {
+                yield return res;
+            }
+        }
+        mCoroutines.Remove(wait);
+    }
+}
+```
+
+
 ## IEqualityComparer 
 
 定义用于支持比较对象是否相等的方法
