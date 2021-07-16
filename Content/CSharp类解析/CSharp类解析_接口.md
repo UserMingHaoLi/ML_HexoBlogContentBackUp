@@ -835,6 +835,7 @@ public class CCoroutineMgr : CSingletonBehaviour<CCoroutineMgr>
 }
 ```
 
+> 实际上完全可以实现自己的协程(不依赖Unity)
 
 ## IEqualityComparer 
 
