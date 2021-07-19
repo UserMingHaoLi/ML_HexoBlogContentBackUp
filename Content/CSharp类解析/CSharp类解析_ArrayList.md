@@ -197,6 +197,108 @@ public virtual Object this[int index] {
 为特定 IList 创建 ArrayList 包装。   
 `static`的, 没用过.
 
+# Add()
+
+```C#
+public virtual int Add(Object value) {
+	Contract.Ensures(Contract.Result<int>() >= 0);
+	if (_size == _items.Length) EnsureCapacity(_size + 1);
+	_items[_size] = value;
+	_version++;
+	return _size++;
+}
+```
+*注意`EnsureCapacity`,这是扩容*
+
+# AddRange
+
+```C#
+InsertRange(_size, c);
+```
+
+# EnsureCapacity
+
+使用指定的比较器在已排序 ArrayList 的某个元素范围中搜索元素，并返回该元素从零开始的索引
+
+也就是搜索查找
+
+```C#
+Array.BinarySearch((Array)_items, index, count, value, comparer);
+```
+后面都是这些重载
+
+# Clear()
+
+```C#
+if (_size > 0)
+{
+	Array.Clear(_items, 0, _size); 
+	_size = 0;
+}
+_version++;
+```
+
+# Clone()
+
+```C#
+Contract.Ensures(Contract.Result<Object>() != null);
+	ArrayList la = new ArrayList(_size);
+	la._size = _size;
+	la._version = _version;
+	Array.Copy(_items, 0, la._items, 0, _size);
+	return la;
+```
+就是`new`  
+
+# Contains()
+
+```C#
+public virtual bool Contains(Object item) {
+	if (item==null) {
+		for(int i=0; i<_size; i++)
+			if (_items[i]==null)
+				return true;
+		return false;
+	}
+	else {
+		for(int i=0; i<_size; i++)
+			if ( (_items[i] != null) && (_items[i].Equals(item)) )
+				return true;
+		return false;
+	}
+}
+```
+*这里没用`==`而是用了`Equals`,并为`null`作了单独处理*
+
+# CopyTo
+
+实际是` Array.Copy`
+
+# EnsureCapacity
+
+经典的*2扩容来了
+```C#
+private void EnsureCapacity(int min) {
+	if (_items.Length < min) {
+		int newCapacity = _items.Length == 0? _defaultCapacity: _items.Length * 2;
+		// Allow the list to grow to maximum possible capacity (~2G elements) before encountering overflow.
+		// Note that this check works even when _items.Length overflowed thanks to the (uint) cast
+		if ((uint)newCapacity > Array.MaxArrayLength) newCapacity = Array.MaxArrayLength;
+		if (newCapacity < min) newCapacity = min;
+		Capacity = newCapacity;
+	}
+}
+```
+*当前容量比所需最少容量小时, `_items.Length * 2`*  
+然后设置`Capacity`,上面我们讲到过,这就是`New`
+
+**所以如果是大数量,则一定要手动指定,不然就一直*2,消耗是很大的**
+
+# FixedSize
+
+几个`static`方法  
+返回具有固定大小的 `ArrayList` 包装
+
 # 完毕
 
 **感谢您的观看!**  
