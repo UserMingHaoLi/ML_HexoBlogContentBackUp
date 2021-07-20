@@ -299,6 +299,140 @@ private void EnsureCapacity(int min) {
 几个`static`方法  
 返回具有固定大小的 `ArrayList` 包装
 
+# GetEnumerator
+
+```C#
+public virtual IEnumerator GetEnumerator() {
+	Contract.Ensures(Contract.Result<IEnumerator>() != null);
+	return new ArrayListEnumeratorSimple(this);
+}
+
+public virtual IEnumerator GetEnumerator(int index, int count) {
+	if (index < 0)
+		throw new ArgumentOutOfRangeException("index", Environment.GetResourceString("ArgumentOutOfRange_NeedNonNegNum"));
+	if (count < 0)
+		throw new ArgumentOutOfRangeException("count", Environment.GetResourceString("ArgumentOutOfRange_NeedNonNegNum"));
+	if (_size - index < count)
+		throw new ArgumentException(Environment.GetResourceString("Argument_InvalidOffLen"));
+	Contract.Ensures(Contract.Result<IEnumerator>() != null);
+	Contract.EndContractBlock();
+
+	return new ArrayListEnumerator(this, index, count);
+}
+```
+
+可以看到是`new`了一个内部类`ArrayListEnumerator`
+
+```C#
+private sealed class ArrayListEnumerator : IEnumerator, ICloneable
+{
+	private ArrayList list;
+	private int index;
+	private int endIndex;       // Where to stop.
+	private int version;
+	private Object currentElement;
+	private int startIndex;     // Save this for Reset.
+
+	internal ArrayListEnumerator(ArrayList list, int index, int count) {
+		this.list = list;
+		startIndex = index;
+		this.index = index - 1;
+		endIndex = this.index + count;  // last valid index
+		version = list._version;
+		currentElement = null;
+	}
+
+	public Object Clone() {
+		return MemberwiseClone();
+	}
+
+	public bool MoveNext() {
+		if (version != list._version) throw new InvalidOperationException(Environment.GetResourceString(ResId.InvalidOperation_EnumFailedVersion));
+		if (index < endIndex) {
+			currentElement = list[++index];
+			return true;
+		}
+		else {
+			index = endIndex + 1;
+		}
+		
+		return false;
+	}
+
+	public Object Current {
+		get {
+			if (index < startIndex) 
+				throw new InvalidOperationException(Environment.GetResourceString(ResId.InvalidOperation_EnumNotStarted));
+			else if (index > endIndex) {
+				throw new InvalidOperationException(Environment.GetResourceString(ResId.InvalidOperation_EnumEnded));
+			}
+			return currentElement;
+		}
+	}
+
+	public void Reset() {
+		if (version != list._version) throw new InvalidOperationException(Environment.GetResourceString(ResId.InvalidOperation_EnumFailedVersion));
+		index = startIndex - 1;                
+	}
+}
+```
+*就是一个经典迭代器,没什么好说的*
+
+# IndexOf
+
+```C#
+public virtual int IndexOf(Object value) {
+		Contract.Ensures(Contract.Result<int>() < Count);
+		return Array.IndexOf((Array)_items, value, 0, _size);
+	}
+```
+*就调了下`Array.IndexOf`*
+
+# Insert
+
+```C#
+public virtual void Insert(int index, Object value) {
+		// Note that insertions at the end are legal.
+		if (index < 0 || index > _size) throw new ArgumentOutOfRangeException("index", Environment.GetResourceString("ArgumentOutOfRange_ArrayListInsert"));
+		//Contract.Ensures(Count == Contract.OldValue(Count) + 1);
+		Contract.EndContractBlock();
+
+		if (_size == _items.Length) EnsureCapacity(_size + 1);
+		if (index < _size) {
+			Array.Copy(_items, index, _items, index + 1, _size - index);
+		}
+		_items[index] = value;
+		_size++;
+		_version++;
+	}
+```
+*可以看出`Insert`还是比较耗的,用了`Array.Copy`*
+
+# LastIndexOf
+
+```C#
+public virtual int LastIndexOf(Object value, int startIndex, int count) {
+	if (Count != 0 && (startIndex < 0 || count < 0))
+		throw new ArgumentOutOfRangeException((startIndex<0 ? "startIndex" : "count"), Environment.GetResourceString("ArgumentOutOfRange_NeedNonNegNum"));
+	Contract.Ensures(Contract.Result<int>() < Count);
+	Contract.EndContractBlock();
+
+	if (_size == 0)  // Special case for an empty list
+		return -1;
+
+	if (startIndex >= _size || count > startIndex + 1) 
+		throw new ArgumentOutOfRangeException((startIndex>=_size ? "startIndex" : "count"), Environment.GetResourceString("ArgumentOutOfRange_BiggerThanCollection"));
+
+	return Array.LastIndexOf((Array)_items, value, startIndex, count);
+}
+```
+`Array.LastIndexOf`实际上也是遍历查找
+
+# ReadOnly
+
+返回只读的 ArrayList 包装  
+同样没用过
+
 # 完毕
 
 **感谢您的观看!**  
