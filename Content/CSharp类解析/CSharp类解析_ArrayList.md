@@ -433,6 +433,80 @@ public virtual int LastIndexOf(Object value, int startIndex, int count) {
 返回只读的 ArrayList 包装  
 同样没用过
 
+# Remove
+
+# RemoveAt
+
+```C#
+public virtual void Remove(Object obj) {
+	Contract.Ensures(Count >= 0);
+
+	int index = IndexOf(obj);
+	BCLDebug.Correctness(index >= 0 || !(obj is Int32), "You passed an Int32 to Remove that wasn't in the ArrayList." + Environment.NewLine + "Did you mean RemoveAt?  int: "+obj+"  Count: "+Count);
+	if (index >=0) 
+		RemoveAt(index);
+}
+public virtual void RemoveAt(int index) {
+	if (index < 0 || index >= _size) throw new ArgumentOutOfRangeException("index", Environment.GetResourceString("ArgumentOutOfRange_Index"));
+	Contract.Ensures(Count >= 0);
+	//Contract.Ensures(Count == Contract.OldValue(Count) - 1);
+	Contract.EndContractBlock();
+
+	_size--;
+	if (index < _size) {
+		Array.Copy(_items, index + 1, _items, index, _size - index);
+	}
+	_items[_size] = null;
+	_version++;
+}
+```
+
+可见,和`insert`类似,都使用了Copy
+
+# RemoveRange
+
+```C#
+public virtual void RemoveRange(int index, int count) {
+	if (index < 0)
+		throw new ArgumentOutOfRangeException("index", Environment.GetResourceString("ArgumentOutOfRange_NeedNonNegNum"));
+	if (count < 0)
+		throw new ArgumentOutOfRangeException("count", Environment.GetResourceString("ArgumentOutOfRange_NeedNonNegNum"));
+	if (_size - index < count)
+		throw new ArgumentException(Environment.GetResourceString("Argument_InvalidOffLen"));
+	Contract.Ensures(Count >= 0);
+	//Contract.Ensures(Count == Contract.OldValue(Count) - count);
+	Contract.EndContractBlock();
+
+	if (count > 0) {
+		int i = _size;
+		_size -= count;
+		if (index < _size) {
+			Array.Copy(_items, index + count, _items, index, _size - index);
+		}
+		while (i > _size) _items[--i] = null;
+		_version++;
+	}
+}
+```
+`Array.Copy`
+
+# Repeat
+
+```C#
+ArrayList list = new ArrayList((count>_defaultCapacity)?count:_defaultCapacity);
+for(int i=0; i<count; i++)
+	list.Add(value);
+return list;
+```
+
+返回 `ArrayList`，其元素是指定值的副本。
+
+# Reverse
+
+```C#
+Array.Reverse(_items, index, count);
+```
+
 # 完毕
 
 **感谢您的观看!**  
