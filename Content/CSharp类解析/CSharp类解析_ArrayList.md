@@ -507,7 +507,80 @@ return list;
 Array.Reverse(_items, index, count);
 ```
 
-加班,摸一天
+# SetRange
+
+```C#
+public virtual void SetRange(int index, ICollection c) {
+	if (c==null) throw new ArgumentNullException("c", Environment.GetResourceString("ArgumentNull_Collection"));
+	Contract.EndContractBlock();
+	int count = c.Count;
+	if (index < 0 || index > _size - count) throw new ArgumentOutOfRangeException("index", Environment.GetResourceString("ArgumentOutOfRange_Index"));
+	
+	if (count > 0) {
+		c.CopyTo(_items, index);
+		_version++;
+	}
+}
+```
+*使用`ICollection.CopyTo`*
+
+# GetRange
+
+```C#
+public virtual ArrayList GetRange(int index, int count) {
+	if (index < 0 || count < 0)
+		throw new ArgumentOutOfRangeException((index<0 ? "index" : "count"), Environment.GetResourceString("ArgumentOutOfRange_NeedNonNegNum"));
+	if (_size - index < count)
+		throw new ArgumentException(Environment.GetResourceString("Argument_InvalidOffLen"));
+	Contract.Ensures(Contract.Result<ArrayList>() != null);
+	Contract.EndContractBlock();
+	return new Range(this,index, count);
+}
+```
+*可以看到`new Range`*  
+*这是`private class Range: ArrayList`*
+
+#  Sort
+
+` Array.Sort`
+
+# Synchronized
+
+Synchronized(ArrayList)	
+返回同步的（线程安全）ArrayList 包装器。
+Synchronized(IList)	
+返回同步的（线程安全）IList 包装器。
+
+# ToArray
+
+```C#
+public virtual Object[] ToArray() {
+	Contract.Ensures(Contract.Result<Object[]>() != null);
+
+	Object[] array = new Object[_size];
+	Array.Copy(_items, 0, array, 0, _size);
+	return array;
+}
+```
+*还是`new Object` + `Array.Copy`*
+
+# IListWrapper
+
+` private class IListWrapper : ArrayList`
+
+内部类型,用于`Adapter`的返回值
+
+## IListWrapperEnumWrapper
+
+用于提供`public override IEnumerator GetEnumerator`
+
+# SyncArrayList
+
+`private class SyncArrayList : ArrayList`
+
+用于`Synchronized(ArrayList list) `
+
+> 地下的一些类都是这种包装用途
 
 # 完毕
 
