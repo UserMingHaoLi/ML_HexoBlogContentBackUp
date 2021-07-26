@@ -59,6 +59,42 @@ System.CodeDom.CodeDirectiveCollection
 
 > 不建议使用 `CollectionBase` 类进行新的开发。 相反，我们建议使用泛型 `Collection<T>` 类
 
+# Comparer 
+
+比较两个对象是否相等，其中字符串比较是区分大小写的
+
+```C#
+Comparer.DefaultInvariant.Compare( str1, str2 )
+```
+
+> 此类是`IComparer`接口的默认实现  
+
+比较过程使用当前线程的。    
+根据区域性，字符串比较可能会产生不同的结果
+
+# DictionaryBase 
+
+为键/值对的强类型集合提供 `abstract` 基类
+
+```C#
+//派生
+System.Diagnostics.InstanceDataCollection
+System.Diagnostics.InstanceDataCollectionCollection
+System.DirectoryServices.ActiveDirectory.ActiveDirectoryReplicationMetadata
+System.DirectoryServices.Protocols.SearchResultAttributeCollection
+System.DirectoryServices.ResultPropertyCollection
+```
+
+# DictionaryEntry 
+
+可设置或检索的字典键/值对
+
+```C#
+foreach (DictionaryEntry de in openWith)
+```
+
+
+
 # 完毕
 
 **感谢您的观看!**  
