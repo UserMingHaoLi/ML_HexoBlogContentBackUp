@@ -93,7 +93,13 @@ System.DirectoryServices.ResultPropertyCollection
 foreach (DictionaryEntry de in openWith)
 ```
 
+# Hashtable 
 
+表示根据键的哈希代码进行组织的键/值对的集合
+
+不建议使用 `Hashtable` 类进行新的开发。 相反，我们建议使用泛型 `Dictionary<TKey,TValue>` 类
+
+> 只有一个线程执行写入 (更新) 操作时，它对于多线程使用是线程安全的
 
 # 完毕
 
