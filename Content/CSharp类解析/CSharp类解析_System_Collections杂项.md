@@ -101,6 +101,36 @@ foreach (DictionaryEntry de in openWith)
 
 > 只有一个线程执行写入 (更新) 操作时，它对于多线程使用是线程安全的
 
+## 扩展
+
+当前`HashTable`中的被占用空间达到一个百分比的时候就将该空间自动扩容，在`.net`中这个百分比是72%.  
+且初始大小为3
+
+```C#
+private const Int32 InitialSize = 3;
+this.loadFactor = 0.72f * loadFactor;
+```
+
+然后比较用的是`0x7FFFFFFF`
+
+```C#
+if (((b.hash_coll &  0x7FFFFFFF) == hashcode) && 
+			KeyEquals (b.key, key))
+			return true;
+```
+
+.net中是通过探测法解决哈希冲突的，当通过散列值取得的位置Postion以及被占用的时候，就会增加一个位移x值判断下一个位置Postion+x是否被占用，如果仍然被占用就继续往下位移x判断Position+2*x位置是否被占用，如果没有被占用则将值放入其中。当HashTable中的可用空间越来越小时，则获取得到可用空间的难度越来越大，消耗的时间就越多
+
+自动扩容的大小是当前空间大小的两倍最接近的素数
+
+注意Add是`Object`类型的,值类型难免装箱拆箱
+
+```C#
+public virtual void Add(Object key, Object value) {
+	Insert(key, value, true);
+}
+```
+
 # 完毕
 
 **感谢您的观看!**  
