@@ -131,6 +131,32 @@ public virtual void Add(Object key, Object value) {
 }
 ```
 
+# Queue 
+
+先进先出集合
+
+> 不建议使用 `Queue` 类进行新的开发。 相反，我们建议使用泛型 `Queue<T>` 类
+
+# ReadOnlyCollectionBase 
+
+提供强类型化非泛型只读集合的 `abstract` 基类
+
+# SortedList 
+
+表示键/值对的集合，这些键值对按键排序并可按照键和索引访问
+
+> 这些都是过时的, 自从泛型出来后
+
+`System.Collections.Generic`这个空间下
+
+# Stack
+
+表示对象的简单后进先出 (LIFO) 非泛型集合
+
+# StructuralComparisons 
+
+提供用于执行两个集合对象的结构化比较的对象
+
 # 完毕
 
 **感谢您的观看!**  
