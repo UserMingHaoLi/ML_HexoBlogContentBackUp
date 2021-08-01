@@ -12,9 +12,16 @@ tags:
 	- CSharp
 ---
 
+位于`System.Collections.Generic`
+
+经典默认大小
+` private const int _defaultCapacity = 4;`
+
+然后是防止迭代中修改的`private int _version;`
 
 <!--more-->
 
+然后就没了, 和`ArrayList`长得一摸一样
 
 
 # 完毕
