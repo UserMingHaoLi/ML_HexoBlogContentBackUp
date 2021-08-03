@@ -12,10 +12,266 @@ tags:
 	- CSharp
 ---
 
+```C#
+private struct Entry {
+	public int hashCode;    // Lower 31 bits of hash code, -1 if unused
+	public int next;        // Index of next entry, -1 if last
+	public TKey key;           // Key of entry
+	public TValue value;         // Value of entry
+}
+```
+*每个Item*
+
+```C#
+private int[] buckets;
+private Entry[] entries;
+private int count;
+private int version;
+private int freeList;
+private int freeCount;
+private IEqualityComparer<TKey> comparer;
+private KeyCollection keys;
+private ValueCollection values;
+private Object _syncRoot;
+```
+*基础定义*
 
 <!--more-->
 
+# 构造
+```C#
+this.comparer = comparer ?? EqualityComparer<TKey>.Default;
+```
+内容如下
+```C#
+ static readonly EqualityComparer<T> defaultComparer = CreateComparer();
+ 
+public static EqualityComparer<T> Default {
+	get {
+		Contract.Ensures(Contract.Result<EqualityComparer<T>>() != null);
+		return defaultComparer;
+	}
+}
+ private static EqualityComparer<T> CreateComparer() {
+	Contract.Ensures(Contract.Result<EqualityComparer<T>>() != null);
 
+	RuntimeType t = (RuntimeType)typeof(T);
+	// Specialize type byte for performance reasons
+	if (t == typeof(byte)) {
+		return (EqualityComparer<T>)(object)(new ByteEqualityComparer());
+	}
+	// If T implements IEquatable<T> return a GenericEqualityComparer<T>
+	if (typeof(IEquatable<T>).IsAssignableFrom(t)) {
+		return (EqualityComparer<T>)RuntimeTypeHandle.CreateInstanceForAnotherGenericParameter((RuntimeType)typeof(GenericEqualityComparer<int>), t);
+	}
+	// If T is a Nullable<U> where U implements IEquatable<U> return a NullableEqualityComparer<U>
+	if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>)) {
+		RuntimeType u = (RuntimeType)t.GetGenericArguments()[0];
+		if (typeof(IEquatable<>).MakeGenericType(u).IsAssignableFrom(u)) {
+			return (EqualityComparer<T>)RuntimeTypeHandle.CreateInstanceForAnotherGenericParameter((RuntimeType)typeof(NullableEqualityComparer<int>), u);
+		}
+	}
+
+	// See the METHOD__JIT_HELPERS__UNSAFE_ENUM_CAST and METHOD__JIT_HELPERS__UNSAFE_ENUM_CAST_LONG cases in getILIntrinsicImplementation
+	if (t.IsEnum) {
+		TypeCode underlyingTypeCode = Type.GetTypeCode(Enum.GetUnderlyingType(t));
+
+		// Depending on the enum type, we need to special case the comparers so that we avoid boxing
+		// Note: We have different comparers for Short and SByte because for those types we need to make sure we call GetHashCode on the actual underlying type as the 
+		// implementation of GetHashCode is more complex than for the other types.
+		switch (underlyingTypeCode) {
+			case TypeCode.Int16: // short
+				return (EqualityComparer<T>)RuntimeTypeHandle.CreateInstanceForAnotherGenericParameter((RuntimeType)typeof(ShortEnumEqualityComparer<short>), t);
+			case TypeCode.SByte:
+				return (EqualityComparer<T>)RuntimeTypeHandle.CreateInstanceForAnotherGenericParameter((RuntimeType)typeof(SByteEnumEqualityComparer<sbyte>), t);
+			case TypeCode.Int32:
+			case TypeCode.UInt32:
+			case TypeCode.Byte:
+			case TypeCode.UInt16: //ushort
+				return (EqualityComparer<T>)RuntimeTypeHandle.CreateInstanceForAnotherGenericParameter((RuntimeType)typeof(EnumEqualityComparer<int>), t);
+			case TypeCode.Int64:
+			case TypeCode.UInt64:
+				return (EqualityComparer<T>)RuntimeTypeHandle.CreateInstanceForAnotherGenericParameter((RuntimeType)typeof(LongEnumEqualityComparer<long>), t);
+		}
+	}
+	// Otherwise return an ObjectEqualityComparer<T>
+	return new ObjectEqualityComparer<T>();
+}
+```
+*注意`T`为`Tkey`,且对整形值类型有特殊优化*
+
+`ObjectEqualityComparer`,可见继承了`EqualityComparer`
+```C#
+internal class ObjectEqualityComparer<T>: EqualityComparer<T>
+{
+[Pure]
+public override bool Equals(T x, T y) {
+	if (x != null) {
+		if (y != null) return x.Equals(y);
+		return false;
+	}
+	if (y != null) return false;
+	return true;
+}
+
+[Pure]
+public override int GetHashCode(T obj) {
+	if (obj == null) return 0;
+	return obj.GetHashCode();
+}
+
+internal override int IndexOf(T[] array, T value, int startIndex, int count) {
+	int endIndex = startIndex + count;
+	if (value == null) {
+		for (int i = startIndex; i < endIndex; i++) {
+			if (array[i] == null) return i;
+		}
+	}
+	else {
+		for (int i = startIndex; i < endIndex; i++) {
+			if (array[i] != null && array[i].Equals(value)) return i;
+		}
+	}
+	return -1;
+}
+
+internal override int LastIndexOf(T[] array, T value, int startIndex, int count) {
+	int endIndex = startIndex - count + 1;
+	if (value == null) {
+		for (int i = startIndex; i >= endIndex; i--) {
+			if (array[i] == null) return i;
+		}
+	}
+	else {
+		for (int i = startIndex; i >= endIndex; i--) {
+			if (array[i] != null && array[i].Equals(value)) return i;
+		}
+	}
+	return -1;
+}
+
+// Equals method for the comparer itself. 
+public override bool Equals(Object obj){
+	ObjectEqualityComparer<T> comparer = obj as ObjectEqualityComparer<T>;
+	return comparer != null;
+}        
+
+public override int GetHashCode() {
+	return this.GetType().Name.GetHashCode();
+}                                
+}
+```
+
+# Count Keys Values
+
+```C#
+public int Count {
+	get { return count - freeCount; }
+}
+public KeyCollection Keys {
+	get {
+		Contract.Ensures(Contract.Result<KeyCollection>() != null);
+		if (keys == null) keys = new KeyCollection(this);
+		return keys;
+	}
+}
+public ValueCollection Values {
+	get {
+		Contract.Ensures(Contract.Result<ValueCollection>() != null);
+		if (values == null) values = new ValueCollection(this);
+		return values;
+	}
+}
+```
+*所谓`KeyCollection`和`ValueCollection`都只是`MoveNext`的时候只取其中的`Key`或`Value`*
+
+# Add Insert
+
+```C#
+public void Add(TKey key, TValue value) {
+	Insert(key, value, true);
+}
+private void Insert(TKey key, TValue value, bool add) {
+
+	if( key == null ) {
+		ThrowHelper.ThrowArgumentNullException(ExceptionArgument.key);
+	}
+
+	if (buckets == null) Initialize(0);
+	int hashCode = comparer.GetHashCode(key) & 0x7FFFFFFF;
+	int targetBucket = hashCode % buckets.Length;
+
+#if FEATURE_RANDOMIZED_STRING_HASHING
+	int collisionCount = 0;
+#endif
+
+	for (int i = buckets[targetBucket]; i >= 0; i = entries[i].next) {
+		if (entries[i].hashCode == hashCode && comparer.Equals(entries[i].key, key)) {
+			if (add) { 
+				ThrowHelper.ThrowArgumentException(ExceptionResource.Argument_AddingDuplicate);
+			}
+			entries[i].value = value;
+			version++;
+			return;
+		} 
+
+#if FEATURE_RANDOMIZED_STRING_HASHING
+		collisionCount++;
+#endif
+	}
+	int index;
+	if (freeCount > 0) {
+		index = freeList;
+		freeList = entries[index].next;
+		freeCount--;
+	}
+	else {
+		if (count == entries.Length)
+		{
+			Resize();
+			targetBucket = hashCode % buckets.Length;
+		}
+		index = count;
+		count++;
+	}
+
+	entries[index].hashCode = hashCode;
+	entries[index].next = buckets[targetBucket];
+	entries[index].key = key;
+	entries[index].value = value;
+	buckets[targetBucket] = index;
+	version++;
+
+#if FEATURE_RANDOMIZED_STRING_HASHING
+
+#if FEATURE_CORECLR
+	// In case we hit the collision threshold we'll need to switch to the comparer which is using randomized string hashing
+	// in this case will be EqualityComparer<string>.Default.
+	// Note, randomized string hashing is turned on by default on coreclr so EqualityComparer<string>.Default will 
+	// be using randomized string hashing
+
+	if (collisionCount > HashHelpers.HashCollisionThreshold && comparer == NonRandomizedStringEqualityComparer.Default) 
+	{
+		comparer = (IEqualityComparer<TKey>) EqualityComparer<string>.Default;
+		Resize(entries.Length, true);
+	}
+#else
+	if(collisionCount > HashHelpers.HashCollisionThreshold && HashHelpers.IsWellKnownEqualityComparer(comparer)) 
+	{
+		comparer = (IEqualityComparer<TKey>) HashHelpers.GetRandomizedEqualityComparer(comparer);
+		Resize(entries.Length, true);
+	}
+#endif // FEATURE_CORECLR
+
+#endif
+
+}
+```
+*和`HashTbl`类似,也是双倍素数和` 0x7FFFFFFF`*
+
+且使用`buckets`为索引,所以操作速度较快, 但是只对于`Key`生效`ContainsValue(TValue value)`还是全部遍历
+
+后面就是一堆迭代器和包装, 没啥好说的.
 
 # 完毕
 
