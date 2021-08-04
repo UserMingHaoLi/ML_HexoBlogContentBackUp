@@ -273,6 +273,8 @@ private void Insert(TKey key, TValue value, bool add) {
 
 后面就是一堆迭代器和包装, 没啥好说的.
 
+----
+
 对于容器规则,找了两张图片方便理解  
 水印就不去了.
 
