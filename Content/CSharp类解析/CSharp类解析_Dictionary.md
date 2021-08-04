@@ -273,13 +273,20 @@ private void Insert(TKey key, TValue value, bool add) {
 
 后面就是一堆迭代器和包装, 没啥好说的.
 
+对于容器规则,找了两张图片方便理解  
+水印就不去了.
+
+![Dictionary_Image1]
+![Dictionary_Image1]
+
 # 完毕
 
 **感谢您的观看!**  
 本文来自 [ML-Blog][ML-Blog_Link]
 
 <!-- 图片 -->
-
+[Dictionary_Image1]:https://github.com/UserMingHaoLi/ML_HexoBlogContentImages/blob/main/Content/CSharp%E7%B1%BB%E8%A7%A3%E6%9E%90/CSharp%E7%B1%BB%E8%A7%A3%E6%9E%90_Dictionary/Dictionary_Image1.jpg "Dictionary_Image1"
+[Dictionary_Image2]:https://github.com/UserMingHaoLi/ML_HexoBlogContentImages/blob/main/Content/CSharp%E7%B1%BB%E8%A7%A3%E6%9E%90/CSharp%E7%B1%BB%E8%A7%A3%E6%9E%90_Dictionary/Dictionary_Image2.jpg "Dictionary_Image2"
 <!-- 链接 -->
 
 <!-- 水印 -->
