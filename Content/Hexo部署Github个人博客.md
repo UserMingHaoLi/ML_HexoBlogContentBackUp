@@ -320,6 +320,52 @@ categories:
 
 建议格式 `id: ml-20210315-220300-g6`
 
+# 修改备案号
+
+前往`/home/ubuntu/Hexo/themes/landscape/layout/_partial/footer.ejs`
+
+内容
+
+```HTML
+<footer id="footer">
+  <% if (theme.sidebar === 'bottom'){ %>
+    <%- partial('_partial/sidebar') %>
+  <% } %>
+  <div class="outer">
+	<img src="https://static.hdslb.com/images/base/beiantubiao.png">
+	<a href="http://beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">鄂ICP备XXXXXX号-1</a>
+    <div id="footer-info" class="inner">
+      &copy; <%= date(new Date(), 'YYYY') %> <%= config.author || config.title %><br>
+      <%= __('powered_by') %> <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+```
+
+在之后重写生成即可
+
+# 长期运行
+
+```Shell
+nohup hexo server -p 80 &
+```
+
+这样使用`nohub`命令来后台运行, -p是指定端口  
+
+**记得备案**
+
+## 关闭
+
+```
+ps -aux
+```
+查询`hexo`所处进程ID
+
+然后
+```
+kill 进程Id
+```
+
 # 完毕
 
 **感谢您的观看!**  
