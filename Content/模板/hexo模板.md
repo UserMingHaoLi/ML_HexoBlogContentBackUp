@@ -99,6 +99,126 @@ static void Swap(List<int> num, int l, int r)
 }
 ```
 
+抄了一个`A*`,今天就这么摸了.  
+有时间再回来理解以下
+
+```C#
+public bool FindPath()
+{
+    openList.Clear();
+    closeList.Clear();
+
+    List<Node> neighborList;
+    openList.Add(map.startNode);
+
+    while (openList.Count > 0)
+    {
+        curNode = FindLowestFNode(openList);
+        openList.Remove(curNode);
+        closeList.Add(curNode);
+
+        if (curNode == map.finishNode)
+        {
+            return true;
+        }
+
+        neighborList = GetNeighborNode(curNode);
+        foreach (var item in neighborList)
+        {
+            if (!closeList.Contains(item))
+            {
+                if (!openList.Contains(item))
+                {
+                    openList.Add(item);
+                    item.parentNode = curNode;
+                    item.G = curNode.G + GetDistance(curNode, item);
+                    item.H = GetDistance(item, map.finishNode);
+                }
+                else
+                {
+                    int newG = curNode.G + GetDistance(curNode, item);
+                    if (newG < item.G)
+                    {
+                        item.G = newG;
+                        item.parentNode = curNode;
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+//获取寻路的路径
+private void GetPath()
+{
+    path.Clear();
+    Node node = map.finishNode;
+
+    while (node != null)
+    {
+        path.Push(node);
+        node = node.parentNode;
+    }
+
+    //获取到路径的事件
+    if (OnGetPath != null)
+        OnGetPath(path);
+}
+
+//找到最小F值的node
+private Node FindLowestFNode(List<Node> array)
+{
+    Node node = array[0];
+    foreach (var item in array)
+    {
+        if (item.F <= node.F)
+            node = item;
+    }
+    return node;
+}
+
+//获取指定的两个节点间的理想距离，允许对角移动
+private int GetDistance(Node fromNode, Node toNode)
+{
+    int x = Mathf.Abs(fromNode.location.x - toNode.location.x);
+    int y = Mathf.Abs(fromNode.location.y - toNode.location.y);
+
+    return x > y ? 10 * (x - y) + 14 * y : 10 * (y - x) + 14 * x;
+}
+
+//获取一个节点的周围所有节点
+private List<Node> GetNeighborNode(Node centerNode)
+{
+    List<Node> neighborList = new List<Node>();
+    Node node;
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++)
+        {
+            if (!(i == 0 && j == 0))
+            {
+                node = map.FindNode(centerNode.location.x + i, centerNode.location.y + j, map.groundList);
+                if (node != null)
+                {
+                    //判断四角的节点是否与障碍物相邻
+                    if ((i == -1 || i == 1) && (j == -1 || j == 1))
+                    {
+                        if (map.FindNode(centerNode.location.x + i, centerNode.location.y, map.obsList) != null
+                        || map.FindNode(centerNode.location.x, centerNode.location.y + j, map.obsList) != null)
+                            continue;
+                    }
+                    neighborList.Add(node);
+                }
+            }
+        }
+    }
+
+    return neighborList;
+} 作者：奥飒姆_Awesome https://www.bilibili.com/read/cv12595386 出处：bilibili
+```
+
 # 完毕
 
 **感谢您的观看!**  
