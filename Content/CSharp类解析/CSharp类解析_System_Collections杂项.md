@@ -14,6 +14,11 @@ tags:
 
 可能有些会扩展,那就单独拿出来
 
+所以`System.Collections` 是数据集合  
+`System.Collections.Generic`是泛型扩展   
+
+
+
 <!--more-->
 
 # BitArray
