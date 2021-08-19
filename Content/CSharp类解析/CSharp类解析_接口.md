@@ -281,7 +281,6 @@ class BaseClass : IDisposable
    }
 }
 ```
-*可以看到,子类重写的实际不是接口内容,但是接口调用这个继承函数,来达到子类释放的目的*
 
 如果你实现`析构器`, 则应做如下修改
 ```C#
@@ -349,6 +348,56 @@ protected override void Dispose(bool disposing)
 }
 ```
 *可以看到,这次是先销毁子类,再销毁父类*
+
+最后  
+**手写一个就是这样**
+```C#
+public class IDisponseTest : IDisposable
+{
+    private bool isReadyDisposed = false;
+
+    ~IDisponseTest()
+    {
+        //析构函数调用时不释放托管资源，因为交由GC进行释放
+        Disponse(false);
+    }
+
+    public void Dispose()
+    {
+        //用户手动释放托管资源和非托管资源
+        Disponse(true);
+        //用户已经释放了托管和非托管资源，所以不需要再调用析构函数
+        GC.SuppressFinalize(this);
+        
+        //如果子类继承此类时，需要按照如下写法进行。
+        //try
+        //{
+        //    Disponse(true);
+        //}
+        //finally
+        //{
+        //    base.Disponse();
+        //}
+    }
+
+    public virtual void Disponse(bool isDisponse)
+    {
+        //isReadyDisposed是控制只有第一次调用Disponse才有效才需要释放托管和非托管资源
+        if (isReadyDisposed)
+            return;
+        if (isDisponse)
+        {
+            //析构函数调用时不释放托管资源，因为交由GC进行释放
+            //如果析构函数释放托管资源可能之前GC释放过，就会导致出现异常
+
+            //托管资源释放
+        }
+        //非托管资源释放
+        isReadyDisposed = true;
+    }
+}
+```
+
 
 ## IEquatable<T>
 
