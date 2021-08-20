@@ -466,6 +466,8 @@ using(var ctx = appdomain.BeginInvoke(m))
 
 `HotFix`是无法正常反射的, 需要使用框架自带的一些方法拿反射
 
+> 这主要是由于`HotFix`内容需要实时运行. 所以底层实现不相同
+
 # 单词
 
 `ILRuntime`其中`T`不用大写.
