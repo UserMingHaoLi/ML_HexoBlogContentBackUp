@@ -526,6 +526,182 @@ using(var ctx = appdomain.BeginInvoke(m))
 
 由于热更都是解译执行，所以执行效率跟直接执行天然就有20-100倍的差距，因此不大适合需要进行大量遍历计算的操作，可将耗时的工具方法放入主工程辅助
 
+# 跨域继承怎么写
+
+```C#
+//这是Unity部分
+public abstract class TestClassBase
+{
+    public virtual int Value
+    {
+        get
+        {
+            return 0;
+        }
+        set
+        {
+
+        }
+    }
+
+    public virtual void TestVirtual(string str)
+    {
+        Debug.Log("!! TestClassBase.TestVirtual, str = " + str);
+    }
+
+    public abstract void TestAbstract(int gg);
+}
+//然后是HotFix部分
+public class TestInheritance : TestClassBase
+{
+	public override int Value { get; set; }
+	public override void TestAbstract(int gg)
+	{
+		UnityEngine.Debug.Log("!! TestInheritance.TestAbstract gg =" + gg);
+	}
+
+	public override void TestVirtual(string str)
+	{
+		base.TestVirtual(str);
+		UnityEngine.Debug.Log("!! TestInheritance.TestVirtual str =" + str);
+	}
+
+	public static TestInheritance NewObject()
+	{
+		return new HotFix_Project.TestInheritance();
+	}
+}
+//以及最重要的适配器
+ public class TestClassBaseAdapter : CrossBindingAdaptor
+{
+	static CrossBindingFunctionInfo<System.Int32> mget_Value_0 = new CrossBindingFunctionInfo<System.Int32>("get_Value");
+	static CrossBindingMethodInfo<System.Int32> mset_Value_1 = new CrossBindingMethodInfo<System.Int32>("set_Value");
+	static CrossBindingMethodInfo<System.String> mTestVirtual_2 = new CrossBindingMethodInfo<System.String>("TestVirtual");
+	static CrossBindingMethodInfo<System.Int32> mTestAbstract_3 = new CrossBindingMethodInfo<System.Int32>("TestAbstract");
+	public override Type BaseCLRType
+	{
+		get
+		{
+			return typeof(global::TestClassBase);
+		}
+	}
+
+	public override Type AdaptorType
+	{
+		get
+		{
+			return typeof(Adapter);
+		}
+	}
+
+	public override object CreateCLRInstance(ILRuntime.Runtime.Enviorment.AppDomain appdomain, ILTypeInstance instance)
+	{
+		return new Adapter(appdomain, instance);
+	}
+
+	public class Adapter : global::TestClassBase, CrossBindingAdaptorType
+	{
+		ILTypeInstance instance;
+		ILRuntime.Runtime.Enviorment.AppDomain appdomain;
+
+		public Adapter()
+		{
+
+		}
+
+		public Adapter(ILRuntime.Runtime.Enviorment.AppDomain appdomain, ILTypeInstance instance)
+		{
+			this.appdomain = appdomain;
+			this.instance = instance;
+		}
+
+		public ILTypeInstance ILInstance { get { return instance; } }
+
+		public override void TestVirtual(System.String str)
+		{
+			if (mTestVirtual_2.CheckShouldInvokeBase(this.instance))
+				base.TestVirtual(str);
+			else
+				mTestVirtual_2.Invoke(this.instance, str);
+		}
+
+		public override void TestAbstract(System.Int32 gg)
+		{
+			mTestAbstract_3.Invoke(this.instance, gg);
+		}
+
+		public override System.Int32 Value
+		{
+		get
+		{
+			if (mget_Value_0.CheckShouldInvokeBase(this.instance))
+				return base.Value;
+			else
+				return mget_Value_0.Invoke(this.instance);
+
+		}
+		set
+		{
+			if (mset_Value_1.CheckShouldInvokeBase(this.instance))
+				base.Value = value;
+			else
+				mset_Value_1.Invoke(this.instance, value);
+
+		}
+		}
+
+		public override string ToString()
+		{
+			IMethod m = appdomain.ObjectType.GetMethod("ToString", 0);
+			m = instance.Type.GetVirtualMethod(m);
+			if (m == null || m is ILMethod)
+			{
+				return instance.ToString();
+			}
+			else
+				return instance.Type.FullName;
+		}
+	}
+}
+```
+*看起来就是一个固定模板, 或许可以考虑自动生成*  
+这个是给继承用的
+
+# 手动重定向来为代码增加下届
+
+```C#
+unsafe static StackObject* Log_11(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+{
+	//ILRuntime的调用约定为被调用者清理堆栈，因此执行这个函数后需要将参数从堆栈清理干净，并把返回值放在栈顶，具体请看ILRuntime实现原理文档
+	ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
+	StackObject* ptr_of_this_method;
+	//这个是最后方法返回后esp栈指针的值，应该返回清理完参数并指向返回值，这里是只需要返回清理完参数的值即可
+	StackObject* __ret = ILIntepreter.Minus(__esp, 1);
+	//取Log方法的参数，如果有两个参数的话，第一个参数是esp - 2,第二个参数是esp -1, 因为Mono的bug，直接-2值会错误，所以要调用ILIntepreter.Minus
+	ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
+
+	//这里是将栈指针上的值转换成object，如果是基础类型可直接通过ptr->Value和ptr->ValueLow访问到值，具体请看ILRuntime实现原理文档
+	object message = typeof(object).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
+	//所有非基础类型都得调用Free来释放托管堆栈
+	__intp.Free(ptr_of_this_method);
+
+	//在真实调用Debug.Log前，我们先获取DLL内的堆栈
+	var stacktrace = __domain.DebugService.GetStackTrace(__intp);
+
+	//我们在输出信息后面加上DLL堆栈
+	UnityEngine.Debug.Log(message + "\n" + stacktrace);
+
+	return __ret;
+}
+```
+注意, 需要有一个注册
+
+```C#
+//这里做一些ILRuntime的注册
+var mi = typeof(Debug).GetMethod("Log", new System.Type[] { typeof(object) });
+appdomain.RegisterCLRMethodRedirection(mi, Log_11);
+```
+
 # 总结
 
 * 委托
