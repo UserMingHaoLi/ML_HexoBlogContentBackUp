@@ -216,7 +216,7 @@ public virtual int Add(Object value) {
 InsertRange(_size, c);
 ```
 
-# EnsureCapacity
+# BinarySearch
 
 使用指定的比较器在已排序 ArrayList 的某个元素范围中搜索元素，并返回该元素从零开始的索引
 
