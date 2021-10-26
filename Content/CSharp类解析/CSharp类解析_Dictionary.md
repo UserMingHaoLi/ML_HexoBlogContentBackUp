@@ -269,6 +269,8 @@ private void Insert(TKey key, TValue value, bool add) {
 ```
 *和`HashTbl`类似,也是双倍素数和` 0x7FFFFFFF`*
 
+> 其中7FFFFFFF等同于八进制的慢15位,也就是intMax
+
 且使用`buckets`为索引,所以操作速度较快, 但是只对于`Key`生效`ContainsValue(TValue value)`还是全部遍历
 
 后面就是一堆迭代器和包装, 没啥好说的.
@@ -303,6 +305,7 @@ for (int i = (min | 1); i < Int32.MaxValue;i+=2)
 ```
 额外条件中的`Hashtable.HashPrime = 101`  
 这是为了实现`"均匀分布式"键`,也就是让结果更稀疏,均匀
+
 
 # 完毕
 
