@@ -117,6 +117,13 @@ curl -L https://get.daocloud.io/docker/compose/releases/download/1.24.1/docker-c
 
 > 你可以使用任何方式将此文件移动到之前安装Docker的服务器上, 记得新建文件夹.
 
+注意先转到RSSHub目录
+
+```
+cd /home/ubuntu  
+mkdir RSSHub
+```
+
 RSSHub推荐的指令(实际我是使用ftp上传上去的.)
 
 > wget https://raw.githubusercontent.com/DIYgod/RSSHub/master/docker-compose.yml
@@ -235,15 +242,17 @@ docker-compose down
 
 ## 下载配置文件
 
-`docker-compose.yml`
+[docker-compose.yml](https://github.com/HenryQW/Awesome-TTRSS/blob/main/docker-compose.yml)
 
 > 注意新建文件夹, 不同的服务要运行在不同的文件夹里面
+
+> 如果不能创建或者传递FTP,注意可能是需要写入权限`chmod 777`
 
 ## 修改配置
 
 按照自己的需要修改配置
 
-配置就不放了, 就是修改了以下数据库密码和实例地址.
+配置就不放了, 就是修改了以下数据库密码和实例地址(URL).
 
 ## 运行
 
@@ -256,6 +265,9 @@ docker-compose down
 通过你自定义的实例地址访问, 注意实例地址的端口要和你配置的端口号一样.
 
 > 打不开记得检查云服务器的安全组有没有开放相关端口.
+
+TODO ML TTRSS不支持1200端口了,明天看下咋搞  
+而且老的配置文件可以启动,新的起不了,明天看下咋回事
 
 # nextcloud
 
