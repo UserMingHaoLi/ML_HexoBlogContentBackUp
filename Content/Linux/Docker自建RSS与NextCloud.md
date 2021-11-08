@@ -101,7 +101,7 @@ docker-Compose是Docker的一个外挂组件, 通过配置文件快速运行Dock
 ## 下载Docker-Compose
 
 ```
-curl -L https://get.daocloud.io/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+curl -L https://get.daocloud.io/docker/compose/releases/download/v2.1.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 ```
 ## 运行
 
@@ -140,81 +140,15 @@ RSSHub推荐的指令(实际我是使用ftp上传上去的.)
 
 首先看下源文件
 
-```
-version: '3'
-
-services:
-
-  service.rsshub:
-    image: diygod/rsshub
-    restart: always
-    ports:
-      - "1200:1200"
-    environment:
-      NODE_ENV: production
-      CACHE_TYPE: redis
-      REDIS_URL: 'redis://db.redis:6379/'
-      PUPPETEER_WS_ENDPOINT: 'ws://service.browserless:3000'
-    depends_on:
-      - db.redis
-      - service.browserless
-
-  service.browserless:
-    image: browserless/chrome
-    restart: always
-
-  db.redis:
-    image: redis
-    restart: always
-    volumes:
-        - redis-data:/data
-
-volumes:
-  redis-data:
-
-```
-
 **之后根据RSSHub官网给的参数自行编辑即可**
 
-以下是我编辑后的文件, 希望不要抄作业哦. 自己自定义才是最好的.
-
 ```
-version: '3'
-
-services:
-
-  service.rsshub:
-    image: diygod/rsshub
-    restart: always
-    ports:
-      - "1200:1200"
-    environment:
-      NODE_ENV: production
-      CACHE_TYPE: redis
-      REDIS_URL: 'redis://db.redis:6379/'
-      PUPPETEER_WS_ENDPOINT: 'ws://service.browserless:3000'
-      CACHE_EXPIRE: '3600'
-      CACHE_CONTENT_EXPIRE: '14400'
-      LISTEN_INADDR_ANY: '3'
-      PORT: '1200'
-    depends_on:
-      - db.redis
-      - service.browserless
-
-  service.browserless:
-    image: browserless/chrome
-    restart: always
-
-  db.redis:
-    image: redis
-    restart: always
-    volumes:
-        - redis-data:/data
-
-volumes:
-  redis-data:
-
+CACHE_EXPIRE: '3600'
+CACHE_CONTENT_EXPIRE: '14400'
+LISTEN_INADDR_ANY: '3'
+PORT: '1200'
 ```
+**主要是新增了如下参数
 
 ## 启动
 
@@ -244,6 +178,10 @@ docker-compose down
 
 [docker-compose.yml](https://github.com/HenryQW/Awesome-TTRSS/blob/main/docker-compose.yml)
 
+```
+wget https://raw.githubusercontent.com/HenryQW/Awesome-TTRSS/main/docker-compose.yml
+```
+
 > 注意新建文件夹, 不同的服务要运行在不同的文件夹里面
 
 > 如果不能创建或者传递FTP,注意可能是需要写入权限`chmod 777`
@@ -252,7 +190,15 @@ docker-compose down
 
 按照自己的需要修改配置
 
-配置就不放了, 就是修改了以下数据库密码和实例地址(URL).
+修改了`数据库密码`和`实例地址(URL)`,`两个ID`,`添加额外支持的端口`  
+
+如果是root用户,则需要`修改两个Id为0`
+
+如果要支持1200端口,则需要使用`ALLOW_PORTS`参数
+
+启动不了推荐使用`docker-compose down --rmi all`删除所有容器,之后重新运行
+
+`docker-compose logs`能帮助诊断问题
 
 ## 运行
 
@@ -265,9 +211,6 @@ docker-compose down
 通过你自定义的实例地址访问, 注意实例地址的端口要和你配置的端口号一样.
 
 > 打不开记得检查云服务器的安全组有没有开放相关端口.
-
-TODO ML TTRSS不支持1200端口了,明天看下咋搞  
-而且老的配置文件可以启动,新的起不了,明天看下咋回事
 
 # nextcloud
 
@@ -294,16 +237,18 @@ services:
     image: nextcloud
     restart: always
     ports:
-      - 1999:80
+      - 1980:80
     links:
       - db
     volumes:
-      - /home/ubuntu/nextcloud/www:/var/www/html
+      - /home/ubuntu/NextCloud/www:/var/www/html
 ```
 
-注意其中的地址 `/home/ubuntu/nextcloud` 这个是我创建的文件夹, 根据你自己的需求修改.
+volumes，作用是，将宿主机的目录挂载到docker容器中，这样操作文件时，不用登录docker容器了，直接在宿主机操作就可以了
 
-然后是端口`1999:80` 根据自己的需要映射.
+注意其中的地址 `/home/ubuntu/NextCloud` 这个是我创建的文件夹, 根据你自己的需求修改.
+
+然后是端口`1980:80` 根据自己的需要映射.
 
 **数据库的相关设置自行修改**
 
@@ -317,11 +262,9 @@ services:
 
 访问你的相关IP和端口即可.
 
-## 额外的坑
-
 注意, 第一次访问会写配置, 之后就只能通过这个地址访问了, 如果还想扩展安全地址, 需要修改相关配置
 
-到你服务的目录下找到 www/config/config.php 进行修改即可
+到你服务的目录下找到 `www/config/config.php` 进行修改即可
 
 **修改完之后记得重新启动服务**
 
@@ -336,6 +279,8 @@ services:
 ## 获取源码
 
 > git clone https://github.com/tencentyun/cosfs /usr/cosfs
+
+出现`GnuTLS recv error (-110)`, 可以使用`git config --global http.postBuffer 2147480000`, 扩展下载限制
 
 ## 安装依赖
 
