@@ -25,7 +25,7 @@ tags:
 # 引子
 
 [活动介绍][PlasticSCM_learn_Link]  
-[作业征集][作业征集]
+[作业征集][plastichub_learnActivity_Link]
 
 将课程作业提交到 PlasticHub 上，就能获得 Unity 中文课堂价值 50 元代金券。
 
