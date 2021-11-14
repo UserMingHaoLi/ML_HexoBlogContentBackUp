@@ -18,7 +18,7 @@ tags:
 [PlasticHub地址][plastichub_Link]   
 [Unity官网Plastic页][Unity_Plastic_Link]  
 
-> PlasticHub中Unity官方账号为`Unity-Tech-Cn`
+> PlasticHub中Unity官方账号为**Unity-Tech-Cn**
 
 <!--more-->
 
@@ -121,7 +121,7 @@ Multiple precompiled assemblies with the same name unityplastic.dll included or 
 还是同样的操作,随便改改材质,保存Prefab,提交  
 
 此时前往可视化界面,准备将这两个分支合并到主干`main`,先合并`合并测试`分支  
-右键点击,选择`将此变更集合并到`,目标选择为`main`, 刚好,我们之前以为的`main`,其实是`mian/用户名`, 所以这次创建的新`mian`正好作为默认分支.
+右键点击,选择`将此变更集合并到`,目标选择为`main`, 刚好,我们之前以为的`main`,其实是`main/用户名`, 所以这次创建的新`main`正好作为默认分支.
 
 然后将`冲突测试`合并到main,果然有冲突.  
 
