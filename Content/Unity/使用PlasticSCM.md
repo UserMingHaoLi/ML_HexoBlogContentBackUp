@@ -4,12 +4,10 @@ date: 2021-11-14 06:14:00
 updated: 2021-11-14 06:14:00
 id: ml-20211114-061400-g168
 categories:
-	- 工具部署
+	- Unity
+	- 工具使用
 tags: 
-    - 云服务器
-	- Docker
-	- RSS
-	- NextCloud
+	- Unity
 ---
 
 `PlasticSCM`是Unity推出的版本管理工具,类似于Git或SVN.  
