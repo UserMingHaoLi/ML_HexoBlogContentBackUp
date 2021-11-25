@@ -163,6 +163,181 @@ matrix <float, 2, 2> fMatrix = { 0.0f, 0.1, // row 1
                                };
 ```
 
+下面的示例使用两个命名集来访问矩阵
+
+```
+// given
+float2x2 fMatrix = { 1.0f, 1.1f, // row 1
+                     2.0f, 2.1f  // row 2
+                   }; 
+
+float f_1D;
+f_1D = matrix._m00; // read the value in row 1, column 1: 1.0
+f_1D = matrix._m11; // read the value in row 2, column 2: 2.1
+
+f_1D = matrix._11;  // read the value in row 1, column 1: 1.0
+f_1D = matrix._22;  // read the value in row 2, column 2: 2.1
+
+//与矢量一样，命名集可以使用命名集中的一个或多个组件
+// Given
+float2x2 fMatrix = { 1.0f, 1.1f, // row 1
+                     2.0f, 2.1f  // row 2
+                   };
+float2 temp;
+
+temp = fMatrix._m00_m11 // valid
+temp = fMatrix._m11_m00 // valid
+temp = fMatrix._11_22   // valid
+temp = fMatrix._22_11   // valid
+```
+
+从零开始的行列位置：
+* _m00、 _ m01、 _ m02、 _ m03
+* _m10、 _ m11、 _ m12、 _ m13
+* _m20、 _ m21、 _ m22、 _ m23
+* _m30、 _ m31、 _ m32-16ms、 _ m33
+从1开始的行列位置：
+* _11、 _ 12、 _ 13、 _ 14
+* _21、 _ 22、 _ 23、 _ 24
+* _31、 _ 32、 _ 33、 _ 34
+* _41、 _ 42、 _ 43、 _ 44
+
+还可以通过使用数组访问表示法`[0][0]`
+
+```
+temp = fMatrix[0][0] // single component read
+temp = fMatrix[0][1] // single component read
+```
+
+请注意，结构运算符 "." 不用于访问数组, 也不能同时访问多个数据
+
+```
+float2 temp;
+temp = fMatrix[0][0]_[0][1] // 无效，无法读取两个组件
+
+//但是，数组访问可以读取多组件向量
+temp = fMatrix[0] // read the first row
+```
+
+> 可以使用关键字更改矩阵包装, 使其按行或者列存放于寄存器.这是一个重要的考虑因素
+
+行-主矩阵的布局如下所示：  
+
+ 11 21 31 41  
+ 12 22 32 42  
+ 13 23 33 43  
+ 14 24 34 44  
+
+列主矩阵的布局如下所示：  
+ 11 12 13 14  
+ 21 22 23 24  
+ 31 32 33 34  
+ 41 42 43 44  
+
+> 默认情况下，统一参数的矩阵封装顺序设置为列-主
+
+# 运算
+
+默认情况下，统一参数的矩阵封装顺序设置为列-主
+
+```
+float4 v = a*b;
+```
+
+等同于
+
+```
+v.x = a.x*b.x;
+v.y = a.y*b.y;
+v.z = a.z*b.z;
+v.w = a.w*b.w;
+```
+
+矢量 * 矩阵 如下转化
+
+```
+val.xyz = (float3) mul((float1x4)pos,World);
+```
+此示例使用 (float1x4) cast 将 pos 向量转换为列向量
+
+# 结构
+
+下面是一些示例结构声明
+```
+struct struct2
+{
+  int    a;
+  float  b;
+  int4x4 iMatrix;
+}
+```
+
+> 也可以用户定义类型
+
+# 在Unity中创建Shader
+
+这是一个新建的`UnlitShader`,无任何修改.
+```HLSL
+Shader "Unlit/01MiniShader"
+{
+    Properties
+    {
+        _MainTex ("Texture", 2D) = "white" {}
+    }
+    SubShader
+    {
+        Tags { "RenderType"="Opaque" }
+        LOD 100
+
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            // make fog work
+            #pragma multi_compile_fog
+
+            #include "UnityCG.cginc"
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float2 uv : TEXCOORD0;
+                UNITY_FOG_COORDS(1)
+                float4 vertex : SV_POSITION;
+            };
+
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+
+            v2f vert (appdata v)
+            {
+                v2f o;
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                UNITY_TRANSFER_FOG(o,o.vertex);
+                return o;
+            }
+
+            fixed4 frag (v2f i) : SV_Target
+            {
+                // sample the texture
+                fixed4 col = tex2D(_MainTex, i.uv);
+                // apply fog
+                UNITY_APPLY_FOG(i.fogCoord, col);
+                return col;
+            }
+            ENDCG
+        }
+    }
+}
+```
+
 # 完毕
 
 **感谢您的观看!**  
