@@ -107,12 +107,12 @@ min16uint -最小16位无符号整数。
 
 向量包含一到四个标量组件;向量的每一个分量都必须是同一类型
 
-```
+```HLSL
 float3  fVector = { 0.2f, 0.3f, 0.4f };
 ```
 
 也可使用此语法声明向量
-```
+```HLSL
 vector <double, 4> dVector = { 0.2, 0.3, 0.4, 0.5 };
 ```
 
@@ -121,7 +121,7 @@ vector <double, 4> dVector = { 0.2, 0.3, 0.4, 0.5 };
 * 位置集： x、y、z 和 w
 * 颜色集： r、g、b、a
 
-```
+```HLSL
 float4 pos = float4(0,0,2,1);
 float2 f_2D;
 f_2D = pos.xy;   // read two components 
@@ -149,7 +149,7 @@ f_4D.a = pos.r * 5.0f;
 
 矩阵是一种特殊数据类型，包含一到十六个组件。 矩阵的每一个分量都必须具有相同的类型
 
-```
+```HLSL
 float2x2 fMatrix = { 0.0f, 0.1, // row 1
                      2.1f, 2.2f // row 2
                    };   
@@ -157,7 +157,7 @@ float2x2 fMatrix = { 0.0f, 0.1, // row 1
 
 也可使用此语法声明矩阵
 
-```
+```HLSL
 matrix <float, 2, 2> fMatrix = { 0.0f, 0.1, // row 1
                                  2.1f, 2.2f // row 2
                                };
@@ -165,7 +165,7 @@ matrix <float, 2, 2> fMatrix = { 0.0f, 0.1, // row 1
 
 下面的示例使用两个命名集来访问矩阵
 
-```
+```HLSL
 // given
 float2x2 fMatrix = { 1.0f, 1.1f, // row 1
                      2.0f, 2.1f  // row 2
@@ -204,14 +204,14 @@ temp = fMatrix._22_11   // valid
 
 还可以通过使用数组访问表示法`[0][0]`
 
-```
+```HLSL
 temp = fMatrix[0][0] // single component read
 temp = fMatrix[0][1] // single component read
 ```
 
 请注意，结构运算符 "." 不用于访问数组, 也不能同时访问多个数据
 
-```
+```HLSL
 float2 temp;
 temp = fMatrix[0][0]_[0][1] // 无效，无法读取两个组件
 
@@ -240,13 +240,13 @@ temp = fMatrix[0] // read the first row
 
 默认情况下，统一参数的矩阵封装顺序设置为列-主
 
-```
+```HLSL
 float4 v = a*b;
 ```
 
 等同于
 
-```
+```HLSL
 v.x = a.x*b.x;
 v.y = a.y*b.y;
 v.z = a.z*b.z;
@@ -255,7 +255,7 @@ v.w = a.w*b.w;
 
 矢量 * 矩阵 如下转化
 
-```
+```HLSL
 val.xyz = (float3) mul((float1x4)pos,World);
 ```
 此示例使用 (float1x4) cast 将 pos 向量转换为列向量
@@ -263,7 +263,7 @@ val.xyz = (float3) mul((float1x4)pos,World);
 # 结构
 
 下面是一些示例结构声明
-```
+```HLSL
 struct struct2
 {
   int    a;
