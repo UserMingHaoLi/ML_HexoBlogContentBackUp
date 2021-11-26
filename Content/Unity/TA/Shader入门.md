@@ -555,6 +555,23 @@ Shader "CS02/MiniShader" //Shader的真正名字  可以是路径式的格式
 }
 ```
 
+注意到, Unity帮我们做了些事情  
+```HLSL
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+```
+
+默认的Shader是有背面剔除`Cull Back`, 想要不剔除, 需要在`CGPROGRAM`上方添加`Cull Off`  
+正面剔除是`Cull Front`
+
+可以将此属性曝光在`Properties`, 之后在`CGPROGRAM`上方添加`Cull [_CullMode]`, 如下  
+```
+[Enum(UnityEngine.Rendering.CullMode)]_CullMode("CullMode", float) = 2
+```
+
+由于UV的不同, 在平面表现良好的`tex2D(_MainTex, i.uv);`很难直接应用到3D模型.  
+光栅化插值的时候,可能由于UV不连续导致不合理的值
+
 # 完毕
 
 **感谢您的观看!**  
