@@ -572,6 +572,99 @@ Shader "CS02/MiniShader" //Shader的真正名字  可以是路径式的格式
 由于UV的不同, 在平面表现良好的`tex2D(_MainTex, i.uv);`很难直接应用到3D模型.  
 光栅化插值的时候,可能由于UV不连续导致不合理的值
 
+# Clip Alpha测试
+
+现在直接在`frag`种使用使用`Clip(value)`, 如果value小于0,则直接丢弃
+
+```HLSL
+float4 gradient = tex2D(_MainTex, f.uv).r; //从MainTex采样, 使用f的uv信息
+clip(gradient - _Cutout);
+return gradient.xxxx;
+```
+使贴图中r值小于`_Cutout`的部分不渲染, 通过外部参数控制, 可以达到部分渲染的效果
+
+然后使冲击波实现
+
+```HLSL
+float4 gradient = tex2D(_MainTex, f.uv + _Time.y * _Speed.xy).r;
+half noise = tex2D(_NoiseTex, f.uv + _Time.y * _Speed.zw).r;
+clip(gradient - noise - _Cutout);
+return noise.xxxx;
+```
+采样了两张贴图,第一张用于决定裁剪的起始值, 第二章可以作为被裁决的取样+上色.
+
+使用 `Blend SrcAlpha OneMinusSrcAlpha` 放置在`CGPROGRAM`之前, 可以启用半透明混合, 但是这会导致渲染穿插, 这取决于渲染物体和摄像机的位置关系.
+
+这可能需要配合另一个参数`ZWrite Off` 关闭深度写入来处理.
+
+当然,别忘了这是半透明物体,需要存放在`Render Queue > 2500`的位置  
+`Tags {"Queue" = "Transparent"}`放置在`Pass`之前
+
+注意使用`saturate(value)`来将值限制于0-1之间
+
+# 边缘光
+
+需要用到视野和法线, 转化如下
+
+```HLSL
+o.normal_world = normalize(mul(float4(v.normal, 0.0), _World2Object));
+float3 pos_world = mul(_Object2World, v.vertex).xyz;
+o.view_world = normalize(_WorldSpaceCamearPos.xyz - pos_world);
+```
+注意只能是`normal`在前, `_World2Object`在后, 且注意,需要标准化`normalize`  
+光栅化也会导致向量强度发生变化, 片元Shader取值的时候也要注意`normalize`
+
+加上片元Shader
+```HLSL
+//片元Shader
+float4 frag(v2f f) : SV_Target //SV_Target表示输出的目的地(渲染目标)
+{
+float3 normal_world = normalize(f.normal_world);
+float3 view_world = normalize(f.view_world);
+float NdotV = saturate(dot(normal_world, view_world));
+float rim_alpha = 1.0 - NdotV;
+float3 color = _Color.xyz;
+return float4(color, rim_alpha);
+}
+```
+
+通过点乘 法线方向和视野方向, 得到一个边缘发光的效果  
+两个向量点乘, 方向越一致,值越接近1, 180度时值为-1.  
+
+将点乘的结果作为alpha值, 就是越边缘的部分越显示, 再加上外界调整颜色值, 一个边缘发光就完成了.
+
+但是可以看到, 我们可以透过物体观察到另一层的边缘光, 这不是很好, 想要只看到第一层怎么办呢.  
+
+打开深度写入`Zwrite On`, 可以缓解一些,但还没有彻底解决,一些奇怪的角度仍然会穿帮
+
+这里在之前的`Pass`前面新增一个`Pass`
+
+```HLSL
+Pass
+{
+	Cull Off //关闭正面,背面裁剪
+	Zwrite On //开启深度写入
+	ColorMask 0	//不写入任何颜色
+	CGPROGRAM
+	float4 _Color;
+	#pragma vertex vert
+	#pragma fragment frag
+
+	float4 vert(float4 vertexPos : POSITION) : SV_POSITION
+	{
+		return UnityObjectToClipPos(vertexPos);
+	}
+	float4 frag(void) : COLOR
+	{
+		return _Color;
+	}
+}
+```
+
+这是通过预先写入第一层的深度, 来让其他层的深度无法写入, 而颜色由第二个`Pass`负责  
+
+那么代价使什么呢,一个`Pass`就是一次渲染提交, 也就是常说的`Draw Call`, 表现在Unity的`Batches`参数上
+
 # 完毕
 
 **感谢您的观看!**  
