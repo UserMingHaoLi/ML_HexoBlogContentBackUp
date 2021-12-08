@@ -34,6 +34,14 @@ tags:
 		- [片元着色器](#片元着色器)
 		- [逐片元操作](#逐片元操作)
 	- [总结](#总结)
+- [Unity Shader基础](#unity-shader基础)
+	- [概述](#概述-1)
+	- [UnityShader的基础:ShaderLab](#unityshader的基础shaderlab)
+	- [UnityShader的结构](#unityshader的结构)
+	- [UnityShader的形式](#unityshader的形式)
+		- [表面着色器](#表面着色器)
+		- [顶点, 片元着色器](#顶点-片元着色器)
+		- [固定函数着色器](#固定函数着色器)
 - [完毕](#完毕)
 
 <!--more-->
@@ -236,6 +244,77 @@ DirectX中称为 输出合并阶段(Output-Merger) Merger一词便是重点.
 ## 总结
 
 每个资料给出的流水线流程和名称各不相同, 这主要是由于编程接口(OpenGL,DirectX)的实现不尽相同, 还有GPU底层的优化导致的.
+
+# Unity Shader基础
+
+Unity提供了一个方便的框架来处理渲染设置和着色器代码.
+
+## 概述
+
+Material和UnityShader, 他们通常是一起出现的, 材质持有UnityShader, 物体持有材质.
+
+UnityShader定义渲染需要的代码(顶点着色器,片元着色器),属性(纹理,反射),指令(渲染设置,标签设置).  
+而材质允许我们调节这些属性. 并将其赋值给相应的模型.
+
+> 可以注意到, 上面使用的都是UnityShader, 这是由于UnityShader与之前提及的渲染管线的Shader很大不同, 后面会提到.
+
+## UnityShader的基础:ShaderLab
+
+这是Unity提供给开发者的高层级的渲染抽象层, 使开发者轻松控制渲染.
+
+> Unity会讲ShaderLab编译为真正的Shader代码, 开发者无需关心.  
+> 真想关心可以点击`Compile and show code` 查看Unity为不同编程接口生成的底层汇编指令.
+
+## UnityShader的结构
+
+SubShader, 最少有一个, 可以包含多个.  
+只会运行其中的一个, 写多个一般是为了适配不同的平台和机型, 以便控制性能和复杂度.
+
+```HLSL
+SubShader{
+	[Tags]
+	[RenderSetup]
+	Pass
+	{
+
+	}
+}
+```
+Tags是标签, RenderSetup是状态设置, Pass则定义了一个完成的渲染流程, 如果Pass过多, 则会渲染多次, 也自然会消耗更多性能.  
+Pass中也可以使用标签和状态设置, 但有些内容是SubShader特有的, 且在SubShader中的设置, 将应用于所有的Pass
+
+```HLSL
+Pass
+{
+	[Name]
+	[Tags]
+	[RenderSetup]
+}
+```
+
+拥有Name, 可以用ShaderLab的UsePass命令直接使用其他UnityShader中的Pass  
+提高代码的复用性  
+
+Fallback, 可以跟在SubShader语句后面, 用于表示, 如果所有SubShader都不能在此机器上运行, 则使用这个Shader吧.  
+基本就是用来表示, 最低级的UnityShader是谁 
+
+当然, 你也可以关闭Fallback, 这表明, 如果不能执行,就不要执行了.
+
+## UnityShader的形式
+
+### 表面着色器
+
+Unity最后还是将其转化为了顶点和片元Shader, 只是帮我们省了一些操作
+
+### 顶点, 片元着色器
+
+### 固定函数着色器
+
+不支持可编程渲染管线, 就可以使用这个.
+
+> 实际已经不存在了, 最终都被编译为了顶点,片元着色器.
+
+> CG和DX9风格的HLSL几乎是同一种语言, 所以我们常说 `CG/HLSL`
 
 # 完毕
 
