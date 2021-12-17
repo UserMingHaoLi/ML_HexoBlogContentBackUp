@@ -64,6 +64,8 @@ tags:
 		- [CG中的矢量和矩阵](#cg中的矢量和矩阵)
 		- [Unity中的屏幕坐标](#unity中的屏幕坐标)
 - [开始UnityShader学习之旅](#开始unityshader学习之旅)
+	- [Debug](#debug)
+	- [注意跨平台渲染的差异](#注意跨平台渲染的差异)
 - [完毕](#完毕)
 
 <!--more-->
@@ -671,6 +673,55 @@ float2 wcoord = i.scrPos.xy / i.scrPos.z
 ```
 
 # 开始UnityShader学习之旅
+
+略, 基础部分已经写过了
+
+```
+//Unity内置的appdata_full
+struct appdata_full
+{
+	float4 vertex : POSITION;
+	float4 tangent : TANGENT;
+	float4 normal : NORMAL;
+	float4 texcoord : TEXCOORD0;
+	float4 texcoord1 : TEXCOORD1;
+	float4 texcoord2 : TEXCOORD2;
+	float4 texcoord3 : TEXCOORD3;
+	#if defined(SHADER_API _XBOX460)
+	half4 texcoord4 : TEXCOORD4;
+	half4 texcoord5 : TEXCOORD5;
+	#endif
+	fixed4 color : COLOR;
+}
+```
+
+## Debug
+
+Shader很难调试, 但可以使用 visual studio的`Graphics Debugger`  
+还有Unity的`Frame Debugger`
+
+还可以使用`Intel GPA`,`RenderDoc`,`NVIDIA NSight`,`AMD GPU PrefStudio`
+
+可以输出自定义图像颜色来查看数值, 也算是一种Log了...
+
+## 注意跨平台渲染的差异
+
+最经典的就是OpenGL和DirectX
+
+渲染纹理时,由于原点不同,会出现图片翻转的情况, 但是Unity内置帮我们处理过了.
+
+但在抗锯齿情况下,不会被自动翻转
+
+```
+#if UNITY_UV_STARTS_AT_TOP
+if (_MainTex_TexelSize.y < 0)
+	uv.y = 1-uv.y
+#endif
+```
+
+尽量少的且简单的使用分支和循环语句, GPU和CPU的处理方式并不相同, 花在一个分支的事件, 就可能超过运行所有分支的事件.
+
+不要除以0, 编辑器不会报错, 运行在不同平台效果不同,且是不可预料的
 
 # 完毕
 
