@@ -1561,7 +1561,7 @@ Shader "UnityShaderBook/713"
 这里通过遮罩纹理保护目标不受光照, 事实上, 可以任意利用其RGBA四个通道, 存储不同的属性, 用于精确控制任何逐像素的表面属性
 
 > DOTA2中, 每个模型使用四张纹理, 颜色,表面法线,两张遮罩(共计8通道)  
-> 可前往DOTA2官网学习
+> 可前往DOTA2官网学习 [Dota 2 物品创意工坊流程指导主页](https://www.dota2.com/workshop/)
 
 ```HLSL
 Shader "UnityShaderBook/714"
