@@ -76,6 +76,11 @@ tags:
 	- [渐变纹理](#渐变纹理)
 - [遮罩纹理](#遮罩纹理)
 - [透明效果](#透明效果)
+	- [透明度测试](#透明度测试)
+	- [透明度混合](#透明度混合)
+	- [开启深度写入的半透明效果](#开启深度写入的半透明效果)
+	- [ShaderLab的混合命令](#shaderlab的混合命令)
+	- [双面透明的渲染效果](#双面透明的渲染效果)
 - [完毕](#完毕)
 
 <!--more-->
@@ -1660,9 +1665,62 @@ Shader "UnityShaderBook/714"
 
 # 透明效果
 
+半透明渲染需要先渲染不透明的,再(离摄像机)由远到近渲染.才能得到正确的颜色.
 
+但是远近是基于物体的, 深度值是基于像素(片元)的,对于多物体交叉叠加,或是遮挡重合的情况, 显示出的结果总是错误的.  
+为减少错误的情况,尽可能让模型总是凸面体, 并考虑将复杂的模型拆分成可独立排序的多个子模型.  
+也可以让透明通道变得柔和,使得错误不是很明显
+
+Unity使用`Queue`来表示渲染队列, 值越小越先被渲染.
+
+Unity预定义的队列
+* Background 1000 背景
+* Geometry 2000 默认队列
+* AlphaTest 2450 需要透明度测试
+* Transparent 3000 透明队列, 处于这之后的将从后往前排序渲染.
+* Overlay 最后渲染,可实现叠加效果
+
+这些定义再SubShader的Tags中`Tags {"Queue"="Transparent"}`, 并在Pass中关闭深度写入`Zwrite Off`
+
+## 透明度测试
+
+一般使用CG中的一个函数`void Clip(float x)`, 他有多个重载用于接受各种参数
+
+如果给定的参数是负数,则舍弃当前像素(片元)的输出颜色
+
+```HLSL
+
+```
+
+## 透明度混合
+
+使用`Bland`来控制混合模式
+
+自定义混合公式(AlphaBlend = SrcColor片元颜色 * **SrcAlpha片元Alpha** + DestColor缓冲区颜色 * **(1.0-SrcAlpha)**)
+
+* Blend Off 关闭混合
+* Blend SrcFactor DstFactor 开启混合,并设置RGBA混合因子
+* Blend SrcFactor DstFactor SrcFactorA DstFactoryA 开启,RGB混合因子,A混合因子
+* BlendOp BlendOperation 并非是简单的加后混合,有其他操作
+
+```HLSL
+
+```
+
+## 开启深度写入的半透明效果
+
+使用两个Pass来渲染, 第一个写入深度, 第二个进行透明渲染, 这样得到的模型不会暴露其内部和身后的像素.
+
+```HLSL
+
+```
+
+## ShaderLab的混合命令
+
+## 双面透明的渲染效果
 
 # 完毕
+
 
 **感谢您的观看!**  
 本文来自 [ML-Blog][ML-Blog_Link]
