@@ -81,6 +81,7 @@ tags:
 	- [开启深度写入的半透明效果](#开启深度写入的半透明效果)
 	- [ShaderLab的混合命令](#shaderlab的混合命令)
 	- [双面透明的渲染效果](#双面透明的渲染效果)
+- [更复杂的光照](#更复杂的光照)
 - [完毕](#完毕)
 
 <!--more-->
@@ -1690,6 +1691,80 @@ Unity预定义的队列
 
 ```HLSL
 
+Shader "UnityShaderBook/831"
+{
+	Properties
+	{
+		//漫反射系数
+			_Color("Color",Color) = (1.0,1.0,1.0,1.0)
+			_MainTex("MainTex",2D) = "white" {}
+			_Cutoff("Cutoff",Range(-0.1,2.0)) = 0.5
+	}
+		SubShader
+			{
+			//透明度测试需要的Tags
+			Tags {"Queue" = "AlphaTest" "Ignoreprojector" = "True" "RenderType" = "TransparentCutout"}
+			Pass
+			{
+			//定义正确的LightMode,才能获取一些Unity内置光照变量
+			Tags {"LightMode" = "ForwardBase" }
+
+			CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
+			#include "Lighting.cginc"
+
+			fixed4 _Color;
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			fixed _Cutoff;
+
+			struct a2v
+			{
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+				float4 texcoord : TEXCOORD0;
+			};
+
+			struct v2f
+			{
+				float4 pos : SV_POSITION;
+				float2 uv : TEXCOORD0;
+				float3 worldNormal : TEXCOORD1;
+				float3 worldPos : TEXCOORD2;
+			};
+
+			v2f vert(a2v v)
+			{
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+				return o;
+			}
+
+			float4 frag(v2f i) : SV_Target
+			{
+				fixed3 worldNormal = normalize(i.worldNormal);
+				fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
+				fixed4 texColor = tex2D(_MainTex, i.uv);
+
+				clip(texColor.a - _Cutoff);
+				//if(texColor.a - _Cutoff > 0.0) discard;
+
+				fixed3 albedo = texColor.rgb * _Color.rgb;
+				fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+				fixed3 diffuse = _LightColor0.rgb * albedo * saturate(dot(worldNormal, worldLightDir));
+
+				return fixed4(ambient + diffuse, 1.0);
+			}
+
+			ENDCG
+		}
+	}
+	//Fallback "Diffuse"
+}
 ```
 
 ## 透明度混合
@@ -1705,19 +1780,195 @@ Unity预定义的队列
 
 ```HLSL
 
+Shader "UnityShaderBook/841"
+{
+	Properties
+	{
+		//漫反射系数
+			_Color("Color",Color) = (1.0,1.0,1.0,1.0)
+			_MainTex("MainTex",2D) = "white" {}
+			_AlphaScale("AlphaScale",Range(-0.1,2.0)) = 1
+	}
+		SubShader
+			{
+			//透明度测试需要的Tags
+			Tags {"Queue" = "AlphaTest" "Ignoreprojector" = "True" "RenderType" = "TransparentCutout"}
+			Pass
+			{
+			//定义正确的LightMode,才能获取一些Unity内置光照变量
+			Tags {"LightMode" = "ForwardBase" }
+			ZWRite Off
+			Blend SrcAlpha OneMinusSrcAlpha
+			CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
+			#include "Lighting.cginc"
+
+			fixed4 _Color;
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			fixed _AlphaScale;
+
+			struct a2v
+			{
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+				float4 texcoord : TEXCOORD0;
+			};
+
+			struct v2f
+			{
+				float4 pos : SV_POSITION;
+				float2 uv : TEXCOORD0;
+				float3 worldNormal : TEXCOORD1;
+				float3 worldPos : TEXCOORD2;
+			};
+
+			v2f vert(a2v v)
+			{
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+				return o;
+			}
+
+			float4 frag(v2f i) : SV_Target
+			{
+				fixed3 worldNormal = normalize(i.worldNormal);
+				fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
+				fixed4 texColor = tex2D(_MainTex, i.uv);
+
+				fixed3 albedo = texColor.rgb * _Color.rgb;
+				fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+				fixed3 diffuse = _LightColor0.rgb * albedo * saturate(dot(worldNormal, worldLightDir));
+
+				return fixed4(ambient + diffuse, texColor.a * _AlphaScale);
+			}
+
+			ENDCG
+		}
+	}
+	//Fallback "Diffuse"
+}
 ```
+仅改变了返回颜色的透明度
 
 ## 开启深度写入的半透明效果
 
 使用两个Pass来渲染, 第一个写入深度, 第二个进行透明渲染, 这样得到的模型不会暴露其内部和身后的像素.
 
+仅需将此Pass新增此处
 ```HLSL
-
+SubShader
+{
+	//透明度测试需要的Tags
+	Tags {"Queue" = "AlphaTest" "Ignoreprojector" = "True" "RenderType" = "TransparentCutout"}
+	Pass
+	{
+		ZWrite On
+		ColorMask 0
+	}
+	Pass
+	{
+	//定义正确的LightMode,才能获取一些Unity内置光照变量
+	Tags {"LightMode" = "ForwardBase" }
+	//...
+	}
+}
 ```
 
 ## ShaderLab的混合命令
 
+就是这一段
+
+```
+Blend SrcAlpha OneMinusSrcAlpha
+```
+
+他是高度可定制的, 因子分为两个,四个,区别只是是否区分Alpha通道.
+
+参数如下
+
+* One
+* Zero
+* SrcColor
+* SrcAlpha
+* DstColor
+* DstAlpha
+* OneMinusSrcColor
+* OneMinusSrcAlpha
+* OneMinusDstColor
+* OneMinusDstAlpha
+
+对于 自定义混合公式(AlphaBlend = SrcColor片元颜色 * **SrcAlpha片元Alpha** + DestColor缓冲区颜色 * **(1.0-SrcAlpha)**)
+
+这个加法也可以自定义
+
+使用`BlendOp BlendOperation`
+
+* Add
+* Sub
+* RevSub
+* Min
+* Max
+
+常见的混合类型
+```HLSL
+//正常透明度混合
+Blend SrcAlpha OneMinusSrcAlpha
+//柔和叠加
+Blend OneMinusDstColor One
+//正片叠底
+Blend DstColor Zero
+//两倍相乘
+Blend DstColor SrcColor
+//变暗
+BlendOp Min
+Blend One One
+//变亮
+BlendOp Max
+Blend One One
+//滤色
+Blend OneMinusDstColor One
+//等同于
+Blend One OneMinusSrcColor
+//线性减淡
+Blend One One
+```
+
 ## 双面透明的渲染效果
+
+`Cull Back` 默认是这个,会剔除背面的图元.  
+设为 `Off` 则会导致渲染面数成倍增加
+
+只需在Shader831的Pass中添加一行代码, 即可透过透明部分看到背面
+```HLSL
+Cull Off
+```
+但这只是透明度测试的双面渲染, 透明度混合的双面渲染要困难很多  
+因为要保证图元是从后往前渲染的.  
+直接关闭,就无法保证背面和正面的渲染顺序,导致颜色错误
+
+可以分成两个Pass,一个渲染背面,一个渲染正面,当然这是有性能开销的.
+
+在Shader841的基础上,复制一个原本的Pass,使其有两个Pass  
+其中第一个`Cull Front`, 第二个`Cull Back`
+```HLSL
+Pass
+{
+	Cull Front
+	//...
+}
+Pass
+{
+	Cull Back
+	//...
+}
+```
+
+# 更复杂的光照
 
 # 完毕
 
