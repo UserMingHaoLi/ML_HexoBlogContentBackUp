@@ -82,6 +82,10 @@ tags:
 	- [ShaderLab的混合命令](#shaderlab的混合命令)
 	- [双面透明的渲染效果](#双面透明的渲染效果)
 - [更复杂的光照](#更复杂的光照)
+	- [Unity的阴影](#unity的阴影)
+	- [透明物体的阴影](#透明物体的阴影)
+	- [标准Shader](#标准shader)
+- [高级纹理](#高级纹理)
 - [完毕](#完毕)
 
 <!--more-->
@@ -1969,6 +1973,958 @@ Pass
 ```
 
 # 更复杂的光照
+
+`LightMode=ForwardBase`指定使用什么样的光源信息, 这指示Unity可以按一定格式准备光照信息.
+
+前向渲染, 逐像素光源, N*M个Pass
+
+延迟渲染, 2Pass,第一个不进行光照,只计算可见性并存储可见, 第二个计算可见片元的光照信息.  
+适合光源较多的情况下使用,提升性能  
+* 不支持真正的抗锯齿功能
+* 不能处理半透明物体
+* 对显卡有一定要求
+
+默认缓存G存储漫反射,高光反射-A为指数,法线,(自发光,LightMap,反射探长)
+
+---
+
+前向渲染处理不同光源类型
+```HLSL
+Shader "UnityShaderBook/8712"
+	Properties
+	{
+		_Diffuse("Diffuse", Color) = (1, 1, 1, 1)
+		_Specular("Specular", Color) = (1, 1, 1, 1)
+		_Gloss("Gloss", Range(8.0, 256)) = 20
+	}
+	SubShader{
+		Tags { "RenderType" = "Opaque" }
+
+		Pass 
+		{
+			Tags { "LightMode" = "ForwardBase" }
+
+			CGPROGRAM
+
+			// 获取光照数据必须
+			#pragma multi_compile_fwdbase	
+
+			#pragma vertex vert
+			#pragma fragment frag
+
+			#include "Lighting.cginc"
+
+			fixed4 _Diffuse;
+			fixed4 _Specular;
+			float _Gloss;
+
+			struct a2v {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+			};
+
+			struct v2f {
+				float4 pos : SV_POSITION;
+				float3 worldNormal : TEXCOORD0;
+				float3 worldPos : TEXCOORD1;
+			};
+
+			v2f vert(a2v v) {
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+				return o;
+			}
+
+			fixed4 frag(v2f i) : SV_Target {
+				fixed3 worldNormal = normalize(i.worldNormal);
+				fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
+
+				fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
+
+				fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * max(0, dot(worldNormal, worldLightDir));
+
+				fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos.xyz);
+				fixed3 halfDir = normalize(worldLightDir + viewDir);
+				fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(worldNormal, halfDir)), _Gloss);
+
+				fixed atten = 1.0;//衰减
+
+				return fixed4(ambient + (diffuse + specular) * atten, 1.0);
+			}
+
+			ENDCG
+		}
+
+		Pass 
+		{
+			Tags { "LightMode" = "ForwardAdd" } //逐像素光源
+
+			Blend One One //不混合就会覆盖,所以要混合
+
+			CGPROGRAM
+
+			#pragma multi_compile_fwdadd
+
+			#pragma vertex vert
+			#pragma fragment frag
+
+			#include "Lighting.cginc"
+			#include "AutoLight.cginc"
+
+			fixed4 _Diffuse;
+			fixed4 _Specular;
+			float _Gloss;
+
+			struct a2v {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+			};
+
+			struct v2f {
+				float4 pos : SV_POSITION;
+				float3 worldNormal : TEXCOORD0;
+				float3 worldPos : TEXCOORD1;
+			};
+
+			v2f vert(a2v v) {
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+				return o;
+			}
+
+			fixed4 frag(v2f i) : SV_Target {
+				fixed3 worldNormal = normalize(i.worldNormal);
+				#ifdef USING_DIRECTIONAL_LIGHT //平行光就有这个宏
+					fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);//平行光只要方向
+				#else
+					fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz - i.worldPos.xyz);//其他光还要通过位置取方向
+				#endif
+
+				fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * max(0, dot(worldNormal, worldLightDir));
+
+				fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos.xyz);
+				fixed3 halfDir = normalize(worldLightDir + viewDir);
+				fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(worldNormal, halfDir)), _Gloss);
+
+				#ifdef USING_DIRECTIONAL_LIGHT //衰减
+					fixed atten = 1.0;
+				#else
+					#if defined (POINT)
+						float3 lightCoord = mul(unity_WorldToLight, float4(i.worldPos, 1)).xyz;
+						fixed atten = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL; //Unity准备了纹理表方便取值
+					#elif defined (SPOT)
+						float4 lightCoord = mul(unity_WorldToLight, float4(i.worldPos, 1));
+						fixed atten = (lightCoord.z > 0) * tex2D(_LightTexture0, lightCoord.xy / lightCoord.w + 0.5).w * tex2D(_LightTextureB0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL;
+					#else
+						fixed atten = 1.0;
+					#endif
+				#endif
+
+				return fixed4((diffuse + specular) * atten, 1.0);
+			}
+
+			ENDCG
+		}
+	}
+	FallBack "Specular"
+}
+```
+
+unity会自动判断哪个光源重要,取前四个渲染, 也可以手动设置重要,无影响.
+
+Unity准备了纹理表方便取值
+* 需要预处理得到纹理
+* 不直观,难以二次计算
+* 如果有Cookie需要使用_LightTextureB0
+* 0,0表示光源,1,1表示光源所关心的最远衰减
+
+手动计算线性衰减
+```HLSL
+float distance = length(_WorldSpaceLightPos0.xyz - i.worldPosition.xyz);
+atten = 1.0 / dostance;
+```
+
+## Unity的阴影
+
+常用ShadowMap技术, 将摄像机与光源重合, 摄像机看不到的地方就是阴影所在地.
+
+本质上,Unity采用了预处理的深度图.即摄像机所看到物体的深度信息
+
+使用`LightMode = SHadowCaster`处理阴影图深度Pass, 用于得到阴影映射纹理(深度纹理)  
+如果没有此Pass,则查找FallBack, 仍然没有,则不投射阴影,但仍然接受阴影  
+阴影图是屏幕空间下的, 所以采样需要变换.
+
+* 如果想要接受阴影, 需要在Shader中对阴影映射纹理采样, 把结果计算成阴影效果
+* 如果想投射阴影, 就必须加入`LightMode = SHadowCaster`的Pass
+  * 需要开启物体身上MeshRender的CastShadows
+
+使用上一节的代码,不做任何修改就有阴影了, 这是由于Fallback中就有我么你需要的Pass
+
+实现接受阴影
+```HLSL
+
+Shader "UnityShaderBook/942"
+{
+	Properties
+	{
+		_Diffuse("Diffuse", Color) = (1, 1, 1, 1)
+		_Specular("Specular", Color) = (1, 1, 1, 1)
+		_Gloss("Gloss", Range(8.0, 256)) = 20
+	}
+	SubShader
+	{
+		Tags { "RenderType" = "Opaque" }
+
+		Pass 
+		{
+			// Pass for ambient light & first pixel light (directional light)
+			Tags { "LightMode" = "ForwardBase" }
+
+			CGPROGRAM
+
+			// Apparently need to add this declaration 
+			#pragma multi_compile_fwdbase	
+
+			#pragma vertex vert
+			#pragma fragment frag
+
+			// Need these files to get built-in macros
+			#include "Lighting.cginc"
+			#include "AutoLight.cginc"
+
+			fixed4 _Diffuse;
+			fixed4 _Specular;
+			float _Gloss;
+
+			struct a2v {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+			};
+
+			struct v2f {
+				float4 pos : SV_POSITION;
+				float3 worldNormal : TEXCOORD0;
+				float3 worldPos : TEXCOORD1;
+				SHADOW_COORDS(2)
+			};
+
+			v2f vert(a2v v) {
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+				// Pass shadow coordinates to pixel shader
+				TRANSFER_SHADOW(o);
+
+				return o;
+			}
+
+			fixed4 frag(v2f i) : SV_Target {
+				fixed3 worldNormal = normalize(i.worldNormal);
+				fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
+
+				fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
+
+				fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * max(0, dot(worldNormal, worldLightDir));
+
+				fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos.xyz);
+				fixed3 halfDir = normalize(worldLightDir + viewDir);
+				fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(worldNormal, halfDir)), _Gloss);
+
+				fixed atten = 1.0;
+
+				fixed shadow = SHADOW_ATTENUATION(i);
+
+				return fixed4(ambient + (diffuse + specular) * atten * shadow, 1.0);
+			}
+
+			ENDCG
+		}
+
+		Pass 
+		{
+			// Pass for other pixel lights
+			Tags { "LightMode" = "ForwardAdd" }
+
+			Blend One One
+
+			CGPROGRAM
+
+			// Apparently need to add this declaration
+			#pragma multi_compile_fwdadd
+			// Use the line below to add shadows for point and spot lights
+//			#pragma multi_compile_fwdadd_fullshadows
+
+			#pragma vertex vert
+			#pragma fragment frag
+
+			#include "Lighting.cginc"
+			#include "AutoLight.cginc"
+
+			fixed4 _Diffuse;
+			fixed4 _Specular;
+			float _Gloss;
+
+			struct a2v {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+			};
+
+			struct v2f {
+				float4 position : SV_POSITION;
+				float3 worldNormal : TEXCOORD0;
+				float3 worldPos : TEXCOORD1;
+			};
+
+			v2f vert(a2v v) {
+				v2f o;
+				o.position = UnityObjectToClipPos(v.vertex);
+
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+				return o;
+			}
+
+			fixed4 frag(v2f i) : SV_Target {
+				fixed3 worldNormal = normalize(i.worldNormal);
+				#ifdef USING_DIRECTIONAL_LIGHT
+					fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
+				#else
+					fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz - i.worldPos.xyz);
+				#endif
+
+				fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * max(0, dot(worldNormal, worldLightDir));
+
+				fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos.xyz);
+				fixed3 halfDir = normalize(worldLightDir + viewDir);
+				fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(worldNormal, halfDir)), _Gloss);
+
+				#ifdef USING_DIRECTIONAL_LIGHT
+					fixed atten = 1.0;
+				#else
+					float3 lightCoord = mul(unity_WorldToLight, float4(i.worldPos, 1)).xyz;
+					fixed atten = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL;
+				#endif
+
+				return fixed4((diffuse + specular) * atten, 1.0);
+			}
+
+			ENDCG
+		}
+	}
+	FallBack "Specular"
+}
+```
+
+可见,新增`#include "AutoLight.cginc"`, 添加了一些阴影处理的宏定义  
+v2f新增寄存器`SHADOW_COORDS(2)`, 这里的2是你要使用的寄存器(TEXCOORD)索引  
+返回顶点之前使用`TRANSFER_SHADOW(o);`为这个寄存器赋值,也就是计算阴影纹理坐标  
+片元着色器获得阴影值`fixed shadow = SHADOW_ATTENUATION(i);`  
+输出`return fixed4(ambient + (diffuse + specular) * atten * shadow, 1.0);`
+
+> 需要注意, 这些宏中使用上下文变量来进行计算, 所以必须使用 `vertex`,作为顶点, v2f必须命名为v, v2f中顶点必须命名为pos.
+
+> 此代码未对AddPass做处理, 所以点光源还没有阴影.
+
+一次性计算(atten * shadow)如下
+```HLSL
+//fixed atten = 1.0;
+
+//fixed shadow = SHADOW_ATTENUATION(i); //先注释之前的这两个数据
+UNITY_LIGHT_ATTENUATION(atten, i, i.worldPos)//使用Unity的宏
+
+return fixed4(ambient + (diffuse + specular) * atten /** shadow*/, 1.0);//直接使用atten即可
+```
+
+> 使用`# pargma multi_compile_fwdadd_fullsadows`来代替之前的`#pragma multi_compile_fwdadd`, 这样AddPass也可以计算逐像素光源的阴影了
+
+## 透明物体的阴影
+
+无法直接的使用Fallback来处理
+
+透明度测试
+```HLSL
+
+Shader "UnityShaderBook/9451"
+{
+	Properties
+	{
+		_Color("Color Tint", Color) = (1, 1, 1, 1)
+		_MainTex("Main Tex", 2D) = "white" {}
+		_Cutoff("Alpha Cutoff", Range(0, 1)) = 0.5
+	}
+	SubShader{
+		Tags {"Queue" = "AlphaTest" "IgnoreProjector" = "True" "RenderType" = "TransparentCutout"}
+
+		Pass 
+		{
+			Tags { "LightMode" = "ForwardBase" }
+
+			Cull Off
+
+			CGPROGRAM
+
+			#pragma multi_compile_fwdbase
+
+			#pragma vertex vert
+			#pragma fragment frag
+
+			#include "Lighting.cginc"
+			#include "AutoLight.cginc"
+
+			fixed4 _Color;
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			fixed _Cutoff;
+
+			struct a2v {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+				float4 texcoord : TEXCOORD0;
+			};
+
+			struct v2f {
+				float4 pos : SV_POSITION;
+				float3 worldNormal : TEXCOORD0;
+				float3 worldPos : TEXCOORD1;
+				float2 uv : TEXCOORD2;
+				SHADOW_COORDS(3)
+			};
+
+			v2f vert(a2v v) {
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+
+				// Pass shadow coordinates to pixel shader
+				TRANSFER_SHADOW(o);
+
+				return o;
+			}
+
+			fixed4 frag(v2f i) : SV_Target {
+				fixed3 worldNormal = normalize(i.worldNormal);
+				fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
+
+				fixed4 texColor = tex2D(_MainTex, i.uv);
+
+				clip(texColor.a - _Cutoff);
+
+				fixed3 albedo = texColor.rgb * _Color.rgb;
+
+				fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+
+				fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(worldNormal, worldLightDir));
+
+				// UNITY_LIGHT_ATTENUATION not only compute attenuation, but also shadow infos
+				UNITY_LIGHT_ATTENUATION(atten, i, i.worldPos);
+
+				return fixed4(ambient + diffuse * atten, 1.0);
+			}
+
+			ENDCG
+		}
+	}
+	FallBack "Transparent/Cutout/VertexLit"//正常
+	//FallBack "Specular"//显示不正常
+}
+```
+
+基本没什么更改, 只是FallBack变了. 它要求必须提供_Cutoff同名属性, 否则无法得到正确结果.
+
+透明度混合
+```HLSL
+
+Shader "UnityShaderBook/9452"
+{	Properties
+	{
+		_Color("Color Tint", Color) = (1, 1, 1, 1)
+		_MainTex("Main Tex", 2D) = "white" {}
+		_AlphaScale("Alpha Scale", Range(0, 1)) = 1
+	}
+	SubShader
+	{
+		Tags {"Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent"}
+
+		Pass {
+			Tags { "LightMode" = "ForwardBase" }
+
+			ZWrite Off
+			Blend SrcAlpha OneMinusSrcAlpha
+
+			CGPROGRAM
+
+			#pragma multi_compile_fwdbase
+
+			#pragma vertex vert
+			#pragma fragment frag
+
+			#include "Lighting.cginc"
+			#include "AutoLight.cginc"
+
+			fixed4 _Color;
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			fixed _AlphaScale;
+
+			struct a2v {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+				float4 texcoord : TEXCOORD0;
+			};
+
+			struct v2f {
+				float4 pos : SV_POSITION;
+				float3 worldNormal : TEXCOORD0;
+				float3 worldPos : TEXCOORD1;
+				float2 uv : TEXCOORD2;
+				SHADOW_COORDS(3)
+			};
+
+			v2f vert(a2v v) {
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+
+				// Pass shadow coordinates to pixel shader
+				TRANSFER_SHADOW(o);
+
+				return o;
+			}
+
+			fixed4 frag(v2f i) : SV_Target {
+				fixed3 worldNormal = normalize(i.worldNormal);
+				fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
+
+				fixed4 texColor = tex2D(_MainTex, i.uv);
+
+				fixed3 albedo = texColor.rgb * _Color.rgb;
+
+				fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+
+				fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(worldNormal, worldLightDir));
+
+				// UNITY_LIGHT_ATTENUATION not only compute attenuation, but also shadow infos
+				UNITY_LIGHT_ATTENUATION(atten, i, i.worldPos);
+
+				return fixed4(ambient + diffuse * atten, texColor.a * _AlphaScale);
+			}
+
+			ENDCG
+		}
+	}
+	FallBack "Transparent/VertexLit"
+	// Or  force to apply shadow
+	//	FallBack "VertexLit"
+}
+```
+为透明度混合提供阴影很难, 因为必须遵守从后往前的顺序渲染, 很复杂且印象性能.  
+Unity中, 所有内置的半透明Shader都不生成阴影. 我么可与强制使用不透明物体的FallBack`FallBack "VertexLit"`来生成阴影, 但效果不是很好.
+
+## 标准Shader
+
+课程资料提供  
+后续课程使用
+
+> 都是已经学过的知识 还蛮简单的
+
+Phong模型
+```HLSL
+Shader "UnityShaderBook/951"
+{
+	Properties 
+	{
+		_Color ("Color Tint", Color) = (1, 1, 1, 1)
+		_MainTex ("Main Tex", 2D) = "white" {}
+		_BumpMap ("Normal Map", 2D) = "bump" {}
+	}
+	SubShader 
+	{
+		Tags { "RenderType"="Opaque" "Queue"="Geometry"}
+
+		Pass 
+		{ 
+			Tags { "LightMode"="ForwardBase" }
+		
+			CGPROGRAM
+			
+			#pragma multi_compile_fwdbase
+			
+			#pragma vertex vert
+			#pragma fragment frag
+			
+			#include "Lighting.cginc"
+			#include "AutoLight.cginc"
+			
+			fixed4 _Color;
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			sampler2D _BumpMap;
+			float4 _BumpMap_ST;
+			
+			struct a2v {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+				float4 tangent : TANGENT;
+				float4 texcoord : TEXCOORD0;
+			};
+			
+			struct v2f {
+				float4 pos : SV_POSITION;
+				float4 uv : TEXCOORD0;
+				float4 TtoW0 : TEXCOORD1;  
+				float4 TtoW1 : TEXCOORD2;  
+				float4 TtoW2 : TEXCOORD3;
+				SHADOW_COORDS(4)
+			};
+			
+			v2f vert(a2v v) {
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				
+				o.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+				o.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
+				
+				float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;  
+				fixed3 worldNormal = UnityObjectToWorldNormal(v.normal);  
+				fixed3 worldTangent = UnityObjectToWorldDir(v.tangent.xyz);  
+				fixed3 worldBinormal = cross(worldNormal, worldTangent) * v.tangent.w; 
+				
+				o.TtoW0 = float4(worldTangent.x, worldBinormal.x, worldNormal.x, worldPos.x);
+				o.TtoW1 = float4(worldTangent.y, worldBinormal.y, worldNormal.y, worldPos.y);
+				o.TtoW2 = float4(worldTangent.z, worldBinormal.z, worldNormal.z, worldPos.z);  
+				
+				TRANSFER_SHADOW(o);
+				
+				return o;
+			}
+			
+			fixed4 frag(v2f i) : SV_Target {
+				float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
+				fixed3 lightDir = normalize(UnityWorldSpaceLightDir(worldPos));
+				fixed3 viewDir = normalize(UnityWorldSpaceViewDir(worldPos));
+				
+				fixed3 bump = UnpackNormal(tex2D(_BumpMap, i.uv.zw));
+				bump = normalize(half3(dot(i.TtoW0.xyz, bump), dot(i.TtoW1.xyz, bump), dot(i.TtoW2.xyz, bump)));
+				
+				fixed3 albedo = tex2D(_MainTex, i.uv.xy).rgb * _Color.rgb;
+				
+				fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+			
+			 	fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(bump, lightDir));
+				
+				UNITY_LIGHT_ATTENUATION(atten, i, worldPos);
+				
+				return fixed4(ambient + diffuse * atten, 1.0);
+			}
+			
+			ENDCG
+		}
+		
+		Pass 
+		{ 
+			Tags { "LightMode"="ForwardAdd" }
+			
+			Blend One One
+		
+			CGPROGRAM
+			
+			#pragma multi_compile_fwdadd
+			// Use the line below to add shadows for point and spot lights
+//			#pragma multi_compile_fwdadd_fullshadows
+			
+			#pragma vertex vert
+			#pragma fragment frag
+			
+			#include "Lighting.cginc"
+			#include "AutoLight.cginc"
+			
+			fixed4 _Color;
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			sampler2D _BumpMap;
+			float4 _BumpMap_ST;
+			
+			struct a2v {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+				float4 tangent : TANGENT;
+				float4 texcoord : TEXCOORD0;
+			};
+			
+			struct v2f {
+				float4 pos : SV_POSITION;
+				float4 uv : TEXCOORD0;
+				float4 TtoW0 : TEXCOORD1;  
+				float4 TtoW1 : TEXCOORD2;  
+				float4 TtoW2 : TEXCOORD3;
+				SHADOW_COORDS(4)
+			};
+			
+			v2f vert(a2v v) {
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				
+				o.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+				o.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
+				
+				float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;  
+				fixed3 worldNormal = UnityObjectToWorldNormal(v.normal);  
+				fixed3 worldTangent = UnityObjectToWorldDir(v.tangent.xyz);  
+				fixed3 worldBinormal = cross(worldNormal, worldTangent) * v.tangent.w; 
+				
+				o.TtoW0 = float4(worldTangent.x, worldBinormal.x, worldNormal.x, worldPos.x);
+				o.TtoW1 = float4(worldTangent.y, worldBinormal.y, worldNormal.y, worldPos.y);
+				o.TtoW2 = float4(worldTangent.z, worldBinormal.z, worldNormal.z, worldPos.z);  
+				
+				TRANSFER_SHADOW(o);
+				
+				return o;
+			}
+			
+			fixed4 frag(v2f i) : SV_Target {
+				float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
+				fixed3 lightDir = normalize(UnityWorldSpaceLightDir(worldPos));
+				fixed3 viewDir = normalize(UnityWorldSpaceViewDir(worldPos));
+				
+				fixed3 bump = UnpackNormal(tex2D(_BumpMap, i.uv.zw));
+				bump = normalize(half3(dot(i.TtoW0.xyz, bump), dot(i.TtoW1.xyz, bump), dot(i.TtoW2.xyz, bump)));
+				
+				fixed3 albedo = tex2D(_MainTex, i.uv.xy).rgb * _Color.rgb;
+				
+			 	fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(bump, lightDir));
+				
+				UNITY_LIGHT_ATTENUATION(atten, i, worldPos);
+				
+				return fixed4(diffuse * atten, 1.0);
+			}
+			
+			ENDCG
+		}
+	} 
+	FallBack "Diffuse"
+}
+```
+
+Blinn-Phong模型
+```HLSL
+Shader "UnityShaderBook/952"
+{
+	Properties 
+	{
+		_Color ("Color Tint", Color) = (1, 1, 1, 1)
+		_MainTex ("Main Tex", 2D) = "white" {}
+		_BumpMap ("Normal Map", 2D) = "bump" {}
+		_Specular ("Specular Color", Color) = (1, 1, 1, 1)
+		_Gloss ("Gloss", Range(8.0, 256)) = 20
+	}
+	SubShader 
+	{
+		Tags { "RenderType"="Opaque" "Queue"="Geometry"}
+		
+		Pass 
+		{ 
+			Tags { "LightMode"="ForwardBase" }
+		
+			CGPROGRAM
+			
+			#pragma multi_compile_fwdbase	
+			
+			#pragma vertex vert
+			#pragma fragment frag
+			
+			#include "UnityCG.cginc"
+			#include "Lighting.cginc"
+			#include "AutoLight.cginc"
+			
+			fixed4 _Color;
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			sampler2D _BumpMap;
+			float4 _BumpMap_ST;
+			fixed4 _Specular;
+			float _Gloss;
+			
+			struct a2v {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+				float4 tangent : TANGENT;
+				float4 texcoord : TEXCOORD0;
+			};
+			
+			struct v2f {
+				float4 pos : SV_POSITION;
+				float4 uv : TEXCOORD0;
+				float4 TtoW0 : TEXCOORD1;  
+                float4 TtoW1 : TEXCOORD2;  
+                float4 TtoW2 : TEXCOORD3; 
+				SHADOW_COORDS(4)
+			};
+			
+			v2f vert(a2v v) {
+			 	v2f o;
+			 	o.pos = UnityObjectToClipPos(v.vertex);
+			 
+			 	o.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+			 	o.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
+
+				TANGENT_SPACE_ROTATION;
+				
+				float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;  
+                fixed3 worldNormal = UnityObjectToWorldNormal(v.normal);  
+                fixed3 worldTangent = UnityObjectToWorldDir(v.tangent.xyz);  
+                fixed3 worldBinormal = cross(worldNormal, worldTangent) * v.tangent.w; 
+                
+                o.TtoW0 = float4(worldTangent.x, worldBinormal.x, worldNormal.x, worldPos.x);  
+                o.TtoW1 = float4(worldTangent.y, worldBinormal.y, worldNormal.y, worldPos.y);  
+                o.TtoW2 = float4(worldTangent.z, worldBinormal.z, worldNormal.z, worldPos.z);  
+  				
+  				TRANSFER_SHADOW(o);
+			 	
+			 	return o;
+			}
+			
+			fixed4 frag(v2f i) : SV_Target {
+				float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
+				fixed3 lightDir = normalize(UnityWorldSpaceLightDir(worldPos));
+				fixed3 viewDir = normalize(UnityWorldSpaceViewDir(worldPos));
+				
+				fixed3 bump = UnpackNormal(tex2D(_BumpMap, i.uv.zw));
+				bump = normalize(half3(dot(i.TtoW0.xyz, bump), dot(i.TtoW1.xyz, bump), dot(i.TtoW2.xyz, bump)));
+
+				fixed3 albedo = tex2D(_MainTex, i.uv.xy).rgb * _Color.rgb;
+				
+				fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+				
+			 	fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(bump, lightDir));
+			 	
+			 	fixed3 halfDir = normalize(lightDir + viewDir);
+			 	fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(bump, halfDir)), _Gloss);
+			
+				UNITY_LIGHT_ATTENUATION(atten, i, worldPos);
+
+				return fixed4(ambient + (diffuse + specular) * atten, 1.0);
+			}
+			
+			ENDCG
+		}
+		
+		Pass { 
+			Tags { "LightMode"="ForwardAdd" }
+			
+			Blend One One
+		
+			CGPROGRAM
+			
+			#pragma multi_compile_fwdadd
+			// Use the line below to add shadows for point and spot lights
+//			#pragma multi_compile_fwdadd_fullshadows
+			
+			#pragma vertex vert
+			#pragma fragment frag
+			
+			#include "Lighting.cginc"
+			#include "AutoLight.cginc"
+			
+			fixed4 _Color;
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			sampler2D _BumpMap;
+			float4 _BumpMap_ST;
+			float _BumpScale;
+			fixed4 _Specular;
+			float _Gloss;
+			
+			struct a2v {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+				float4 tangent : TANGENT;
+				float4 texcoord : TEXCOORD0;
+			};
+			
+			struct v2f {
+				float4 pos : SV_POSITION;
+				float4 uv : TEXCOORD0;
+				float4 TtoW0 : TEXCOORD1;  
+                float4 TtoW1 : TEXCOORD2;  
+                float4 TtoW2 : TEXCOORD3;
+				SHADOW_COORDS(4)
+			};
+			
+			v2f vert(a2v v) {
+			 	v2f o;
+			 	o.pos = UnityObjectToClipPos(v.vertex);
+			 
+			 	o.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+			 	o.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
+
+				float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;  
+                fixed3 worldNormal = UnityObjectToWorldNormal(v.normal);  
+                fixed3 worldTangent = UnityObjectToWorldDir(v.tangent.xyz);  
+                fixed3 worldBinormal = cross(worldNormal, worldTangent) * v.tangent.w; 
+	
+  				o.TtoW0 = float4(worldTangent.x, worldBinormal.x, worldNormal.x, worldPos.x);
+			  	o.TtoW1 = float4(worldTangent.y, worldBinormal.y, worldNormal.y, worldPos.y);
+			  	o.TtoW2 = float4(worldTangent.z, worldBinormal.z, worldNormal.z, worldPos.z);  
+			 	
+			 	TRANSFER_SHADOW(o);
+			 	
+			 	return o;
+			}
+			
+			fixed4 frag(v2f i) : SV_Target {
+				float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
+				fixed3 lightDir = normalize(UnityWorldSpaceLightDir(worldPos));
+				fixed3 viewDir = normalize(UnityWorldSpaceViewDir(worldPos));
+				
+				fixed3 bump = UnpackNormal(tex2D(_BumpMap, i.uv.zw));
+				bump = normalize(half3(dot(i.TtoW0.xyz, bump), dot(i.TtoW1.xyz, bump), dot(i.TtoW2.xyz, bump)));
+				
+				fixed3 albedo = tex2D(_MainTex, i.uv.xy).rgb * _Color.rgb;
+				
+			 	fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(bump, lightDir));
+			 	
+			 	fixed3 halfDir = normalize(lightDir + viewDir);
+			 	fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(bump, halfDir)), _Gloss);
+			
+				UNITY_LIGHT_ATTENUATION(atten, i, worldPos);
+
+				return fixed4((diffuse + specular) * atten, 1.0);
+			}
+			
+			ENDCG
+		}
+	} 
+	FallBack "Specular"
+}
+```
+
+# 高级纹理
 
 # 完毕
 
