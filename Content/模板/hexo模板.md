@@ -15,10 +15,35 @@ tags:
 
 <!--more-->
 
+Next-XML注释.
+
+```
+/// <summary>
+/// Create a new <see cref="Logger" /> instance
+/// </summary>
+/// <param name="repository">The <see cref="ILoggerRepository" /> that will own the <see cref="Logger" />.</param>
+/// <param name="name">The name of the <see cref="Logger" />.</param>
+/// <returns>The <see cref="Logger" /> instance for the specified name.</returns>
+/// <remarks>
+/// <para>
+/// Create a new <see cref="Logger" /> instance with the 
+/// specified name.
+/// </para>
+/// <para>
+/// Called by the <see cref="Hierarchy"/> to create
+/// new named <see cref="Logger"/> instances.
+/// </para>
+/// <para>
+/// If the <paramref name="name"/> is <c>null</c> then the root logger
+/// must be returned.
+/// </para>
+/// </remarks>
+```
+
 ![UML类图模板][UMLClassMode]
 
 <!-- 
-id: ml-20211229-015600-g176
+id: ml-20211229-015600-g178
 每次使用自觉+1.
 -->
 
