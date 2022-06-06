@@ -79,7 +79,8 @@ Console.WriteLine(person);
 * 一个`Deconstruct`解构方法
 * 一个`ToString`方法,形如`Person { FirstName = Nancy, LastName = Davolio, PhoneNumbers = System.String[] }`
 
-> 而且使用比较操作时候, 比较值相等性,而不是引用.
+> 而且使用比较操作时候, 比较值相等性,而不是引用.  
+> 但是 如果一个引用类型的两个变量引用同一个对象，那么这两个变量是相等的. 如下面例子中的`phoneNumbers`
 
 ```C#
 var phoneNumbers = new string[2];
@@ -115,6 +116,8 @@ Console.WriteLine(teacher == student); // output: False
 
 派生类型和基类型的所有公共属性和字段都包含在 ToString 输出中
 
+> 不可变的记录为`Hash`提供了有效支持
+
 # 仅限 Init 的资源库
 
 从 `C# 9.0` 开始，可为属性和索引器创建 `init` 访问器，而不是 `set` 访问器
@@ -132,6 +135,8 @@ var now = new WeatherObservation
 };
 ```
 初始化后尝试更改观察值会导致编译器错误
+
+对于从派生类设置基类属性，仅限 init 的资源库很有用
 
 # 顶级语句
 

@@ -43,7 +43,7 @@ tags:
 
 # Readonly 成员
 
-可以在`struct`成员中使用`readonly`关键字指定改成员不改变.
+可以在`struct`成员中使用`readonly`关键字指定该成员不改变.
 
 也可以用于方法,这指示该方法不改变任何外部参数
 
@@ -208,7 +208,7 @@ static void WriteLinesToFile(IEnumerable<string> lines)
 
 # 静态本地函数
 
-```
+```C#
 int M()
 {
     int y = 5;
@@ -224,7 +224,7 @@ int M()
 
 # 可处置的 ref 结构
 
-用 ref 修饰符声明的 struct 可能无法实现任何接口，因此无法实现 IDisposable。 因此，要能够处理 ref struct，它必须有一个可访问的 void Dispose() 方法。 这同样适用于 readonly ref struct 声明。
+用 `ref` 修饰符声明的 `struct` 可能无法实现任何接口，因此无法实现 `IDisposable。` 因此，要能够处理 `ref struct`，它必须有一个可访问的 `void Dispose()` 方法。 这同样适用于 `readonly ref struct` 声明。
 
 也就是说`using`使用名字查找而不是`interface`
 
