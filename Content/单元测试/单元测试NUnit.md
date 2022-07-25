@@ -20,7 +20,8 @@ tags:
 
 [NUnit文档地址][NUnitDoc_Link]  
 [.NET Core 指南][DotNetCoreUTDoc_Link]  
-[Visual Studio 文档][VisualStudioUTDoc_Link]
+[Visual Studio 文档][VisualStudioUTDoc_Link]  
+[UnityTestFramework 文档][UnityTestFrameworkDoc_Link]  
 
 <!--more-->
 
@@ -28,6 +29,10 @@ tags:
 
 虽然可以使用vs自带的`MSTest`, 但是NUnit也是不错的选择.  
 在NuGet包管理器中搜索安装`NUnit`, `NUnit3TestAdapter` 这样就可以在创建单元测试的时候使用NUnit了
+
+# 忽略文件
+
+[忽略文件, 用于Visual Studio 获取最新版本][VisualStudio.gitignore_Link] 
 
 # 快速开始
 
@@ -42,6 +47,14 @@ tags:
 点击运行全部测试,看到全部通过.  
 
 之后就随意添加单元测试吧.
+
+> 可以直接添加MSTest来完成上面步骤
+
+之后将MSTest的`Using`替换为`using NUnit.Framework;`
+
+使用`[TestFixture()]`, `[Test()]`来处理类型和方法
+
+报错`testhost.dll`则是因为没有安装`testhost`的NuGet库
 
 > **每次命名都要有意义**
 
@@ -137,6 +150,7 @@ tags:
 
 *可以使用标签声明分组,也可以在可视化界面中选择并创建分组.但是无论怎么分组.*
 
+
 # 待续
 
 Log
@@ -157,7 +171,9 @@ Propchange(属性变化代理)
 [NUnitDoc_Link]:https://docs.nunit.org/articles/nunit/intro.html "NUnitDoc"
 [DotNetCoreUTDoc_Link]:https://www.bookstack.cn/read/dotnet/7bc375a213bb0ecc.md ".NetCore单元测试文档"
 [VisualStudioUTDoc_Link]:https://docs.microsoft.com/zh-cn/visualstudio/test/unit-test-basics?view=vs-2019 "VisualStudio单元测试文档"
+[UnityTestFrameworkDoc_Link]:https://docs.unity3d.com/Packages/com.unity.test-framework@2.0/manual/index.html "Unity单元测试文档"
 
+[VisualStudio.gitignore_Link]:https://github.com/github/gitignore/blob/master/VisualStudio.gitignore "VisualStudio 忽略文件"
 
 <!-- 水印 -->
 [ML-Blog_Link]:https://userminghaoli.github.io/ "我的博客"

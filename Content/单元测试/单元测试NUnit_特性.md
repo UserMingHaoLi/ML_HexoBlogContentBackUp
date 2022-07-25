@@ -18,6 +18,75 @@ tags:
 
 <!--more-->
 
+## Apartment
+
+定测试应在特定单元（STA 或 MTA）中运行
+
+既多线程模式或单线程模式
+
+如果未指定此属性，测试将在 MTA 中运行
+
+## Author
+
+作者, 包含Name和eMail参数
+
+每个测试可以有多个作者
+
+## Category
+
+类别
+
+某些启动测试的指令可能会运行指定分组
+
+对于`SetUpFixture`, 分组不起作用
+
+此类型可以继承, 用于自定义你项目的高级类别
+
+## Combinatorial
+## Culture
+## Datapoint
+## DatapointSource
+## DefaultFloatingPointTolerance
+## Description
+## Explicit
+## FixtureLifeCycle
+## Ignore
+## LevelOfParallelism
+## MaxTime
+## NonTestAssembly
+## OneTimeSetUp
+## OneTimeTearDown
+## Order
+## Pairwise
+## Parallelizable
+## NonParallelizable
+## Platform
+## Property
+## Random
+## Range
+## Repeat
+## RequiresThread
+## Retry
+## Sequential
+## SetCulture
+## SetUICulture
+## Setup
+## SetUpFixture
+## SingleThreaded
+## TearDown
+## Test
+## TestCase
+## TestCaseSource
+## TestFixture
+## TestFixtureSetUp
+## TestFixtureSource
+## TestFixtureTearDown
+## TestOf
+## Theory
+## Timeout
+## Values
+## ValueSource
+
 ## Category
 
 **分组**  
