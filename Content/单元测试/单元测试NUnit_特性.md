@@ -42,8 +42,58 @@ tags:
 
 此类型可以继承, 用于自定义你项目的高级类别
 
+继承类的默认受保护构造函数将类别名称设置为类的名称.
+
+需要运行过一次之后, NUnit才会在UI中展示其自定义特征名称.
+
 ## Combinatorial
+
+Combinatorial
+
+组合
+
+以指定 NUnit 应为为测试参数提供的各个数据项的所有可能组合生成测试用例
+
+```C#
+[Test, Combinatorial]
+public void MyTest(
+    [Values(1, 2, 3)] int x,
+    [Values("A", "B")] string s)
+{
+    ...
+}
+
+//MyTest 被调用六次，如下所示：
+
+MyTest(1, "A")
+MyTest(1, "B")
+MyTest(2, "A")
+MyTest(2, "B")
+MyTest(3, "A")
+MyTest(3, "B")
+```
+
+在泛型方法上使用时，程序员必须确保所有可能的参数组合都是有效的。  
+当多个参数使用相同的泛型类型（例如：T）时，这可能是不可能的，  
+并且该属性可能会生成无效的测试用例
+
 ## Culture
+
+Culture 文化区域
+
+如果未满足测试的指定区域性要求，则跳过该要求。在 gui 中，测试的树节点保持灰色，状态栏颜色不受影响
+
+如果您希望在运行测试时更改区域性，请改用 SetCulture 属性
+
+```C#
+[TestFixture]
+[Culture("fr-FR")]
+public class FrenchCultureTests
+{
+// ...
+}
+```
+
 ## Datapoint
 ## DatapointSource
 ## DefaultFloatingPointTolerance
