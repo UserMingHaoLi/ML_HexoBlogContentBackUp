@@ -16,7 +16,6 @@ tags:
 
 >本系列均参考自
 >>[微软官方文档][MicrosoftDoc]
->>[博客园][BoKeYuanCSharp]
 
 根据微软官方[C#发展历史][AddLink2], 此时的c#主要功能包括
 
@@ -31,13 +30,15 @@ tags:
 * 特性
 * 文本
 
+发布日期：2002 年 1 月
+
 <!--more-->
 
 # C#1.0是C#最初始的版本
 
 由于创建时间较晚, 良好的吸取了前人经验, 拥有面向对象架构的同时拥有一些自己独特的东西. 
 如果只是想入门C# 可以参阅 [微软官方C#指南][AddLink1]  
-本文提供的是C#历史变更记录, 有时候会涉及到一些略微底层的东西, 有利于程序员的灵魂.
+本文提供的是C#历史变更记录.
 
 # 面向对象基本特性 -**封装**, **继承**, **多态**
 
@@ -647,7 +648,6 @@ MyAdd += Addint3
 <!-- 链接 -->
 
 [MicrosoftDoc]:https://docs.microsoft.com/zh-cn/dotnet/csharp/whats-new/csharp-version-history "微软官方文档"
-[BoKeYuanCSharp]:https://www.cnblogs.com/dxy1982/tag/C%23/ "博客园C#版本更细"
 
 
 [link1]: https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/keywords/access-modifiers "C#访问修饰符 -封装"
