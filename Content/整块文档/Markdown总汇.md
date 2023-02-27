@@ -355,16 +355,16 @@ Markdown 支持有序列表和无序列表。
 
 ### 一整块代码(带有颜色)
 
-在上面代码块第一个三点的指定渲染格式即可. ` ```C# `
+在上面代码块第一个三点的指定渲染格式即可. ` ```CSharp `
 
-    ```C#
+    ```CSharp
     public void Main()
     {
         Log("本文来自 ML-Blog");
     }
     ```
 *转化之后就带有C#标准的颜色了*
-```C#
+```CSharp
 public void Main()
 {
     Log("本文来自 ML-Blog");

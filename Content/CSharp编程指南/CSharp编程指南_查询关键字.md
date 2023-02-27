@@ -44,14 +44,14 @@ tags:
 
 `from` 子句中引用的数据源必须具有 `IEnumerable`、`IEnumerable<T>` 类型之一，或 `IQueryable<T>` 等派生类型
 
-```C#
+```CSharp
 var lowNums = from num in numbers
             where num < 5
             select num;
 ```
 *此例子查询所有`numbers`中小于5的数字,并返回为`lowNums`*
 
-```C#
+```CSharp
 var scoreQuery = from student in students
                 from score in student.Scores
                 where score > 90
@@ -59,7 +59,7 @@ var scoreQuery = from student in students
 ```
 *此例子演示了嵌套`from`*
 
-```C#
+```CSharp
 var joinQuery2 =
     from lower in lowerCase
     where lower != 'x'
@@ -77,7 +77,7 @@ var joinQuery2 =
 
 `select` 子句指定在执行查询时产生的值的类型
 
-```C#
+```CSharp
  IEnumerable<int> queryHighScores =
             from score in Scores
             where score > 80
@@ -90,7 +90,7 @@ var joinQuery2 =
 `group` 子句返回一个 `IGrouping<TKey,TElement>` 对象序列  
 这些对象包含零个或更多与该组的键值匹配的项
 
-```C#
+```CSharp
 IEnumerable<IGrouping<char, Student>> studentQuery1 =
     from student in students
     group student by student.Last[0];
@@ -99,7 +99,7 @@ IEnumerable<IGrouping<char, Student>> studentQuery1 =
 
 如果要对每个组执行附加查询操作，可使用上下文关键字 `into` 指定一个临时标识符
 
-```C#
+```CSharp
 IEnumerable<IGrouping<char, Student>> studentQuery2 =
     from student in students
     group student by student.Last[0] into g
@@ -117,7 +117,7 @@ IEnumerable<IGrouping<char, Student>> studentQuery2 =
 
 `orderby` 子句可导致返回的序列或子序列（组）以升序或降序排序
 
-```C#
+```CSharp
 IEnumerable<string> sortAscendingQuery =
     from fruit in fruits
     orderby fruit
@@ -131,7 +131,7 @@ IEnumerable<string> sortAscendingQuery =
 
 第一个查询按字母顺序从 A 开始对字词排序，而第二个查询则按降序对相同的字词排序
 
-```C#
+```CSharp
 IEnumerable<Student> sortedStudents =
     from student in students
     orderby student.Last ascending, student.First ascending
@@ -147,7 +147,7 @@ IEnumerable<Student> sortedStudents =
 `join` 子句可用于将来自不同源序列并且在对象模型中没有直接关系的元素相关联  
 要求是每个源中的元素需要共享某个可以进行比较以判断是否相等的值
 
-```C#
+```CSharp
 //定义数据
 class Product
 {
@@ -187,7 +187,7 @@ List<Product> products = new List<Product>()
 
 ## 内部联接
 
-```C#
+```CSharp
 var innerJoinQuery =
     from category in categories
     join prod in products on category.ID equals prod.CategoryID
@@ -195,7 +195,7 @@ var innerJoinQuery =
 ```
 如果 `category.ID equals prod.CategoryID` 不成立,则该`products`不会出现在最终列表中
 
-```C#
+```CSharp
 /*
 Cola      1
 Tea       1
@@ -217,7 +217,7 @@ InnerJoin: 8 items in 1 group.
 
 如果在右侧源序列中找不到与左侧源中的元素相匹配的元素，则 `join` 子句会为该项生成一个空数组。 因此，分组联接基本上仍然是一种内部同等联接，区别在于分组联接将结果序列组织为多个组
 
-```C#
+```CSharp
 var groupJoinQuery =
     from category in categories
     join prod in products on category.ID equals prod.CategoryID into prodGroup
@@ -251,7 +251,7 @@ Unshaped GroupJoin: 8 items in 5 unnamed groups
 ```
 *因为`join`的目标是`prod`所以,实际上`into`结果`prodGroup`里面的小项也都是`prod`*
 
-```C#
+```CSharp
 var groupJoinQuery2 =
     from category in categories
     orderby category.ID
@@ -264,7 +264,7 @@ var groupJoinQuery2 =
                     select prod2
     };
 ```
-```C#
+```CSharp
 foreach (var productGroup in groupJoinQuery2)
 {
     Console.WriteLine(productGroup.Category);
@@ -275,7 +275,7 @@ foreach (var productGroup in groupJoinQuery2)
     }
 }
 ```
-```C#
+```CSharp
 /*
 Beverages
     Cola       1
@@ -294,7 +294,7 @@ Fruit
 ```
 *比上个例子多出一个`Select`集合,以及`products`以`Name`排序*
 
-```C#
+```CSharp
 var groupJoinQuery3 =
     from category in categories
     join product in products on category.ID equals product.CategoryID into prodGroup
@@ -325,7 +325,7 @@ GroupJoin3:
 
 在左外部联接中，将返回左侧源序列中的所有元素，即使右侧序列中没有其匹配元素也是如此。 若要在 LINQ 中执行左外部联接，请结合使用 `DefaultIfEmpty` 方法与分组联接
 
-```C#
+```CSharp
 var leftOuterQuery =
     from category in categories
     join prod in products on category.ID equals prod.CategoryID into prodGroup
@@ -359,7 +359,7 @@ Group:
 ```
 *这里的左侧是`category.ID`, 所以生成所有`ID`. 1,2,3,4,5. 但是没有ID为4的商品, 所以需要指定`DefaultIfEmpty(new Product() `为无匹配时的商品*
 
-```C#
+```CSharp
 var leftOuterQuery2 =
     from category in categories
     join prod in products on category.ID equals prod.CategoryID into prodGroup
@@ -389,7 +389,7 @@ Melons    5
 
 在查询表达式中，存储子表达式的结果
 
-```C#
+```CSharp
 var earlyBirdQuery =
     from sentence in strings
     let words = sentence.Split(' ')
@@ -416,7 +416,7 @@ var earlyBirdQuery =
 
 `on` 上下文关键字用于在查询表达式的 `join` 子句中指定联接条件
 
-```C#
+```CSharp
 join prod in products on category.ID equals prod.CategoryID
 ```
 # equals
@@ -429,7 +429,7 @@ join prod in products on category.ID equals prod.CategoryID
 
 `by` 上下文关键字用于在查询表达式的 `group` 子句中指定应返回项的分组方式
 
-```C#
+```CSharp
 var query = from student in students
     group student by student.LastName[0];
 ```
@@ -438,7 +438,7 @@ var query = from student in students
 
 查询表达式中的 `orderby` 子句 中使用 `ascending` 上下文关键字指定排序顺序为从小到大。 由于 `ascending` 为默认排序顺序，因此无需加以指定。
 
-```C#
+```CSharp
 IEnumerable<string> sortAscendingQuery =
     from vegetable in vegetables
     orderby vegetable ascending
@@ -449,7 +449,7 @@ IEnumerable<string> sortAscendingQuery =
 
 查询表达式中的 `orderby` 子句中使用 `descending` 上下文关键字指定排序顺序为从大到小。
 
-```C#
+```CSharp
 IEnumerable<string> sortDescendingQuery =
     from vegetable in vegetables
     orderby vegetable descending

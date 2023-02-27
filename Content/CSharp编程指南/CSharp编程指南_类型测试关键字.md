@@ -26,7 +26,7 @@ tags:
 
 `is` 会测试表达式是否可转换为指定类型，如果可以，则将其转换为该类型的一个变量
 
-```C#
+```CSharp
 expr is type varname
 ```
 
@@ -46,7 +46,7 @@ expr is type varname
 如果 `expr` 为 `true` 且 `is` 与 `if` 语句配合使用，则仅在 `if` 语句内分配 `varname。` `varname` 的使用范围：从 `is` 表达式到封闭 `if` 语句的块的末尾
 
 演示
-```C#
+```CSharp
 public class Employee : IComparable
 {
     public String Name { get; set; }
@@ -64,7 +64,7 @@ public class Employee : IComparable
 ```
 
 演示2
-```C#
+```CSharp
 if (o is Person p) 
 {
 	Console.WriteLine(p.Name);
@@ -77,7 +77,7 @@ else if (o is Dog d)
 
 对于无模式匹配的等效代码，需要为其单独分配显式转换
 
-```C#
+```CSharp
 if (o is Person) 
 {
 	Person p = (Person) o;
@@ -96,7 +96,7 @@ else if (o is Dog)
 
 > 在 `C# 6` 和更低版本中，`switch` 语句支持常量模式。 自 `C# 7.0` 起，`is` 语句也支持
 
-```C#
+```CSharp
 const int HIGH_ROLL = 6;
 if(Roll() is HIGH_ROLL)
 {
@@ -107,7 +107,7 @@ if(Roll() is HIGH_ROLL)
 
 可以使用常量模式执行 `null` 检查
 
-```C#
+```CSharp
  if (o is null)
 ```
 
@@ -117,7 +117,7 @@ if(Roll() is HIGH_ROLL)
 
 具有 `var` 模式的模式匹配始终成功
 
-```C#
+```CSharp
 Factor(n).ToList() is var factors
 ```
 

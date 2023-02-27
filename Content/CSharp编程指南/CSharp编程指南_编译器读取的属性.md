@@ -71,7 +71,7 @@ tags:
 | CallerMemberNameAttribute | 调用方的方法名称或属性名称。                            | String  |
 
 
-```C#
+```CSharp
 public void DoProcessing()
 {
     TraceMessage("Something happened.");
@@ -121,7 +121,7 @@ public void TraceMessage(string message,
 
 Conditional 应用于启用或禁用显示特定于程序的诊断信息的方法
 
-```C#
+```CSharp
 [Conditional("TRACE_ON")]
 public static void Msg(string msg)
 {
@@ -132,7 +132,7 @@ public static void Msg(string msg)
 
 `Conditional` 特性通常与 `DEBUG` 标识符一起使用，以启用调试生成（而非发布生成）中的跟踪和日志记录功能
 
-```C#
+```CSharp
 [Conditional("DEBUG")]
 static void DebugMethod()
 {
@@ -143,7 +143,7 @@ static void DebugMethod()
 
 如果某个方法具有多个 `Conditional` 特性，则如果定义了一个或多个条件符号（通过使用 `OR` 运算符将这些符号逻辑链接在一起），则包含对该方法的调用。 在以下示例中，存在 A 或 B 将导致方法调用
 
-```C#
+```CSharp
 [Conditional("A"), Conditional("B")]
 static void DoIfAorB()
 {
@@ -155,7 +155,7 @@ static void DoIfAorB()
 
 `Conditional` 特性还可应用于特性类定义。 在以下示例中，如果定义了 `DEBUG`，则自定义特性 `Documentation` 将仅向元数据添加信息
 
-```C#
+```CSharp
 [Conditional("DEBUG")]
 public class DocumentationAttribute : System.Attribute
 {
@@ -182,7 +182,7 @@ class SampleClass
 
 `Obsolete` 特性将代码元素标记为不再推荐使用
 
-```C#
+```CSharp
 using System;
 
 namespace AttributeExamples
@@ -241,7 +241,7 @@ namespace AttributeExamples
 * 某特性是否可多次应用于单个程序元素。
 * 特性是否由派生类继承。
 
-```C#
+```CSharp
 [AttributeUsage(AttributeTargets.All,
                    AllowMultiple = false,
                    Inherited = true)]
@@ -251,14 +251,14 @@ class NewAttribute : Attribute { }
 
 `AllowMultiple` 和 `Inherited` 参数是可选的，因此以下代码具有相同效果：
 
-```C#
+```CSharp
 [AttributeUsage(AttributeTargets.All)]
 class NewAttribute : Attribute { }
 ```
 
 可将多个目标类型与 OR 运算符链接在一起，如下例所示：
 
-```C#
+```CSharp
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 class NewPropertyOrFieldAttribute : Attribute { }
 ```
@@ -269,7 +269,7 @@ class NewPropertyOrFieldAttribute : Attribute { }
 
 `Init1` 和 `Init2` 方法在 `Main` 之前运行，并且每种方法都将一个字符串添加到 `Text` 属性。 因此，当 `Main` 运行时，`Text` 属性已具有来自两个初始化表达式方法中的字符串
 
-```C#
+```CSharp
 using System.Runtime.CompilerServices;
 
 internal class ModuleInitializerExampleModule

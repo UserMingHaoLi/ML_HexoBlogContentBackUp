@@ -47,7 +47,7 @@ tags:
 
 也可以用于方法,这指示该方法不改变任何外部参数
 
-```C#
+```CSharp
 public struct Point
 {
     public double X { get; set; }
@@ -74,7 +74,7 @@ public struct Point
 
 先看代码
 
-```C#
+```CSharp
 public static RGBColor FromRainbow(Rainbow colorBand) =>
     colorBand switch
     {
@@ -97,7 +97,7 @@ default被替换为 _ 有弃元的意义.
 
 和他等效的代码是
 
-```C#
+```CSharp
 public static RGBColor FromRainbowClassic(Rainbow colorBand)
 {
     switch (colorBand)
@@ -128,7 +128,7 @@ public static RGBColor FromRainbowClassic(Rainbow colorBand)
 
 先看代码
 
-```C#
+```CSharp
 public static decimal ComputeSalesTax(Address location, decimal salePrice) =>
     location switch
     {
@@ -148,7 +148,7 @@ public static decimal ComputeSalesTax(Address location, decimal salePrice) =>
 
 看代码
 
-```C#
+```CSharp
 public static string RockPaperScissors(string first, string second)
     => (first, second) switch
     {
@@ -170,7 +170,7 @@ public static string RockPaperScissors(string first, string second)
 
 实际上就是通过`Deconstruct`解构函数来将所有类型转化为元组  
 *注意`point`是存在解构函数的*
-```C#
+```CSharp
 static Quadrant GetQuadrant(Point point) => point switch
 {
     (0, 0) => Quadrant.Origin,
@@ -186,7 +186,7 @@ static Quadrant GetQuadrant(Point point) => point switch
 
 ## Using 声明
 
-```C#
+```CSharp
 static void WriteLinesToFile(IEnumerable<string> lines)
 {
     using var file = new System.IO.StreamWriter("WriteLines2.txt");
@@ -208,7 +208,7 @@ static void WriteLinesToFile(IEnumerable<string> lines)
 
 # 静态本地函数
 
-```C#
+```CSharp
 int M()
 {
     int y = 5;
@@ -234,11 +234,11 @@ int M()
 
 这个是为了修复之前为数据库设计的可空类型的bug.
 
-```C#
+```CSharp
 string? name;   //可为空的string, 所以没有`?`就是不可为空
 ```
 
-```C#
+```CSharp
 name!.Length;   //强制调用
 ```
 
@@ -291,7 +291,7 @@ C# 8.0 之前的编译器视为 *任何引用类型都可以为空*
 * 它将返回 `IAsyncEnumerable<T>`  
 * 该方法包含用于在异步流中返回连续元素的 `yield return` 语句。  
 
-```C#
+```CSharp
 //声明
 public static async System.Collections.Generic.IAsyncEnumerable<int> GenerateSequence()
 {
@@ -320,7 +320,7 @@ await foreach (var number in GenerateSequence())
 
 新增一个索引运算符 `^`
 
-```C#
+```CSharp
 var words = new string[]
 {
                 // index from start    index from end
@@ -354,7 +354,7 @@ words[^2..^0];
 *实际上是一个新的类型`System.Index`在支持这种语法*
 
 此外可以将范围声明为变量
-```C#
+```CSharp
 Range phrase = 1..4;
 ```
 
@@ -363,7 +363,7 @@ Range phrase = 1..4;
 `??=`  
 仅当左操作数计算为 `null` 时，才能使用运算符 `??=` 将其右操作数的值分配给左操作数。
 
-```C#
+```CSharp
 List<int> numbers = null;
 int? i = null;  //?表示i可为空,所以这里给了个null
 

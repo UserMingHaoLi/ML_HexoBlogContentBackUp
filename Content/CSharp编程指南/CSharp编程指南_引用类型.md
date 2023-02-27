@@ -66,7 +66,7 @@ C # 中的每个类型都直接或间接从 `object` 类型派生.
 尽管`string`是引用类型,但是仍然可以使用`==`,`!=`来对其进行逐字的比较,这是C#做的优化.  
 这使得对字符串相等性的测试更为直观
 
-```C#
+```CSharp
 string a = "hello";
 string b = "h";
 b += "ello";//此时生成新的引用字符串
@@ -100,12 +100,12 @@ Console.WriteLine(object.ReferenceEquals(a, b));//false 引用不相等
 
 概念上大概如下所示,但实际实现有差别.
 
-```C#
+```CSharp
 int i = 123;
 object box = new Box<int>(i);
 ```
 继续看如下代码
-```C#
+```CSharp
 Point p = new Point(10, 10);
 object box = p;
 p.x = 20;
@@ -114,7 +114,7 @@ Console.Write(((Point)box).x); //输出10
 这时我们知道了,box在堆中创建的内容,实际上只是拷贝.  
 
 如果我们修改一下
-```C#
+```CSharp
 Point p = new Point(10, 10);
 object box = p;
 ((Point)box).x = 20;//Error: 无法修改取消装箱转化的结果
@@ -124,7 +124,7 @@ Console.Write(((Point)box).x);
 所以需要强制转化回`Point`类型,但是编辑器提示无法修改,这是因为一定进行转化,就会赋值一份堆上的数据到栈上,但是此时并没有任何临时变量接住这个栈上的值, 所以最后此次修改必定被丢弃,于是编译器阻止了此操作.
 
 *拆箱的概念大概如下,实际实现有差异*
-```C#
+```CSharp
 object box = new Box<int>(123);
 int i = ((Box<int>)box).value;
 ```
@@ -136,7 +136,7 @@ int i = ((Box<int>)box).value;
 即用户自定义类型
 
 如下
-```C#
+```CSharp
 class Queue {...}
 class Queue<TElement> {...}
 ```

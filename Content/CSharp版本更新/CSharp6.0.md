@@ -49,7 +49,7 @@ tags:
 允许你为`catch`增加一个逻辑判断, 只有为`true`才能捕获异常  
 用于判断`catch`是否有能力处理异常
 
-```C#
+```CSharp
 catch (System.Net.Http.HttpRequestException e) when (e.Message.Contains("301"))
 {
     return "Site Moved";
@@ -62,7 +62,7 @@ catch (System.Net.Http.HttpRequestException e) when (e.Message.Contains("301"))
 
 允许你声明属性的时候就为他们赋值
 
-```C#
+```CSharp
 public ICollection<double> Grades { get; } = new List<double>();
 ```
 
@@ -72,7 +72,7 @@ public ICollection<double> Grades { get; } = new List<double>();
 
 你编写的许多成员是可以作为单个表达式的单个语句。 改为编写 `expression-bodied` 成员。 这适用于方法和只读属性。 例如，重写 `ToString()` 通常是理想之选
 
-```C#
+```CSharp
 public override string ToString() => $"{LastName}, {FirstName}";
 
 public string FullName => $"{FirstName} {LastName}";
@@ -84,7 +84,7 @@ public string FullName => $"{FirstName} {LastName}";
 
 使用`?.`来代替`.`就不用进行烦人的`null == person`判断了
 
-```C#
+```CSharp
 var first = person?.FirstName; 
 ```
 
@@ -96,13 +96,13 @@ var first = person?.FirstName;
 
 使用`$`开头声明一个字符串. 其中的`{}`将被认为进行字符串内插.
 
-```C#
+```CSharp
 $"{FirstName} {LastName}"
 ```
 
 `{}`内的代码将会和外界的普通代码一样运作. 得出一个结果
 
-```C#
+```CSharp
 ${Grades.Average()}
 ```
 
@@ -112,14 +112,14 @@ ${Grades.Average()}
 
 `nameof` 表达式的计算结果为符号的名称。 他是一个关键字 每当需要变量、属性或成员字段的名称时，这是让工具正常运行的好办法。`nameof` 的其中一个最常见的用途是提供引起异常的符号的名称：
 
-```C#
+```CSharp
 if (IsNullOrWhiteSpace(lastName))
     throw new ArgumentException(message: "Cannot be blank", paramName: nameof(lastName));
 ```
 
 ## 索引初始值设定项
 
-```C#
+```CSharp
 private Dictionary<int, string> messages = new Dictionary<int, string>
 {
     { 404, "Page not Found"},
@@ -141,7 +141,7 @@ private Dictionary<int, string> webErrors = new Dictionary<int, string>
 
  使用 C# 6，现在可以在 catch 或 finally 表达式中使用 await。 这通常用于日志记录方案：
  
- ```C#
+ ```CSharp
  catch (System.Net.Http.HttpRequestException e) when (e.Message.Contains("301"))
     {
         await logError("Recovered from redirect", e);
@@ -158,7 +158,7 @@ private Dictionary<int, string> webErrors = new Dictionary<int, string>
 
 现在可以使用简写声明一个仅`get`的属性
 
-```C#
+```CSharp
 public string FirstName { get; }
 ```
 

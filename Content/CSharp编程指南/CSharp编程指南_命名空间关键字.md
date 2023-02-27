@@ -32,13 +32,13 @@ tags:
 
 允许在命名空间中使用类型，这样无需在该命名空间中限定某个类型的使用
 
-```C#
+```CSharp
 using System;
 ```
 
 允许访问类型的静态成员和嵌套类型，而无需限定使用类型名称进行访问
 
-```C#
+```CSharp
 using static System.Math;
 ```
 
@@ -46,7 +46,7 @@ using static System.Math;
 
 为命名空间或类型创建别名。 这称为 `using 别名指令`
 
-```C#
+```CSharp
 using Project = PC.MyCompany.Project;
 ```
 
@@ -56,7 +56,7 @@ using Project = PC.MyCompany.Project;
 
 >  从 `C#8.0` 开始，`using` 语句可确保正确使用 `IAsyncDisposable` 对象
 
-```C#
+```CSharp
 using (var reader = new StringReader(manyLines))
 {
     string? item;
@@ -78,7 +78,7 @@ using (var reader = new StringReader(manyLines))
 这就是编译器转换 `using` 语句的方式  
 前面的代码示例在编译时将扩展到以下代码
 
-```C#
+```CSharp
 var reader = new StringReader(manyLines);
 try {
 	string? item;
@@ -106,7 +106,7 @@ try {
 /r:GridV2=grid20.dll
 ```
 
-```C#
+```CSharp
 extern alias GridV1;
 
 extern alias GridV2;
@@ -118,7 +118,7 @@ extern alias GridV2;
 在 `Visual Studio` 中向项目添加 `grid.dll` 和 `grid20.dll` 的引用。 打开“属性”选项卡，并将别名从“全局”分别更改为“`GridV1`”和“`GridV2`”。
 
 之后随意使用即可
-```C#
+```CSharp
 using Class1V1 = GridV1::Namespace.Class1;
 
 using Class1V2 = GridV2::Namespace.Class1;

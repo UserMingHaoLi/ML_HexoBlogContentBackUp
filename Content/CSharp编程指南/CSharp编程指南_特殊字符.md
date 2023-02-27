@@ -21,14 +21,14 @@ tags:
 # $ - 字符串内插
 
 与使用`字符串复合格式设置`功能创建格式化字符串相比，字符串内插提供的语法更具可读性，且更加方便
-```C#
+```CSharp
 Console.WriteLine("Hello, {0}! Today is {1}, it's {2:HH:mm} now.", name, date.DayOfWeek, date);
 Console.WriteLine($"Hello, {name}! Today is {date.DayOfWeek}, it's {date:HH:mm} now.");
 ```
 
 解构示意图
 
-```C#
+```CSharp
 {<interpolationExpression>[,<alignment>][:<formatString>]}
 ```
 
@@ -38,7 +38,7 @@ Console.WriteLine($"Hello, {name}! Today is {date.DayOfWeek}, it's {date:HH:mm} 
 | alignment               | 常数表达式，它的值定义表达式结果的字符串表示形式中的最小字符数。 如果值为正，则字符串表示形式为右对齐；如果值为负，则为左对齐。 有关详细信息，请参阅对齐组件 |
 | formatString            | 受表达式结果类型支持的格式字符串。 有关更多信息，请参阅格式字符串组件                                                                                        |
 
-```C#
+```CSharp
 Console.WriteLine($"|{"Left",-7}|{"Right",7}|");
 const int FieldWidthRightAligned = 20;
 Console.WriteLine($"{Math.PI,FieldWidthRightAligned} - default formatting of the pi number");
@@ -55,7 +55,7 @@ Console.WriteLine($"{Math.PI,FieldWidthRightAligned:F3} - display only three dec
 
 因为冒号（“:”）在内插表达式项中具有特殊含义，为了在内插表达式中使用条件运算符，请将表达式放在括号内
 
-```C#
+```CSharp
 string name = "Horace";
 int age = 34;
 Console.WriteLine($"He asked, \"Is your name {name}?\", but didn't wait for a reply :-{{");
@@ -98,7 +98,7 @@ Console.WriteLine($"{name} is {age} year{(age == 1 ? "" : "s")} old.");
 
 复合格式字符串和对象列表将用作支持复合格式设置功能的方法的参数。 复合格式字符串由零个或多个固定文本段与一个或多个格式项混和组成
 
-```C#
+```CSharp
 string name = "Fred";
 String.Format("Name = {0}, hours = {1:hh}", name, DateTime.Now);
 ```
@@ -133,11 +133,11 @@ String.Format("Name = {0}, hours = {1:hh}", name, DateTime.Now);
 * 使 C# 关键字用作标识符, 如`@for`
 * 指示将原义解释字符串,将按字面解释,而不是转义结果
 
-```C#
+```CSharp
 string filename1 = @"c:\documents\files\u0066.txt";
 string filename2 = "c:\\documents\\files\\u0066.txt";
 ```
-```C#
+```CSharp
 string s1 = "He said, \"This is the last \u0063hance\x0021\"";
 string s2 = @"He said, ""This is the last \u0063hance\x0021""";
 Console.WriteLine(s1);
@@ -150,7 +150,7 @@ Console.WriteLine(s2);
 * 使编译器在命名冲突的情况下区分两种属性
 
 
-```C#
+```CSharp
 using System;
 
 [AttributeUsage(AttributeTargets.Class)]

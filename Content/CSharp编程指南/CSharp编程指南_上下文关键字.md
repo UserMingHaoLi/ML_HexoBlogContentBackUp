@@ -46,7 +46,7 @@ tags:
 # remove
 
 `add` 上下文关键字用于定义一个在客户端代码订阅你的事件时调用的自定义事件访问器。 如果提供自定义 `add` 访问器，还必须提供 `remove` 访问器
-```C#
+```CSharp
 class Events : IDrawingObject
 {
     event EventHandler PreDrawEvent;
@@ -69,7 +69,7 @@ class Events : IDrawingObject
  `C# 9.0` 开始，可使用 `not`、`and` 和 `or` 模式连结符来创建以下逻辑模式
 
 否定 `not` 模式在否定模式与表达式不匹配时与表达式匹配
-```C#
+```CSharp
 if (input is not null)
 {
     // ...
@@ -77,7 +77,7 @@ if (input is not null)
 ```
 
 合取 `and` 模式在两个模式都与表达式匹配时与表达式匹配
-```C#
+```CSharp
 static string Classify(double measurement) => measurement switch
 {
     < -40.0 => "Too low",
@@ -90,7 +90,7 @@ static string Classify(double measurement) => measurement switch
 ```
 
 析取 `or` 模式在任一模式与表达式匹配时与表达式匹配
-```C#
+```CSharp
 static string GetCalendarSeason(DateTime date) => date.Month switch
 {
     3 or 4 or 5 => "spring",
@@ -109,12 +109,12 @@ static string GetCalendarSeason(DateTime date) => date.Month switch
 
 从 `C# 8.0` 开始，可使用属性模式来将表达式的属性或字段与嵌套模式进行匹配
 
-```C#
+```CSharp
 static bool IsConferenceDay(DateTime date) => date is { Year: 2020, Month: 5, Day: 19 or 20 or 21 };
 ```
 
 从 `C# 8.0` 开始，可使用位置模式来解构表达式结果并将结果值与相应的嵌套模式匹配
-```C#
+```CSharp
 public readonly struct Point
 {
     public int X { get; }
@@ -135,7 +135,7 @@ static string Classify(Point point) => point switch
 ```
 
 结合前面的两种用法，如以下示例所示
-```C#
+```CSharp
 public record WeightedPoint(int X, int Y)
 {
     public double Weight { get; set; }
@@ -165,7 +165,7 @@ if (input is WeightedPoint (> 0, > 0) { Weight: > 0.0 } p)
 
 # set
 
-```C#
+```CSharp
 class TimePeriod
 {
      private double _seconds;
@@ -183,7 +183,7 @@ class TimePeriod
 `global` 别名，该别名是全局命名空间别名  
 与 `::` 限定符一起使用时，`global` 别名始终引用全局命名空间，即使存在用户定义的 `global` 命名空间别名也是如此
 
-```C#
+```CSharp
 namespace MyCompany.MyProduct.System
 {
     class Program
@@ -202,7 +202,7 @@ namespace MyCompany.MyProduct.System
 
 在 `C# 9` 及更高版本中，`init` 关键字在属性或索引器中定义访问器方法。 `init-only` 资源库仅在对象构造期间为属性或索引器元素赋值. 相当于只读.
 
-```C#
+```CSharp
 class InitExample
 {
      private double _seconds;
@@ -215,7 +215,7 @@ class InitExample
 }
 ```
 也可简写
-```C#
+```CSharp
 class InitExampleAutoProperty
 {
     public double Hours { get; init; }
@@ -233,7 +233,7 @@ class InitExampleAutoProperty
 用于指定分布类和分布方法.  
 允许在两个不同文件中书写同一个类或方法.
 
-```C#
+```CSharp
 namespace PC
 {
     partial class A
@@ -260,10 +260,10 @@ namespace PC
 称作`记录`
 
 如下可以创建具有不可变属性的记录类型
-```C#
+```CSharp
 public record Person(string FirstName, string LastName);
 ```
-```C#
+```CSharp
 public record Person
 {
     public string FirstName { get; init; }
@@ -272,7 +272,7 @@ public record Person
 ```
 
 还可以创建具有可变属性和字段的记录类型
-```C#
+```CSharp
 public record Person
 {
     public string FirstName { get; set; }
@@ -303,7 +303,7 @@ public record Person
 
 此关键字类似于方法的输入参数。 关键字 value 引用客户端代码尝试分配给属性或索引器的值
 
-```C#
+```CSharp
 public virtual int Number
 {
 	get { return num; }
@@ -315,7 +315,7 @@ public virtual int Number
 
 隐式类型本地变量为强类型，就像用户已经自行声明该类型，但编译器决定类型一样
 
-```C#
+```CSharp
 var i = 10; // Implicitly typed.
 int i = 10; // Explicitly typed.
 ```
@@ -329,12 +329,12 @@ int i = 10; // Explicitly typed.
 * 在 `switch` 语句的 `case` 标签中。
 * 在 `switch` 表达式中。
 
-```C#
+```CSharp
 catch (ExceptionType [e]) when (expr)
 ```
 其中，`expr` 是一个表达式，其计算结果为布尔值。 如果该表达式返回 `true`，则执行异常处理程序；如果返回 `false`，则不执行
 
-```C#
+```CSharp
 case (expr) when (when-condition):
 ```
 仅当筛选条件`when-condition`也为 `true` 时，与其相关联的 `case` 标签才为 `true`
@@ -343,7 +343,7 @@ case (expr) when (when-condition):
 
 `where` 子句指定对用作泛型参数的约束
 
-```C#
+```CSharp
 public class AGenericClass<T> where T : IComparable<T> { }
 ```
 *此声明约束`T`实现`IComparable<T>`接口*
@@ -353,7 +353,7 @@ public class AGenericClass<T> where T : IComparable<T> { }
 # yield
 
 使用 `yield` 定义迭代器，可在实现自定义集合类型的 `IEnumerator<T>` 和 `IEnumerable` 模式时无需其他显式类
-```C#
+```CSharp
 yield return <expression>;
 yield break;
 ```
@@ -366,7 +366,7 @@ yield break;
 并保留当前在代码中的位置  
 次调用迭代器函数时，将从该位置重新开始执行
 
-```C#
+```CSharp
 IEnumerable<string> elements = MyIteratorMethod();
 foreach (string element in elements)
 {

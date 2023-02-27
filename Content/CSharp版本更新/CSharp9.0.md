@@ -36,7 +36,7 @@ tags:
 使用 `record` 关键字定义一个**引用类型**  
 创建具有不可变属性的记录类型
 
-```C#
+```CSharp
 public record Person
 {
     public string FirstName { get; init; } = default!;
@@ -46,12 +46,12 @@ public record Person
 `init`关键字后面讲.
 
 也可简写为
-```C#
+```CSharp
 public record Person(string FirstName, string LastName);
 ```
 
 记录被定义为不可变, 但实际可以强制指定可变,但不推荐.
-```C#
+```CSharp
 public record Person
 {
     public string FirstName { get; set; } = default!;
@@ -67,7 +67,7 @@ public record Person
   * 值拷贝
 
 创建一条记录,就和创建一个类一样
-```C#
+```CSharp
 Person person = new("Nancy", "Davolio");
 Console.WriteLine(person);
 // output: Person { FirstName = Nancy, LastName = Davolio }
@@ -82,7 +82,7 @@ Console.WriteLine(person);
 > 而且使用比较操作时候, 比较值相等性,而不是引用.  
 > 但是 如果一个引用类型的两个变量引用同一个对象，那么这两个变量是相等的. 如下面例子中的`phoneNumbers`
 
-```C#
+```CSharp
 var phoneNumbers = new string[2];
 Person person1 = new("Nancy", "Davolio", phoneNumbers);
 Person person2 = new("Nancy", "Davolio", phoneNumbers);
@@ -96,7 +96,7 @@ Console.WriteLine(ReferenceEquals(person1, person2)); // output: False
 
 `with` 表达式创建一个新的记录实例
 
-```C#
+```CSharp
 Person person2 = person1 with { FirstName = "John" };
 Console.WriteLine(person1 == person2); // output: False
 person2 = person1 with { PhoneNumbers = new string[1] };
@@ -108,7 +108,7 @@ Console.WriteLine(person1 == person2); // output: True
 一条记录可以从另一条记录继承。 但是，记录不能从类继承，类也不能从记录继承  
 要使两个记录变量相等，运行时类型必须相等
 
-```C#
+```CSharp
 Person teacher = new Teacher("Nancy", "Davolio", 3);
 Person student = new Student("Nancy", "Davolio", 3);
 Console.WriteLine(teacher == student); // output: False
@@ -126,7 +126,7 @@ Console.WriteLine(teacher == student); // output: False
 仅限 init 的资源库提供了一个窗口用来更改状态。 构造阶段结束时，该窗口关闭  
 在完成所有初始化（包括属性初始化表达式和 with 表达式）之后，构造阶段实际上就结束了
 
-```C#
+```CSharp
 public DateTime RecordedAt { get; init; }
 //使用属性初始化表达式语法来设置值，同时仍保留不变性
 var now = new WeatherObservation 
@@ -142,7 +142,7 @@ var now = new WeatherObservation
 
 顶级语句从许多应用程序中删除了不必要的流程
 
-```C#
+```CSharp
 using System;
 
 namespace HelloWorld
@@ -158,7 +158,7 @@ namespace HelloWorld
 ```
 
 可以简化为
-```C#
+```CSharp
 using System;
 
 Console.WriteLine("Hello World!");
@@ -166,7 +166,7 @@ Console.WriteLine("Hello World!");
 
 也可删除 `using` 指令，并使用完全限定的类型名称
 
-```C#
+```CSharp
 System.Console.WriteLine("Hello World!");
 ```
 
@@ -196,7 +196,7 @@ C# 9 包括新的模式匹配改进：
 
 后面模式中的任何一种都可在允许使用模式的任何上下文中使用：`is` 模式表达式、`switch` 表达式、嵌套模式以及 `switch` 语句的 `case` 标签的模式
 
-```C#
+```CSharp
 public static bool IsLetterOrSeparator(this char c) =>
     c is (>= 'a' and <= 'z') or (>= 'A' and <= 'Z') or '.' or ',';
 ```
@@ -218,26 +218,26 @@ public static bool IsLetterOrSeparator(this char c) =>
 # 调整和完成功能
 
 已知创建对象的类型时，可在 表达式中省略该类型
-```C#
+```CSharp
 private List<WeatherObservation> _observations = new();//已知我要New什么了
 ```
 
 当需要创建新对象作为参数传递给方法时，也可使用目标类型 new
-```C#
+```CSharp
 public WeatherForecast ForecastFor(DateTime forecastDate, WeatherForecastOptions options)
 
 var forecast = station.ForecastFor(DateTime.Now.AddDays(2), new());//已知参数类型,所以知道我要New什么
 ```
 
 将其与仅限 `init` 的属性组合使用来初始化新对象
-```C#
+```CSharp
 WeatherStation station = new() { Location = "Seattle, WA" };
 ```
 
 可使用 `return new();` 语句返回由默认构造函数创建的实例
 
 类似的功能可改进`条件表达式`的目标类型解析
-```C#
+```CSharp
 int? x = condition ? 12 : null;
 //var x = condition ? 12 : (int?)null; //8.0版本
 ```

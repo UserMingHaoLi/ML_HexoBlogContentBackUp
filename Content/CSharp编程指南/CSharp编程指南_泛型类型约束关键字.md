@@ -17,7 +17,7 @@ tags:
 泛型定义中的 `where` 子句指定对用作泛型类型、方法、委托或本地函数中类型参数的参数类型的约束
 
 例1
-```C#
+```CSharp
 class ItemFactory<T> where T : new()
 {
     public T GetNewItem()
@@ -27,7 +27,7 @@ class ItemFactory<T> where T : new()
 }
 ```
 例2
-```C#
+```CSharp
 public class ItemFactory2<T>
     where T : IComparable, new()
 {  }
@@ -35,7 +35,7 @@ public class ItemFactory2<T>
 
 可以声明一个泛型类 `AGenericClass`，以使类型参数 `T` 实现 `IComparable<T>` 接口
 
-```C#
+```CSharp
 public class AGenericClass<T> where T : IComparable<T> { }
 ```
 
@@ -79,7 +79,7 @@ public class AGenericClass<T> where T : IComparable<T> { }
 
 > 从 `C# 7.3` 开始，可将 `System.Delegate` 或 `System.MulticastDelegate` 用作基类约束
 
-```C#
+```CSharp
 public static TDelegate TypeSafeCombine<TDelegate>(this TDelegate source, TDelegate target)
     where TDelegate : System.Delegate
     => Delegate.Combine(source, target) as TDelegate;
@@ -87,7 +87,7 @@ public static TDelegate TypeSafeCombine<TDelegate>(this TDelegate source, TDeleg
 
 > 从 `C# 7.3` 开始，还可指定 `System.Enum` 类型作为基类约束
 
-```C#
+```CSharp
 public static Dictionary<int, string> EnumNamedValues<T>() where T : System.Enum
 {
     var result = new Dictionary<int, string>();

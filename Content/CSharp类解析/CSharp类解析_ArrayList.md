@@ -35,7 +35,7 @@ tags:
 
 首先是一串经典定义
 
-```C#
+```CSharp
 private Object[] _items;
 [ContractPublicPropertyName("Count")]
 private int _size;
@@ -51,19 +51,19 @@ private static readonly Object[] emptyArray = EmptyArray<Object>.Value;
 *如此,我们可知其内部实现为`Object[]`, 且默认有`4`的长度*  
 
 顺便,注意这个`_version`,他是用来维护版本号的, 再迭代器的`MoveNext()`和`Reset()`时候,版本号不一致会报错
-```C#
+```CSharp
  if (version != list._version) throw new InvalidOperationException(Environment.GetResourceString(ResId.InvalidOperation_EnumFailedVersion));
 ```
 
 之后就是构造函数,没什么好说的,就是给了个空组,也就是还没给Count
-```C#
+```CSharp
 public ArrayList() {
 	_items = emptyArray;  
 }
 ```
 
 顺带一提,`emptyArray`长这样
-```C#
+```CSharp
 internal static class EmptyArray<T>
 {
     public static readonly T[] Value = new T[0];
@@ -71,7 +71,7 @@ internal static class EmptyArray<T>
 ```
 
 当然,还有另一种指定长度的构造函数
-```C#
+```CSharp
 public ArrayList(int capacity) {
 	if (capacity < 0) throw new ArgumentOutOfRangeException("capacity", Environment.GetResourceString("ArgumentOutOfRange_MustBeNonNegNum", "capacity"));
 	Contract.EndContractBlock();
@@ -85,7 +85,7 @@ public ArrayList(int capacity) {
 *参数不小于0, 之后 `new Object[capacity]`*
 
 然后是以`ICollection`参数创建
-```C#
+```CSharp
 public ArrayList(ICollection c) {
 	if (c==null)
 		throw new ArgumentNullException("c", Environment.GetResourceString("ArgumentNull_Collection"));
@@ -108,7 +108,7 @@ public ArrayList(ICollection c) {
 
 实际长度,也就是`_items.Length`
 
-```C#
+```CSharp
 public virtual int Capacity {
 get {
 	Contract.Ensures(Contract.Result<int>() >= Count);
@@ -142,7 +142,7 @@ set {
 # Count
 
 也就是外界看到的长度, 实际上是已有元素的数量.
-```C#
+```CSharp
 public virtual int Count {
 	get {
 		Contract.Ensures(Contract.Result<int>() >= 0);
@@ -162,7 +162,7 @@ public virtual int Count {
 # SyncRoot
 
 这个锁倒是有,是在前面定义,用的时候生成
-```C#
+```CSharp
 public virtual Object SyncRoot {
 	get { 
 		if( _syncRoot == null) {
@@ -175,7 +175,7 @@ public virtual Object SyncRoot {
 
 # this[int index]
 
-```C#
+```CSharp
 public virtual Object this[int index] {
 	get {
 		if (index < 0 || index >= _size) throw new ArgumentOutOfRangeException("index", Environment.GetResourceString("ArgumentOutOfRange_Index"));
@@ -199,7 +199,7 @@ public virtual Object this[int index] {
 
 # Add()
 
-```C#
+```CSharp
 public virtual int Add(Object value) {
 	Contract.Ensures(Contract.Result<int>() >= 0);
 	if (_size == _items.Length) EnsureCapacity(_size + 1);
@@ -212,7 +212,7 @@ public virtual int Add(Object value) {
 
 # AddRange
 
-```C#
+```CSharp
 InsertRange(_size, c);
 ```
 
@@ -222,14 +222,14 @@ InsertRange(_size, c);
 
 也就是搜索查找
 
-```C#
+```CSharp
 Array.BinarySearch((Array)_items, index, count, value, comparer);
 ```
 后面都是这些重载
 
 # Clear()
 
-```C#
+```CSharp
 if (_size > 0)
 {
 	Array.Clear(_items, 0, _size); 
@@ -240,7 +240,7 @@ _version++;
 
 # Clone()
 
-```C#
+```CSharp
 Contract.Ensures(Contract.Result<Object>() != null);
 	ArrayList la = new ArrayList(_size);
 	la._size = _size;
@@ -252,7 +252,7 @@ Contract.Ensures(Contract.Result<Object>() != null);
 
 # Contains()
 
-```C#
+```CSharp
 public virtual bool Contains(Object item) {
 	if (item==null) {
 		for(int i=0; i<_size; i++)
@@ -277,7 +277,7 @@ public virtual bool Contains(Object item) {
 # EnsureCapacity
 
 经典的*2扩容来了
-```C#
+```CSharp
 private void EnsureCapacity(int min) {
 	if (_items.Length < min) {
 		int newCapacity = _items.Length == 0? _defaultCapacity: _items.Length * 2;
@@ -301,7 +301,7 @@ private void EnsureCapacity(int min) {
 
 # GetEnumerator
 
-```C#
+```CSharp
 public virtual IEnumerator GetEnumerator() {
 	Contract.Ensures(Contract.Result<IEnumerator>() != null);
 	return new ArrayListEnumeratorSimple(this);
@@ -323,7 +323,7 @@ public virtual IEnumerator GetEnumerator(int index, int count) {
 
 可以看到是`new`了一个内部类`ArrayListEnumerator`
 
-```C#
+```CSharp
 private sealed class ArrayListEnumerator : IEnumerator, ICloneable
 {
 	private ArrayList list;
@@ -380,7 +380,7 @@ private sealed class ArrayListEnumerator : IEnumerator, ICloneable
 
 # IndexOf
 
-```C#
+```CSharp
 public virtual int IndexOf(Object value) {
 		Contract.Ensures(Contract.Result<int>() < Count);
 		return Array.IndexOf((Array)_items, value, 0, _size);
@@ -390,7 +390,7 @@ public virtual int IndexOf(Object value) {
 
 # Insert
 
-```C#
+```CSharp
 public virtual void Insert(int index, Object value) {
 		// Note that insertions at the end are legal.
 		if (index < 0 || index > _size) throw new ArgumentOutOfRangeException("index", Environment.GetResourceString("ArgumentOutOfRange_ArrayListInsert"));
@@ -410,7 +410,7 @@ public virtual void Insert(int index, Object value) {
 
 # LastIndexOf
 
-```C#
+```CSharp
 public virtual int LastIndexOf(Object value, int startIndex, int count) {
 	if (Count != 0 && (startIndex < 0 || count < 0))
 		throw new ArgumentOutOfRangeException((startIndex<0 ? "startIndex" : "count"), Environment.GetResourceString("ArgumentOutOfRange_NeedNonNegNum"));
@@ -437,7 +437,7 @@ public virtual int LastIndexOf(Object value, int startIndex, int count) {
 
 # RemoveAt
 
-```C#
+```CSharp
 public virtual void Remove(Object obj) {
 	Contract.Ensures(Count >= 0);
 
@@ -465,7 +465,7 @@ public virtual void RemoveAt(int index) {
 
 # RemoveRange
 
-```C#
+```CSharp
 public virtual void RemoveRange(int index, int count) {
 	if (index < 0)
 		throw new ArgumentOutOfRangeException("index", Environment.GetResourceString("ArgumentOutOfRange_NeedNonNegNum"));
@@ -492,7 +492,7 @@ public virtual void RemoveRange(int index, int count) {
 
 # Repeat
 
-```C#
+```CSharp
 ArrayList list = new ArrayList((count>_defaultCapacity)?count:_defaultCapacity);
 for(int i=0; i<count; i++)
 	list.Add(value);
@@ -503,13 +503,13 @@ return list;
 
 # Reverse
 
-```C#
+```CSharp
 Array.Reverse(_items, index, count);
 ```
 
 # SetRange
 
-```C#
+```CSharp
 public virtual void SetRange(int index, ICollection c) {
 	if (c==null) throw new ArgumentNullException("c", Environment.GetResourceString("ArgumentNull_Collection"));
 	Contract.EndContractBlock();
@@ -526,7 +526,7 @@ public virtual void SetRange(int index, ICollection c) {
 
 # GetRange
 
-```C#
+```CSharp
 public virtual ArrayList GetRange(int index, int count) {
 	if (index < 0 || count < 0)
 		throw new ArgumentOutOfRangeException((index<0 ? "index" : "count"), Environment.GetResourceString("ArgumentOutOfRange_NeedNonNegNum"));
@@ -553,7 +553,7 @@ Synchronized(IList)
 
 # ToArray
 
-```C#
+```CSharp
 public virtual Object[] ToArray() {
 	Contract.Ensures(Contract.Result<Object[]>() != null);
 

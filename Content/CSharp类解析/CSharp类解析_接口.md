@@ -89,14 +89,14 @@ tags:
 
 ### AsyncState
 
-```C#
+```CSharp
 public object? AsyncState { get; }
 ```
 可以看到是一个`Object`, 用户定义的任何类型都可以放在里面
 
 ### AsyncWaitHandle
 
-```C#
+```CSharp
 public System.Threading.WaitHandle AsyncWaitHandle { get; }
 ```
 
@@ -107,7 +107,7 @@ public System.Threading.WaitHandle AsyncWaitHandle { get; }
 
 ### CompletedSynchronously
 
-```C#
+```CSharp
 public bool CompletedSynchronously { get; }
 ```
 
@@ -117,13 +117,13 @@ public bool CompletedSynchronously { get; }
 
 ### IsCompleted
 
-```C#
+```CSharp
 public bool IsCompleted { get; }
 ```
 
 可以使用属性来轮询完成
 
-```C#
+```CSharp
  while(result.IsCompleted == false) {
                 Thread.Sleep(250);
                 Console.Write(".");
@@ -203,7 +203,7 @@ public bool IsCompleted { get; }
 
 为复合格式字符串中的每个格式项调用一次实现。 例如，在下面的语句中， `ICustomFormatter.Format` 方法被调用三次
 
-```C#
+```CSharp
 Console.WriteLine(String.Format(new BinaryFormatter(),"{0} (binary: {0:B}) (hex: {0:H})", byteValue));
 ```
 *因为有三个格式`{}`*
@@ -246,7 +246,7 @@ Console.WriteLine(String.Format(new BinaryFormatter(),"{0} (binary: {0:B}) (hex:
 额外的释放机制,可以考虑` System.Runtime.InteropServices.SafeHandle `, `构析器`
 
 对于基类,官方推荐了一种写法  
-```C#
+```CSharp
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
@@ -283,7 +283,7 @@ class BaseClass : IDisposable
 ```
 
 如果你实现`析构器`, 则应做如下修改
-```C#
+```CSharp
 using System;
 
 class BaseClass : IDisposable
@@ -327,7 +327,7 @@ class BaseClass : IDisposable
 * 如果需要，他们可以提供终结器。 终结器必须调用 `Dispose(false)`
 
 对于子类,代码如下
-```C#
+```CSharp
 protected override void Dispose(bool disposing)
 {
   if (disposed)
@@ -351,7 +351,7 @@ protected override void Dispose(bool disposing)
 
 最后  
 **手写一个就是这样**
-```C#
+```CSharp
 public class IDisponseTest : IDisposable
 {
     private bool isReadyDisposed = false;
@@ -428,7 +428,7 @@ public class IDisponseTest : IDisposable
 就是外界想你要一个类型,你是否能提供,通常,这个类型会用做提供格式化内容,所以本接口实际上是格式化筛选器.  用于通过参数(外界需求)来选取需要的格式化工具
 
 例如
-```C#
+```CSharp
 public class MyFormatProvider : IFormatProvider
 {
    public object GetFormat(Type format)
@@ -450,7 +450,7 @@ public class MyFormatProvider : IFormatProvider
 * `CultureInfo`,表示特定区域性的类
 
 其中`NumberFormatInfo`涉及此接口的源码如下
-```C#
+```CSharp
 public Object GetFormat(Type formatType) 
 {
    return formatType == typeof(NumberFormatInfo)? this: null;
@@ -470,7 +470,7 @@ public Object GetFormat(Type formatType)
 
 通常情况下 `IFormatProvider`, `ICustomFormatter`,`IFormattable`三者联合行动
 
-```C#
+```CSharp
 public string ToString(string format, IFormatProvider provider)
 {
    if (String.IsNullOrEmpty(format)) format = "G";//无格式则使用`G`
@@ -517,7 +517,7 @@ public string ToString(string format, IFormatProvider provider)
     * IDisposable
     * 对接口的引用，它允许观察程序在提供程序完成发送通知前停止接收通知
 
-```C#
+```CSharp
 private List<IObserver<Location>> observers;
 
 public IDisposable Subscribe(IObserver<Location> observer)
@@ -558,7 +558,7 @@ private class Unsubscriber : IDisposable
 * OnNext(T)	
   * 向观察者提供新数据。
 
-```C#
+```CSharp
 using System;
 
 public class LocationReporter : IObserver<Location>
@@ -603,7 +603,7 @@ public class LocationReporter : IObserver<Location>
 }
 ```
 
-```C#
+```CSharp
 public class LocationTracker : IObservable<Location>
 {
    public LocationTracker()
@@ -715,7 +715,7 @@ IServiceProvider接口由多种类型实现
 集合本质上不是一个线程安全的,所以需要`IsSynchronized`来标志访问是同步的(接口实现者处理了多线程问题)
 
 如果你需要处理锁,可以使用`SyncRoot`
-```C#
+```CSharp
 lock(myCollection.SyncRoot)
 ```
 
@@ -843,7 +843,7 @@ lock(myCollection.SyncRoot)
 *从头到尾对一个集合进行枚举在本质上不是一个线程安全的过程*
 
 *协程管理器(接受自定义,底层还是Unity)*
-```C#
+```CSharp
 //所有扩展的WaitForXXX的接口
 public interface IWaitable
 {
@@ -974,7 +974,7 @@ public class CCoroutineMgr : CSingletonBehaviour<CCoroutineMgr>
 
 某些情况下，你可能希望比较 `NaN` 相等性的值以返回 `false` 
 
-```C#
+```CSharp
 public new bool Equals(object x, object y)
 {
   if (x is float)

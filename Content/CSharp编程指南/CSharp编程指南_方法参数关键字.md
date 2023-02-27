@@ -34,7 +34,7 @@ tags:
 * 指定类型的参数的数组。
 * 无参数。 如果未发送任何参数，则 `params` 列表的长度为`零`
 
-```C#
+```CSharp
 public static void UseParams(params int[] list)
 {
 	for (int i = 0; i < list.Length; i++)
@@ -48,7 +48,7 @@ public static void UseParams(params int[] list)
 # in
 
 `in` 关键字会导致按引用传递参数，但确保未修改参数
-```C#
+```CSharp
 int readonlyArgument = 44;
 InArgExample(readonlyArgument);
 Console.WriteLine(readonlyArgument);     // value is still 44
@@ -90,7 +90,7 @@ void InArgExample(in int number)
 
 > 当通过引用传递时，不会对值类型装箱
 
-```C#
+```CSharp
 void Method(ref int refArgument)
 {
     refArgument = refArgument + 44;
@@ -103,7 +103,7 @@ Console.WriteLine(number);
 
 ## 引用返回值
 
-```C#
+```CSharp
 public static ref int Find(int[,] matrix, Func<int, bool> predicate)
 {
     for (int i = 0; i < matrix.GetLength(0); i++)
@@ -121,13 +121,13 @@ public static ref int Find(int[,] matrix, Func<int, bool> predicate)
 ## ref 局部变量
 
 ref 局部变量用于指代使用 return ref 返回的值
-```C#
+```CSharp
 ref decimal estValue = ref Find(matrix, predicate);
 ```
 所以调用上面返回引用的方法就需要这个.
 
 也可以直接转化为临时引用对象
-```C#
+```CSharp
 ref VeryLargeStruct reflocal = ref veryLargeStruct;
 ```
 
@@ -146,7 +146,7 @@ ref VeryLargeStruct reflocal = ref veryLargeStruct;
 `out`与 `ref` 关键字相似，只不过 `ref` 要求在传递之前初始化变量  
 作为 `out` 参数传递的变量在方法调用中传递之前不必进行初始化。 但是被调用的方法需要在返回之前赋一个值
 
-```C#
+```CSharp
 int initializeInMethod;
 OutArgExample(out initializeInMethod);
 Console.WriteLine(initializeInMethod);     // value is now 44
@@ -163,7 +163,7 @@ void OutArgExample(out int number)
 
 从 `C# 7.0` 开始，可以在方法调用的参数列表而不是单独的变量声明中声明 `out` 变量
 
-```C#
+```CSharp
 Int32.TryParse(numberAsString, out int number)
 Int32.TryParse(numberAsString, out var number) //var也可以
 ```

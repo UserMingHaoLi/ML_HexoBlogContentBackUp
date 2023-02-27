@@ -26,7 +26,7 @@ C#编程指南,内容来自 [Microsoft官方文档][csharpDoc_Link]
 但是`Main`方法并没有任何额外的元数据,所以编译器要求每个应用程序只能拥有一入口.  
 
 *以下版本的`Main`都被视为入口*
-```C#
+```CSharp
 static void Main() {...}
 
 static void Main(string[] args) {...}

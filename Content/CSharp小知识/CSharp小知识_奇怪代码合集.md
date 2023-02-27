@@ -17,7 +17,7 @@ tags:
 <!--more-->
 
 # 从死循环中退出
-```C#
+```CSharp
  static void Main(string[] args)
 {
 	 var thread = new Thread(Foo);
@@ -45,7 +45,7 @@ private static void Foo()
 
 # 从null强转出一个类
 
-```C#
+```CSharp
 static void Main(string[] args)
 {
 	Foo foo = (IFoo) null;
@@ -72,7 +72,7 @@ class Foo
 
 # 等待不存在的类
 
-```C#
+```CSharp
 class Program
 {
 	static async Task Main(string[] args)
@@ -114,7 +114,7 @@ public static class RelelnisSou
 *为要等待的类型编写扩展函数,此函数的返回值需要拥有`await`要求的三个成员.*
 
 如下也是成立的
-```C#
+```CSharp
 await await await await await await await await await await await await
 await await await await await await await "String";
 ```
@@ -122,7 +122,7 @@ await await await await await await await "String";
 
 # 如何不执行 finally 里面的代码
 
-```C#
+```CSharp
 try
 {
 	Foo();
@@ -134,7 +134,7 @@ finally
 ```
 
 可以使用强制退出,堆栈溢出,不安全代码申请,干掉自己进程
-```C#
+```CSharp
 Environment.Exit(0);
 //---
 private static void Foo()
@@ -151,7 +151,7 @@ Process.GetCurrentProcess().Kill();
 ```
 但是直接申请大内存和退出当前线程方法都会让 finally 执行
 
-```C#
+```CSharp
 var n = new int[int.MaxValue];
 //提示内存不够，但是finally依然可以运行
 //---
@@ -161,14 +161,14 @@ Thread.CurrentThread.Abort();
 
 # 无限级判断空
 
-```C#
+```CSharp
 var v1 = "123";
 string v2 = null;
 string v3 = null;
 var v = v1 ?? v2 ?? v3;
 ```
 
-```C#
+```CSharp
 var n = 2 + foo?.N ?? 1;
 ```
 *为空时如何求值?*
@@ -176,7 +176,7 @@ var n = 2 + foo?.N ?? 1;
 按照优先级转化后如下`(2 + foo?.N) ?? 1`  
 如果`foo`为`null`,则前半段不会运行, 等同于如下代码
 
-```C#
+```CSharp
 if (foo == null)
 {
 	n = 1;
@@ -189,7 +189,7 @@ else
 
 > 实际上还是算了结果,只是被丢弃了
 
-```C#
+```CSharp
 class Foo
 {
 	public int N
@@ -212,19 +212,19 @@ static void Main()
 ```
 
 `null 合并运算符`是右结合运算符。 也就是说，是窗体的表达式
-```C#
+```CSharp
 a ?? b ?? c
 d ??= e ??= f
 ```
 结果
-```C#
+```CSharp
 a ?? (b ?? c)
 d ??= (e ??= f)
 ```
 
 又因为`+`的优先级大于`??`  
 所以
-```C#
+```CSharp
 var n = (2 + foo?.N) + (foo2.N ?? 1);//0+1
 ```
 
@@ -235,7 +235,7 @@ var n = (2 + foo?.N) + (foo2.N ?? 1);//0+1
 
 # 模式匹配
 
-```C#
+```CSharp
 class B
 {
 public static int operator &(B left, B right) => 1;
@@ -273,7 +273,7 @@ static void Main(string[] args)
 
 # 使用 using 关键词省略长的定义
 
-```C#
+```CSharp
 using HvcnrclHnlfk = System.Collections.Generic.Dictionary<System.Collections.Generic.List<System.Collections.Generic.List<string>>,string>;
 var foo = new HvcnrclHnlfk();
 ```
@@ -281,7 +281,7 @@ var foo = new HvcnrclHnlfk();
 
 # Lambda 嵌套
 
-```C#
+```CSharp
 Func<string,string, EventHandler> foo = (x, y) => (s, e) =>
 {
 	var button = (Button) s;
@@ -294,12 +294,12 @@ Button1.Click += foo(0, -1);
 *这里一个委托返回另一个委托
 
 另外,如下是一个委托加减法
-```C#
+```CSharp
 ((a + b + c) - (a + c))();
 ```
 此式子结果依赖于`ac`是否等同于`ab`或者`bc`. 如果可以等同,则减法生效, 否则使用左侧式子.
 
-```C#
+```CSharp
 static int nd = 1;
 public static void Add(int n)
 {
@@ -319,7 +319,7 @@ Action<int> c = (a) => Add(a);
 
 ## 委托组合
 
-```C#
+```CSharp
 Action a = () => Console.Write("a");
 Action b = () => Console.Write("b");
 Action ab = a + b;
@@ -334,7 +334,7 @@ ab();  // output: ab
 
 如果删除行为导致出现空列表，则结果为 `null`
 
-```C#
+```CSharp
 Action a = () => Console.Write("a");
 Action b = () => Console.Write("b");
 
@@ -352,7 +352,7 @@ Console.WriteLine(nihil is null);  // output: True
 ```
 
 如果右侧操作数的调用列表不是左侧操作数调用列表的正确连续子列表，则该操作的结果是左侧操作数。 例如，删除不属于多播委托的委托不会执行任何操作，从而导致不变的多播委托
-```C#
+```CSharp
 Action a = () => Console.Write("a");
 Action b = () => Console.Write("b");
 
@@ -375,7 +375,7 @@ Console.WriteLine(object.ReferenceEquals(aba, unchanged));  // output: True
 ```
 
 如果左侧操作数为 null，则操作结果为 null。 如果右侧操作数为 null，则操作的结果是左侧操作数
-```C#
+```CSharp
 Action a = () => Console.Write("a");
 
 var nothing = null - a;
@@ -391,7 +391,7 @@ Console.WriteLine(object.ReferenceEquals(first, a));  // output: True
 
 一样是使用别名
 
-```C#
+```CSharp
 using web = System.Web.UI.WebControls;
 using win = System.Windows.Forms;
 web::Control webControl = new web::Control();
@@ -402,7 +402,7 @@ win::Control formControl = new win::Control();
 
 也是为了解决命名冲突
 
-```C#
+```CSharp
 //a.dll
 
 namespace F
@@ -426,7 +426,7 @@ namespace F
 
 使用编辑器指令`csc /r:Gva=a.dll /r:Gvb=b.dll mygrid.cs`
 
-```C#
+```CSharp
 extern alias Gva;
 
 extern alias Gvb;
@@ -440,7 +440,7 @@ Gvb::F.Foo …
 
 这样值公用内存
 
-```C#
+```CSharp
 [StructLayout(LayoutKind.Explicit)]
 public class A
 {
@@ -485,13 +485,13 @@ C#支持在接口中使用默认方法,以便更新接口,不需要使用者强�
 
 不安全代码，从栈申请空间
 
-```C#
+```CSharp
 int* block = stackalloc int[100]; 
 ```
 
 # 指定编译
 
-```C#
+```CSharp
 [Conditional("DEBUG")]
 public void F2()
 {
@@ -504,7 +504,7 @@ public void F2()
 
 可以重写`true`和`falase`
 
-```C#
+```CSharp
 public static bool operator true(Foo mt)
 {
 	return mt._count > 0;
@@ -520,7 +520,7 @@ public static bool operator false(Foo mt)
 
 重写`==`可以更改返回类型,不一定要返回bool
 
-```C#
+```CSharp
 public static string operator !=(Foo f1, Foo f2)
 {
 	return "";
@@ -530,7 +530,7 @@ public static string operator !=(Foo f1, Foo f2)
 # 变量名使用中文
 
 实际上支持所有`Unicode 字符`
-```C#
+```CSharp
 public string H\u00e5rføner()
 {
 	return "可以编译";
@@ -541,7 +541,7 @@ public string H\u00e5rføner()
 
 表达式树功能很强大
 
-```C#
+```CSharp
 static void Main(string[] args)
 {
 	GetMethodName<Foo>(foo => foo.KzcSevfio());
@@ -560,7 +560,7 @@ private static void GetMethodName<T>(Expression<Action<T>> action) where T : cla
 
 重写`ToString`可以让你获得更多调试信息,但有时候`ToString`已用作别处,所以需要`DebuggerDisplay`
 
-```C#
+```CSharp
 [DebuggerDisplay("{DebuggerDisplay}")]
 public sealed class Foo
 {
@@ -574,7 +574,7 @@ public sealed class Foo
 
 实际上这些是微软定义的一些格式,你自己也可以通过接口实现这些.
 
-```C#
+```CSharp
 string format = "000;-#;(0)";
 
 string pos = 1.ToString(format);     // 001
@@ -584,7 +584,7 @@ string zer = 0.ToString(format);     // (0)
 
 # 调用堆栈
 
-```C#
+```CSharp
 var stackTrace = new StackTrace();
 var n = stackTrace.FrameCount;
 for (int i = 0; i < n; i++)
@@ -595,7 +595,7 @@ for (int i = 0; i < n; i++)
 
 # 在 try 和 finally 抛异常会发生什么
 
-```C#
+```CSharp
 try
 {
 	throw new ArgumentException("lindexi is doubi");
@@ -609,7 +609,7 @@ finally
 
 # 如果在构造函数抛出异常 析构函数是否会执行
 
-```C#
+```CSharp
 class Foo
 {
 	public Foo()
@@ -629,7 +629,7 @@ class Foo
 
 # 泛基
 
-```C#
+```CSharp
 public abstract class MyBase<T> where T :MyBase <T>
 {
 
@@ -667,7 +667,7 @@ public class MyClass:MyBase<MyClass>
 
 # 左值条件运算符（C# 7）
 
-```C#
+```CSharp
 int a = 2, b = 3, c = default, d = default;
 (a > b ? ref c : ref d) = 1;
 ```
@@ -676,11 +676,11 @@ int a = 2, b = 3, c = default, d = default;
 
 # 复合空合赋值运算符 ??= （C# 8）
 
-```C#
+```CSharp
 a ??= b
 ```
 *等同于 `a = a ?? b`*
-```C#
+```CSharp
 if (a is null)
 {
     a = b;
@@ -689,7 +689,7 @@ if (a is null)
 
 # true switch 表达式（C# 8）
 
-```C#
+```CSharp
 int b = 36;
 int a = true switch
 {
@@ -704,7 +704,7 @@ int a = true switch
 
 # 传递的弃元（C# 7）
 
-```C#
+```CSharp
 int a = 3, b;
 b = _ = _ = _ = _ = _ = a;
 ```
@@ -712,7 +712,7 @@ b = _ = _ = _ = _ = _ = a;
 
 # __arglist 关键字兼容早期编程语言的可变长参数序列
 
-```C#
+```CSharp
 [DllImport(...)]
 static int printf(string format, __arglist);
 ```
@@ -720,7 +720,7 @@ static int printf(string format, __arglist);
 
 # 扩展方法还可以引用传递
 
-```C#
+```CSharp
 static void Flip(this ref bool @this)
 {
     @this = !@this;
@@ -736,7 +736,7 @@ static void Flip(this ref bool @this)
 
 自己用但不给别人用的接口
 
-```C#
+```CSharp
 internal interface IInternalSomething : ISomething
 {
     string GetDebugString();
@@ -751,7 +751,7 @@ public class A : IInternalSomething
 
 # 一个异步流
 
-```C#
+```CSharp
 作者：「已注销」
 链接：https://www.zhihu.com/question/27421302/answer/99752969
 来源：知乎
@@ -790,7 +790,7 @@ private static void ProcessData()
 
 # GC.GetAllocatedBytesForCurrentThread
 
-```C#
+```CSharp
 var beforeAllocatedBytesForCurrentThread = GC.GetAllocatedBytesForCurrentThread();
 var invocationList = action.GetInvocationList();
 var afterAllocatedBytesForCurrentThread = GC.GetAllocatedBytesForCurrentThread();

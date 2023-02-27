@@ -32,7 +32,7 @@ tags:
 ## if-else
 
 `if` 语句基于布尔表达式的值来识别运行哪个语句
-```C#
+```CSharp
 bool condition = true;
 if (condition)
 {
@@ -51,7 +51,7 @@ else
 
 `switch` 是一个选择语句，它根据与匹配表达式匹配的模式，从候选列表中选择单个开关部分进行执行  
 当选项较多时,`switch` 语句通常用作 `if-else` 构造的替代项
-```C#
+```CSharp
 int caseSwitch = 1;
 switch (caseSwitch)
 {
@@ -72,7 +72,7 @@ switch (caseSwitch)
 * 在`case`语句没有内容,而是后紧跟其他case语句
 * 使用`goto`关键字
 
-```C#
+```CSharp
 switch (caseSwitch)
 {
     case 1:
@@ -101,7 +101,7 @@ switch (caseSwitch)
 
 注意下面这种泛型用法
 
-```C#
+```CSharp
 private static void ShowCollectionInformation<T>(T coll)
 {
 	switch (coll)
@@ -138,7 +138,7 @@ private static void ShowCollectionInformation<T>(T coll)
 指定的布尔表达式的计算结果为 `true` 时，`do` 语句会执行  
 在进行这次判断之前,`do`最少执行一次. 所以表达式写在尾部
 
-```C#
+```CSharp
 int n = 0;
 do
 {
@@ -151,7 +151,7 @@ do
 
 在指定的布尔表达式的计算结果为 `true` 时，`for` 语句会执行
 
-```C#
+```CSharp
 for (int i = 0; i < 5; i++)
 {
     Console.WriteLine(i);
@@ -172,7 +172,7 @@ for (int i = 0; i < 5; i++)
 `条件`部分（如果存在）必须为布尔表达式 。 在每次循环迭代前计算该表达式。 如果“条件”部分不存在或者布尔表达式的计算结果为 `true`，则执行下一个循环迭代；否则退出循环
 
 *所以可以不存在,那就是等同于`true`,也就是死循环*
-```C#
+```CSharp
 for (int i = 0; ; i++)
 {
 	Console.WriteLine(i);
@@ -187,7 +187,7 @@ for (int i = 0; ; i++)
 
 以下示例定义无限 `for` 循环, 但是不推荐这样使用,建议使用显示的`true`
 
-```C#
+```CSharp
 for ( ; ; )
 {
     // Body of the loop.
@@ -198,7 +198,7 @@ for ( ; ; )
 
 `foreach` 语句为类型实例中实现 `System.Collections.IEnumerable` 或 `System.Collections.Generic.IEnumerable<T>` 接口的每个元素执行
 
-```C#
+```CSharp
 var fibNumbers = new List<int> { 0, 1, 1, 2, 3, 5, 8, 13 };
 int count = 0;
 foreach (int element in fibNumbers)
@@ -217,7 +217,7 @@ Console.WriteLine($"Number of elements: {count}");
 *从 `C# 7.3` 开始，如果枚举器的 `Current` 属性返回引用返回值（`ref T`，其中 `T` 为集合元素类型），就可以使用 `ref` 或 `ref readonly` 修饰符来声明迭代变量*
 
 *从 `C# 8.0` 开始，可以使用 `await foreach` 语句来使用异步数据流，即实现 `IAsyncEnumerable<T>` 接口的集合类型。 异步检索下一个元素时，可能会挂起循环的每次迭代。 下面的示例演示如何使用 `await foreach` 语句*
-```C#
+```CSharp
 await foreach (var item in GenerateSequenceAsync())
 {
     Console.WriteLine(item);
@@ -232,7 +232,7 @@ await foreach (var item in GenerateSequenceAsync())
 # while
 
 在指定的布尔表达式的计算结果为 `true` 时，`while` 语句会执行
-```C#
+```CSharp
 int n = 0;
 while (n < 5)
 {
@@ -249,7 +249,7 @@ while (n < 5)
 `break` 语句将终止其所在位置的最接近封闭循环或 `switch` 语句。 控制权将传递给已终止语句后面的语句（若有）
 
 打断`for`
-```C#
+```CSharp
 for (int i = 1; i <= 100; i++)
 {
 	if (i == 5)
@@ -262,7 +262,7 @@ for (int i = 1; i <= 100; i++)
 *同理可应用至任何迭代语句*
 
 打断`case`.
-```C#
+```CSharp
 switch (n)
 {
 	case 1:
@@ -285,7 +285,7 @@ switch (n)
 
 `continue` 语句将控制传递到其中出现的封闭 `while`、`do`、`for` 或 `foreach` 语句的下一次迭代
 
-```C#
+```CSharp
 for (int i = 1; i <= 10; i++)
 {
 	if (i < 9)
@@ -301,7 +301,7 @@ for (int i = 1; i <= 10; i++)
 
 `goto` 语句将程序控制直接传递给标记语句
 
-```C#
+```CSharp
 switch (n)
 {
 	case 1:
@@ -321,7 +321,7 @@ switch (n)
 
 也可以自定义标签,随意跳转
 
-```C#
+```CSharp
 for (int i = 0; i < x; i++)
 {
 	for (int j = 0; j < y; j++)
@@ -347,7 +347,7 @@ Console.WriteLine("End of search.");
 
 `return` 语句可终止它所在的方法的执行，并将控制权返回给调用方法。 它还可以返回可选值。 如果方法是 `void` 类型，则 `return` 语句可以省略
 
-```C#
+```CSharp
 static double CalculateArea(int r)
 {
 	double area = r * r * Math.PI;
@@ -361,7 +361,7 @@ static double CalculateArea(int r)
 
 发出程序执行期间出现异常的信号
 
-```C#
+```CSharp
 throw new IndexOutOfRangeException();
 ```
 *可抛出任何派生自 `System.Exception` 的类的实例*
@@ -370,19 +370,19 @@ throw new IndexOutOfRangeException();
 
 ### 条件运算符
 
-```C#
+```CSharp
  string arg = args.Length >= 1 ? args[0] : throw new ArgumentException("You must supply an argument");
 ```
 
 ### null 合并运算符
 
-```C#
+```CSharp
 name = value ?? throw new ArgumentNullException(paramName: nameof(value), message: "Name cannot be null");
 ```
 
 ### expression-bodied lambda 或方法
 
-```C#
+```CSharp
 DateTime ToDateTime(IFormatProvider provider) => throw new InvalidCastException("Conversion to a DateTime is not supported.");
 ```
 
@@ -392,7 +392,7 @@ DateTime ToDateTime(IFormatProvider provider) => throw new InvalidCastException(
 
 运行在`try`中的语句引发的异常将被捕获
 
-```C#
+```CSharp
 object o2 = null;
 try
 {
@@ -405,7 +405,7 @@ try
 ### catch
 
 由`try`捕获的异常,将交由`catch`处理.
-```C#
+```CSharp
 object o2 = null;
 try
 {
@@ -430,7 +430,7 @@ catch (Exception e)
 
 也可以使用异常筛选器进一步检查该异常以决定是否要对其进行处理。 如果异常筛选器返回 `false`，则继续搜索处理程序
 
-```C#
+```CSharp
 catch (ArgumentException e) when (e.ParamName == "…")
 {
 }
@@ -440,7 +440,7 @@ catch (ArgumentException e) when (e.ParamName == "…")
 
 你可以捕获一个异常而引发一个不同的异常。 执行此操作时，请指定作为内部异常捕获的异常，如以下示例所示
 
-```C#
+```CSharp
 catch (InvalidCastException e)
 {
     // Perform some action here, and then throw a new exception.
@@ -450,7 +450,7 @@ catch (InvalidCastException e)
 
 对于异步的异常处理
 
-```C#
+```CSharp
 public async Task DoMultipleAsync()
 {
     Task theTask1 = ExcAsync(info: "First Task");
@@ -488,7 +488,7 @@ private async Task ExcAsync(string info)
 
 通常情况下，`finally` 块的语句会在控件离开 `try` 语句时运行。 正常执行中，执行 `break`、`continue`、`goto` 或 `return` 语句，或者从 `try` 语句外传播异常都可能会导致发生控件转换
 
-```C#
+```CSharp
 finally
 {
 	// To run the program in Visual Studio, type CTRL+F5. Then
@@ -502,7 +502,7 @@ finally
 
 **合并使用如下**
 
-```C#
+```CSharp
 string path = @"c:\users\public\test.txt";
 System.IO.StreamReader file = new System.IO.StreamReader(path);
 char[] buffer = new char[10];
@@ -546,7 +546,7 @@ C# 语句既可以在已检查的上下文中执行，也可以在未检查的�
 默认情况下，如果表达式仅包含常量值，且产生的值在目标类型范围之外，则会导致编译器错误  
 如果表达式包含一个或多个非常量值，则编译器不检测溢出
 
-```C#
+```CSharp
 int ten = 10;
 int i2 = 2147483647 + ten;//不会报错
 Console.WriteLine(i2);//-2,147,483,639 //溢出了
@@ -554,7 +554,7 @@ Console.WriteLine(i2);//-2,147,483,639 //溢出了
 
 使用关键字来强制检查
 
-```C#
+```CSharp
 checked
 {
     int i3 = 2147483647 + ten;
@@ -566,7 +566,7 @@ checked
 
 同理,就是强制不检查
 
-```C#
+```CSharp
 unchecked
 {
     int1 = 2147483647 + 10;//不会报错
@@ -586,7 +586,7 @@ unchecked
 持有 `lock` 时，持有 `lock` 的线程可以再次获取并释放 `lock`.  
 且阻止任何其他线程获取 `lock` 并等待释放 `lock`
 
-```C#
+```CSharp
 lock (x)
 {
     // Your code...
@@ -595,7 +595,7 @@ lock (x)
 
 其中 `x` 是引用类型的表达式, 它完全等同于
 
-```C#
+```CSharp
 object __lockObj = x;
 bool __lockWasTaken = false;
 try

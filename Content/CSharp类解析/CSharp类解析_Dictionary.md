@@ -12,7 +12,7 @@ tags:
 	- CSharp
 ---
 
-```C#
+```CSharp
 private struct Entry {
 	public int hashCode;    // Lower 31 bits of hash code, -1 if unused
 	public int next;        // Index of next entry, -1 if last
@@ -22,7 +22,7 @@ private struct Entry {
 ```
 *每个Item*
 
-```C#
+```CSharp
 private int[] buckets;
 private Entry[] entries;
 private int count;
@@ -39,11 +39,11 @@ private Object _syncRoot;
 <!--more-->
 
 # 构造
-```C#
+```CSharp
 this.comparer = comparer ?? EqualityComparer<TKey>.Default;
 ```
 内容如下
-```C#
+```CSharp
  static readonly EqualityComparer<T> defaultComparer = CreateComparer();
  
 public static EqualityComparer<T> Default {
@@ -101,7 +101,7 @@ public static EqualityComparer<T> Default {
 *注意`T`为`Tkey`,且对整形值类型有特殊优化*
 
 `ObjectEqualityComparer`,可见继承了`EqualityComparer`
-```C#
+```CSharp
 internal class ObjectEqualityComparer<T>: EqualityComparer<T>
 {
 [Pure]
@@ -164,7 +164,7 @@ public override int GetHashCode() {
 
 # Count Keys Values
 
-```C#
+```CSharp
 public int Count {
 	get { return count - freeCount; }
 }
@@ -187,7 +187,7 @@ public ValueCollection Values {
 
 # Add Insert
 
-```C#
+```CSharp
 public void Add(TKey key, TValue value) {
 	Insert(key, value, true);
 }
@@ -287,7 +287,7 @@ private void Insert(TKey key, TValue value, bool add) {
 
 最后,使用以下数列内容作为初始容量.可略微节省性能(算素数有开销)
 
-```C#
+```CSharp
 public static readonly int[] primes = {
 		3, 7, 11, 17, 23, 29, 37, 47, 59, 71, 89, 107, 131, 163, 197, 239, 293, 353, 431, 521, 631, 761, 919,
 		1103, 1327, 1597, 1931, 2333, 2801, 3371, 4049, 4861, 5839, 7013, 8419, 10103, 12143, 14591,
@@ -296,7 +296,7 @@ public static readonly int[] primes = {
 		1674319, 2009191, 2411033, 2893249, 3471899, 4166287, 4999559, 5999471, 7199369};
 ```
 
-```C#
+```CSharp
 for (int i = (min | 1); i < Int32.MaxValue;i+=2) 
 {
 	if (IsPrime(i) && ((i - 1) % Hashtable.HashPrime != 0))

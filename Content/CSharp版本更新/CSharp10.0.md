@@ -54,7 +54,7 @@ tags:
 
 # 文件范围的命名空间声明
 
-```C#
+```CSharp
 namespace MyNamespace;
 ```
 
@@ -64,19 +64,19 @@ namespace MyNamespace;
 
 从 `C# 10` 开始，可引用属性模式中嵌套的属性或字段
 
-```C#
+```CSharp
 { Prop1.Prop2: pattern }
 ```
 
 在 `C# 10` 及更高版本中有效，且其等效项
 
-```C#
+```CSharp
 { Prop1: { Prop2: pattern } }
 ```
 
 # Lambda 表达式改进
 
-```C#
+```CSharp
 var parse = (string s) => int.Parse(s);
 ```
 
@@ -103,7 +103,7 @@ var parse = (string s) => int.Parse(s);
 
 此更改取消了早期 C# 版本中的限制。 以前，析构可以将所有值赋给现有变量，或将新声明的变量初始化：
 
-```C#
+```CSharp
 // Initialization:
 (int x, int y) = point;
 
@@ -114,7 +114,7 @@ int y1 = 0;
 ```
 
 `C# 10` 取消了此限制：
-```C#
+```CSharp
 int x = 0;
 (x, int y) = point;
 ```
@@ -129,7 +129,7 @@ int x = 0;
 
 如果条件为 `false`，则异常消息包含传递给 `condition` 的参数的文本表示形式：
 
-```C#
+```CSharp
 public static void Validate(bool condition, [CallerArgumentExpression("condition")] string? message=null)
 {
     if (!condition)

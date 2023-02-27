@@ -43,7 +43,7 @@ in 参数作为托管引用传递，并具有来自被调用方的其他保证
 
 声明 ref readonly 返回成员
 
-```C#
+```CSharp
 public ref readonly T ItemRef(int i)
 {
 	return ref this.array[i];
@@ -53,7 +53,7 @@ public ref readonly T ItemRef(int i)
 
 # 只读结构
 
-```C#
+```CSharp
 readonly struct Vector3
 {
 }
@@ -61,7 +61,7 @@ readonly struct Vector3
 
 # ref/in 扩展方法
 
-```C#
+```CSharp
 // this can be called on either RValue or an LValue
 public static void Reader(in this Guid self)
 {
@@ -79,7 +79,7 @@ public static void Mutator(ref this Guid self)
 
 # Readonly 引用局部变量
 
-```C#
+```CSharp
 static readonly ref Vector3 M1() => . . .
 
 static readonly ref Vector3 M1_Trace()
@@ -103,11 +103,11 @@ static readonly ref Vector3 M1_Trace()
 
 # 三元 ref 表达式
 
-```C#
+```CSharp
 ref var r = ref Choice(arr != null, ref arr[0], ref otherArr[0]);
 ```
 
-```C#
+```CSharp
 ref T Choice(bool condition, ref T consequence, ref T alternative)
 {
     if (condition)

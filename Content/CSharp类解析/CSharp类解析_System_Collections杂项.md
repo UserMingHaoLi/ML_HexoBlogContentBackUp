@@ -25,7 +25,7 @@ tags:
 
 `true`和`false`的数组
 
-```C#
+```CSharp
 BitArray myBA1 = new BitArray( 5 );
 ```
 
@@ -45,7 +45,7 @@ BitArray myBA1 = new BitArray( 5 );
 
 > 不建议使用 `CaseInsensitiveHashCodeProvider` 类进行新的开发,具体同上.
 
-```C#
+```CSharp
 Hashtable myHT2 = new Hashtable( new CaseInsensitiveHashCodeProvider(), new CaseInsensitiveComparer() );
 ```
 
@@ -53,7 +53,7 @@ Hashtable myHT2 = new Hashtable( new CaseInsensitiveHashCodeProvider(), new Case
 
 提供强类型集合的 `abstract` 基类
 
-```C#
+```CSharp
 //派生
 System.CodeDom.CodeAttributeArgumentCollection
 System.CodeDom.CodeAttributeDeclarationCollection
@@ -68,7 +68,7 @@ System.CodeDom.CodeDirectiveCollection
 
 比较两个对象是否相等，其中字符串比较是区分大小写的
 
-```C#
+```CSharp
 Comparer.DefaultInvariant.Compare( str1, str2 )
 ```
 
@@ -81,7 +81,7 @@ Comparer.DefaultInvariant.Compare( str1, str2 )
 
 为键/值对的强类型集合提供 `abstract` 基类
 
-```C#
+```CSharp
 //派生
 System.Diagnostics.InstanceDataCollection
 System.Diagnostics.InstanceDataCollectionCollection
@@ -94,7 +94,7 @@ System.DirectoryServices.ResultPropertyCollection
 
 可设置或检索的字典键/值对
 
-```C#
+```CSharp
 foreach (DictionaryEntry de in openWith)
 ```
 
@@ -111,14 +111,14 @@ foreach (DictionaryEntry de in openWith)
 当前`HashTable`中的被占用空间达到一个百分比的时候就将该空间自动扩容，在`.net`中这个百分比是72%.  
 且初始大小为3
 
-```C#
+```CSharp
 private const Int32 InitialSize = 3;
 this.loadFactor = 0.72f * loadFactor;
 ```
 
 然后比较用的是`0x7FFFFFFF`
 
-```C#
+```CSharp
 if (((b.hash_coll &  0x7FFFFFFF) == hashcode) && 
 			KeyEquals (b.key, key))
 			return true;
@@ -130,7 +130,7 @@ if (((b.hash_coll &  0x7FFFFFFF) == hashcode) &&
 
 注意Add是`Object`类型的,值类型难免装箱拆箱
 
-```C#
+```CSharp
 public virtual void Add(Object key, Object value) {
 	Insert(key, value, true);
 }

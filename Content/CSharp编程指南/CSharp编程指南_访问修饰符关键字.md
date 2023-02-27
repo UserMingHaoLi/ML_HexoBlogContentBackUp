@@ -51,7 +51,7 @@ tags:
 
 公共访问是允许的最高访问级别。 对访问公共成员没有限制
 
-```C#
+```CSharp
 class PointTest
 {
     public int x;
@@ -77,7 +77,7 @@ class Program
 受保护成员在其所在的类中可由派生类实例访问  
 也就是说除了自己类可以访问外,派生类也可以访问,其他类则不能访问
 
-```C#
+```CSharp
 class A
 {
     protected int x = 123;
@@ -105,7 +105,7 @@ class B : A
 内部访问通常用于基于组件的开发,因为它可使一组组件以私有方式进行协作,而不必向应用程序代码的其余部分公开
 
 *以下实例演示了其作用*
-```C#
+```CSharp
 //Assembly1
 internal class BaseClass1
 {  
@@ -140,7 +140,7 @@ public class TestAccess
 在声明私有成员的类或结构外引用它会导致编译时错误
 
 *以下实例演示了其作用*
-```C#
+```CSharp
 //外界只能访问 GetName() 和 Salary
 class Employee2
 {
@@ -178,7 +178,7 @@ class PrivateTest
 
 结构成员不能为 `protected internal`，因为无法继承结构
 
-```C#
+```CSharp
 // Assembly1
 public class BaseClass
 {
@@ -214,7 +214,7 @@ class DerivedClass : BaseClass
 仅派生自包含类的类型可访问私有受保护成员，但仅能在其包含程序集中访问  
 `private protected` 访问修饰符在 C# 版本 7.2 及更高版本中有效
 
-```C#
+```CSharp
 // Assembly1
 public class BaseClass
 {

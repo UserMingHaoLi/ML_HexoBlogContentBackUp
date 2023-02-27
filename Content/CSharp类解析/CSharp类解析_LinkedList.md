@@ -20,7 +20,7 @@ tags:
 
 # 首先是定义
 
-```C#
+```CSharp
 internal LinkedListNode<T> head;
 internal int count;
 internal int version;
@@ -28,7 +28,7 @@ private Object _syncRoot;
 ```
 *基本的,表头,数量,版本号*
 
-```C#
+```CSharp
 public int Count {
 	get { return count;}
 }
@@ -49,7 +49,7 @@ bool ICollection<T>.IsReadOnly {
 
 # 构造函数
 
-```C#
+```CSharp
 public LinkedList() {
 }
 
@@ -72,14 +72,14 @@ protected LinkedList(SerializationInfo info, StreamingContext context) {
 
 # Add
 
-```C#
+```CSharp
 void ICollection<T>.Add(T value) {
 	AddLast(value);
 }
 ```
 *就是调了个` AddLast(value)`
 
-```C#
+```CSharp
 public LinkedListNode<T> AddAfter(LinkedListNode<T> node, T value) {
 	ValidateNode(node);
 	LinkedListNode<T> result = new LinkedListNode<T>(node.list, value); 
@@ -168,7 +168,7 @@ public void AddLast(LinkedListNode<T> node) {
 
 # Clear
 
-```C#
+```CSharp
 public void Clear() {
 	LinkedListNode<T> current = head;             
 	while (current != null ) {
@@ -186,7 +186,7 @@ public void Clear() {
 
 # CopyTo
 
-```C#
+```CSharp
 public void CopyTo( T[] array, int index) {
 	if (array == null) {
 		throw new ArgumentNullException("array");
@@ -213,7 +213,7 @@ public void CopyTo( T[] array, int index) {
 
 # Contains 和 Find
 
-```C#
+```CSharp
 public bool Contains(T value) {
 	return Find(value) != null;    
 }
@@ -248,7 +248,7 @@ public LinkedListNode<T> Find(T value) {
 > 注意,这里使用了`EqualityComparer<T>.Default`作为比较器.
 
 这个比较器长成这样
-```C#
+```CSharp
 public override bool Equals(T x, T y) {
 	if (x != null) {
 		if (y != null) return x.Equals(y);
@@ -262,7 +262,7 @@ public override bool Equals(T x, T y) {
 # GetEnumerator
 
 *经典两件套,内部类就不重复展示了*
-```C#
+```CSharp
 public Enumerator GetEnumerator() {
 	return new Enumerator(this);
 }
@@ -274,7 +274,7 @@ IEnumerator<T> IEnumerable<T>.GetEnumerator() {
 
 # Remove
 
-```C#
+```CSharp
 public bool Remove(T value) {
 	LinkedListNode<T> node = Find(value);
 	if (node != null) {
@@ -307,7 +307,7 @@ public void RemoveLast() {
 
 终于到数据操作部分了.
 
-```C#
+```CSharp
 private void InternalInsertNodeBefore(LinkedListNode<T> node, LinkedListNode<T> newNode) {
 	newNode.next = node;
 	newNode.prev = node.prev;
@@ -348,7 +348,7 @@ internal void InternalRemoveNode(LinkedListNode<T> node) {
 
 # Validate
 
-```C#
+```CSharp
 internal void ValidateNewNode(LinkedListNode<T> node) {
 	if (node == null) {
 		throw new ArgumentNullException("node");                
@@ -375,7 +375,7 @@ internal void ValidateNode(LinkedListNode<T> node) {
 
 # ICollection.CopyTo
 
-```C#
+```CSharp
 void System.Collections.ICollection.CopyTo(Array  array, int index) {
 	if (array == null) {
 		throw new ArgumentNullException("array");
@@ -438,7 +438,7 @@ void System.Collections.ICollection.CopyTo(Array  array, int index) {
 # LinkedListNode
 
 *每个节点*
-```C#
+```CSharp
 [System.Runtime.InteropServices.ComVisible(false)] 
 public sealed class LinkedListNode<T> {
 	internal LinkedList<T> list;

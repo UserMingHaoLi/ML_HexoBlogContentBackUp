@@ -41,12 +41,12 @@ tags:
 * #else：关闭前面的条件编译，如果没有定义前面指定的符号，打开一个新的条件编译。
 * #endif：关闭前面的条件编译。
 
-```C#
+```CSharp
 #if DEBUG
     Console.WriteLine("Debug version");
 #endif
 ```
-```C#
+```CSharp
 #define VC7
 //...
 #if debug
@@ -62,7 +62,7 @@ tags:
 * #define：定义符号。
 * #undef：取消定义符号。
 
-```C#
+```CSharp
 #define VERBOSE
 
 #if VERBOSE
@@ -87,7 +87,7 @@ tags:
 
 #error 可从代码中的特定位置生成 CS1029 用户定义的错误。 例如
 
-```C#
+```CSharp
 #error Deprecated code in this method.
 ```
 
@@ -95,7 +95,7 @@ tags:
 
 `#line 200` 指令将下一行的行号强制设为 200（尽管默认值为 #6）；在执行下一个 `#line` 指令前，文件名都会报告为“特殊”。 `#line default` 指令将行号恢复至默认行号，这会对上一指令重新编号的行进行计数。
 
-```C#
+```CSharp
 class MainClass
 {
     static void Main()
@@ -117,7 +117,7 @@ class MainClass
 
 #line filename 指令可指定要在编译器输出中显示的文件名
 
-```C#
+```CSharp
 // preprocessor_linehidden.cs
 using System;
 class MainClass
@@ -140,7 +140,7 @@ class MainClass
 * #pragma warning：启用或禁用警告。
 * #pragma checksum：生成校验和。
 
-```C#
+```CSharp
 #pragma pragma-name pragma-arguments
 ```
 

@@ -46,7 +46,7 @@ tags:
 
 # Equals
 
-```C#
+```CSharp
 public virtual bool Equals(Object obj)
 {
 	return RuntimeHelpers.Equals(this, obj);
@@ -59,7 +59,7 @@ public new static extern bool Equals(Object o1, Object o2);
 ```
 
 使用object的比较可能产生额外性能开销,建议使用
-```C#
+```CSharp
 interface IEquatable<T>
 ```
 *不过并不能确认外部调用了那个`Equals`,所以还是要重写`Object`的`Equals`*
@@ -75,7 +75,7 @@ interface IEquatable<T>
 例如，对象的值 `String` 基于字符串的字符; `String.Equals(Object)` 方法会重写 `Object.Equals(Object)` 方法，以便 `true` 为任意两个包含相同字符的字符串实例返回相同的顺序
 
 重写示例
-```C#
+```CSharp
 public override bool Equals(Object obj)
 {
 	Person personObj = obj as Person;
@@ -101,7 +101,7 @@ public override bool Equals(Object obj)
 # GetHashCode
 
 作为默认哈希函数
-```C#
+```CSharp
 public virtual int GetHashCode()
 {
 	return RuntimeHelpers.GetHashCode(this);
@@ -114,7 +114,7 @@ public static extern int GetHashCode(Object o);
 
 生成哈希代码的一种方法是使用操作来合并这些字段 
 
-```C#
+```CSharp
 public override int GetHashCode()
 {
 	return x ^ y;
@@ -124,7 +124,7 @@ public override int GetHashCode()
 
 可以考虑使用元组
 
-```C#
+```CSharp
 public override int GetHashCode()
 {
 	return Tuple.Create(x, y).GetHashCode();
@@ -133,7 +133,7 @@ public override int GetHashCode()
 *该对象反映每个字段的顺序*
 
 还有一种方法,将两个哈希值按一定权重重叠
-```C#
+```CSharp
 public override int GetHashCode()
 {
 	return ShiftAndWrap(x.GetHashCode(), 2) ^ y.GetHashCode();
@@ -171,7 +171,7 @@ public override int GetHashCode()
 
 # GetType
 
-```C#
+```CSharp
 [System.Security.SecuritySafeCritical]
 [Pure]
 [ResourceExposure(ResourceScope.None)]
@@ -192,7 +192,7 @@ public extern Type GetType();
 
 返回表示当前对象的字符串
 
-```C#
+```CSharp
 public virtual String ToString()
 {
 	return GetType().ToString();
@@ -211,7 +211,7 @@ public override String ToString()
 
 下面的示例调用重载 `Decimal.ToString(String, IFormatProvider)` 的方法，以显示货币值的区分区域性的格式设置
 
-```C#
+```CSharp
 using System;
 using System.Globalization;
 
@@ -246,7 +246,7 @@ public class Example
 * 如果类不 `sealed`, 则可以继承并重写`ToString`方法.
 * 使用`扩展方法`
 
-```C#
+```CSharp
 public class CList<T> : List<T>
 {
    public CList(IEnumerable<T> collection) : base(collection)
@@ -269,7 +269,7 @@ public class CList<T> : List<T>
 }
 ```
 
-```C#
+```CSharp
 public static string ToString2<T>(this List<T> l)
 {
 	string retVal = string.Empty;
@@ -303,7 +303,7 @@ public static string ToString2<T>(this List<T> l)
 
 # MemberwiseClone
 
-```C#
+```CSharp
 [System.Security.SecuritySafeCritical] 
 [ResourceExposure(ResourceScope.None)]
 [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -323,7 +323,7 @@ protected extern Object MemberwiseClone();
 
 # 静态Equals
 
-```C#
+```CSharp
 public static bool Equals(Object objA, Object objB) 
 {
    if (objA==objB) {
@@ -344,7 +344,7 @@ public static bool Equals(Object objA, Object objB)
 
 # 静态ReferenceEquals
 
-```C#
+```CSharp
 [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
 [System.Runtime.Versioning.NonVersionable]
 public static bool ReferenceEquals (Object objA, Object objB) {
@@ -359,7 +359,7 @@ public static bool ReferenceEquals (Object objA, Object objB) {
 * 比较值类型时, 由于装箱,会返回`false`
 * 比较字符串时, 取决于该字符串是否是缓存.
 
-```C#
+```CSharp
 String s1 = "String1";
 String s2 = "String1";
 Console.WriteLine("s1 = s2: {0}", Object.ReferenceEquals(s1, s2));
@@ -383,7 +383,7 @@ Console.WriteLine("{0} interned: {1}", s3,
 
 # 构造
 
-```C#
+```CSharp
 [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
 [System.Runtime.Versioning.NonVersionable]
 public Object()
@@ -394,7 +394,7 @@ public Object()
 
 # 析构
 
-```C#
+```CSharp
 [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
 [System.Runtime.Versioning.NonVersionable]
 ~Object()
@@ -426,7 +426,7 @@ public Object()
 
 # private
 
-```C#
+```CSharp
 // Sets the value specified in the variant on the field
 // 
 [System.Security.SecurityCritical]  // auto-generated

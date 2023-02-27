@@ -54,7 +54,7 @@ Combinatorial
 
 以指定 NUnit 应为为测试参数提供的各个数据项的所有可能组合生成测试用例
 
-```C#
+```CSharp
 [Test, Combinatorial]
 public void MyTest(
     [Values(1, 2, 3)] int x,
@@ -85,7 +85,7 @@ Culture 文化区域
 
 如果您希望在运行测试时更改区域性，请改用 SetCulture 属性
 
-```C#
+```CSharp
 [TestFixture]
 [Culture("fr-FR")]
 public class FrenchCultureTests

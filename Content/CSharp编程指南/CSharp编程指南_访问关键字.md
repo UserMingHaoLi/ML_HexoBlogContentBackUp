@@ -24,7 +24,7 @@ tags:
 
 所访问的基类是类声明中指定的基类。 例如，如果指定 `class ClassB : ClassA`，则从 `ClassB` 访问 `ClassA` 的成员，而不考虑 `ClassA` 的基类。
 
-```C#
+```CSharp
 public class Person
 {
     protected string ssn = "444-55-6666";
@@ -67,7 +67,7 @@ Employee ID: ABC567EFG
 `this` 关键字指代类的当前实例，还可用作扩展方法的第一个参数的修饰符
 
 访问限定类似名称隐藏的成员
-```C#
+```CSharp
 public class Employee
 {
     private string alias;
@@ -84,12 +84,12 @@ public class Employee
 ```
 
 将本体对象作为参数传递
-```C#
+```CSharp
 CalcTax(this);
 ```
 
 声明索引器
-```C#
+```CSharp
 public int this[int param]
 {
     get { return array[param]; }

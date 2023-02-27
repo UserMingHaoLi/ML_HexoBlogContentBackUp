@@ -50,20 +50,20 @@ tags:
 
 以前声明`out`变量的时候, 你需要先声明一个变量, 再使用`out`来修饰它.
 
-```C#
+```CSharp
 int num
 if(int.TryParse(input, out num))
 ```
 
 现在, C#允许你在使用`out`修饰的时候直接声明变量.
 
-```C#
+```CSharp
 if(int.TryParse(input, out int num))
 ```
 
 别忘了, C#支持隐式变量.
 
-```C#
+```CSharp
 if(int.TryParse(input, out var num))
 ```
 
@@ -73,7 +73,7 @@ if(int.TryParse(input, out var num))
 *有时候并不是在上方,但任然是同级的,如下的`out var j`*
 
 
-```C#
+```CSharp
 public class B
 {
    public B(int i, out int j)
@@ -97,21 +97,21 @@ public class D : B
 
 使用`()`创建一个元组
 
-```C#
+```CSharp
 var let = ("a", "b");
 ```
 
 此元组默认生成两个元素, Item1和Item2.  
 你也可以显示声明元组
 
-```C#
+```CSharp
 (string Alpha, string Beta) namedLetters = ("a", "b");
 Console.WriteLine($"{namedLetters.Alpha}, {namedLetters.Beta}");
 ```
 
 或者你可以从右侧指定名称
 
-```C#
+```CSharp
 var alphabetStart = (Alpha: "a", Beta: "b");
 Console.WriteLine($"{alphabetStart.Alpha}, {alphabetStart.Beta}");
 ```
@@ -122,7 +122,7 @@ Console.WriteLine($"{alphabetStart.Alpha}, {alphabetStart.Beta}");
 公开方法最好是使用定义好的`class`和`struct`  
 下面演示一个方法
 
-```C#
+```CSharp
 private static (int Max, int Min) Range(Ienumerable<int> num)
 {
     int min = int.MinValue;
@@ -134,14 +134,14 @@ private static (int Max, int Min) Range(Ienumerable<int> num)
 有时候不希望使用`.`来取得数据,那么可以使用解构,也就是不声明元组,直接声明个体  
 > 官方翻译为`析构`但是我们一般理解`~`函数是析构,所以这里使用了解构
 
-```C#
+```CSharp
 (int max, int min) = Range(numbers);    //没有声明元组
 Console.WriteLine(max); //直接使用max和min,无需 `.`
 Console.WriteLine(min);
 ```
 
 这种解构每个类都可以拥有,只需提供`Deconstruct`方法,无需任何接口.
-```C#
+```CSharp
 public class Point
 {
     public Point(double x, double y)
@@ -155,13 +155,13 @@ public class Point
 }
 ```
 *像这样使用*
-```C#
+```CSharp
 var p = new Point(3.14, 2.71);
 (double X, double Y) = p;//将调用`Deconstruct`
 ```
 
 编译器有时也可以帮你推断类型
-```C#
+```CSharp
 int count = 5;
 string label = "Colors used in the map";
 var pair = (count, label); //可以推断为(int,string)
@@ -171,7 +171,7 @@ var pair = (count, label); //可以推断为(int,string)
 > 即使手动命名,默认名称任然存在.  
 > `元组赋值`和`元组相等`比较不会考虑字段名称
 >> 或者说他们就是使用的ItemX,而不是你给的别名.
-```C#
+```CSharp
 (double, int) t1 = (4.5, 3);
 Console.WriteLine($"Tuple with elements {t1.Item1} and {t1.Item2}.");
 ```
@@ -180,7 +180,7 @@ Console.WriteLine($"Tuple with elements {t1.Item1} and {t1.Item2}.");
 
 看一下这几个例子,就会明白,名称其实没啥用.还是Item靠谱
 > 提一嘴,编译后的源代码实际上就是用的Item,你的命名都变成了`[TupleElementNamesAttribute]`的元数据
-```C#
+```CSharp
 (int, double) t1 = (17, 3.14);
 (double First, double Second) t2 = (0.0, 1.0);
 t2 = t1;//可以使用 First,Second
@@ -195,7 +195,7 @@ Console.WriteLine($"{nameof(t3)}: {t3.A} and {t3.B}");
 // t3: 17 and 3.14
 ```
 *元组还可以继续解构*
-```C#
+```CSharp
 var t = ("post office", 3.6);
 (string destination, double distance) = t;//解构
 Console.WriteLine($"Distance to {destination} is {distance} kilometers.");
@@ -234,7 +234,7 @@ var (_,_,_,pop1,_,pop2) = QueryCityDataForYears("New York City", 1960, 2010);
 
 扩展了is表达式, 兼顾了声明变量和as的工作
 
-```C#
+```CSharp
 var sum = 0;
 foreach(var item in values)
 {
@@ -247,7 +247,7 @@ return sum;
 ```
 
 次例子中演示了`item is int val`这句话表示, 如果item是一个int , 将它赋值给val, 否则`else`  
-```C#
+```CSharp
 if (item is int)
 {
     int val = item as int;
@@ -256,7 +256,7 @@ if (item is int)
 ```
 
 也支持switch
-```C#
+```CSharp
 public static int SumPositiveNumbers(IEnumerable<object> sequence)
 {
     int sum = 0;
@@ -289,7 +289,7 @@ public static int SumPositiveNumbers(IEnumerable<object> sequence)
 
 使用`when`关键字继续判断.
 
-```C#
+```CSharp
 switch (num)
 {
     case null:
@@ -303,7 +303,7 @@ switch (num)
 
 ## 本地函数
 
-```C#
+```CSharp
 public static IEnumerable<char> AlphabetSubset3(char start, char end)
 {
     if (start < 'a' || start > 'z')
@@ -332,7 +332,7 @@ public static IEnumerable<char> AlphabetSubset3(char start, char end)
 
 ## 更多 expression-bodied 成员
 
-```C#
+```CSharp
 public ExpressionMembersExample(string label) => this.Label = label;
 
 ~ExpressionMembersExample() => Console.Error.WriteLine("Finalized!");
@@ -354,17 +354,17 @@ public string Label
 
 声明函数的时候使用`ref`关键字  
 这表明返回类型为`ref`引用
-```C#
+```CSharp
 public static ref int Find3(int[,] matrix, Func<int, bool> predicate)
 ```
 返回数据的时候使用`ref`修饰  
 这表明返回的数据是一个引用
-```C#
+```CSharp
 return ref matrix[i, j];
 ```
 接收函数调用的时候使用`ref`关键字定义变量  
 这表明调用者知道自己在干什么
-```C#
+```CSharp
 ref var item = ref MatrixSearch.Find3(matrix, (val) => val == 42);
 ```
 如此这般, 就可以修改item达到修改matrix的效果了.~~总感觉很危险~~
@@ -377,7 +377,7 @@ ref var item = ref MatrixSearch.Find3(matrix, (val) => val == 42);
 * null合并表达式
 * 一些lambda表达式
 
-```C#
+```CSharp
 public string Name
 {
     get => name;
@@ -396,7 +396,7 @@ public string Name
 你可以声明可读性更强的数字变量了  
 使用`_`来分割字符, 他们不会被当做变量使用, 只是增加可读性.
 
-```C#
+```CSharp
 public const int Sixteen =   0b0001_0000;
 public const long BillionsAndBillions = 100_000_000_000;
 public const double AvogadroConstant = 6.022_140_857_747_474e23;
@@ -409,7 +409,7 @@ public const decimal GoldenRatio = 1.618_033_988_749_894_848_204_586_834_365_638
 
 顾名思义, 请看
 
-```C#
+```CSharp
 public static async Task Main()
 {
     
@@ -420,12 +420,12 @@ public static async Task Main()
 
 以前使用`default`需要这么写
 
-```C#
+```CSharp
 Func<string, bool> foo = default(Func<string, bool>)
 ```
 
 现在可以自动推断了.
-```C#
+```CSharp
 Func<string, bool> foo = default;
 ```
 
@@ -441,7 +441,7 @@ Func<string, bool> foo = default;
 
 可以根据右侧名称自动推断名称.
 
-```C#
+```CSharp
 int count = 5;
 string label = "Colors used in the map";
 var pair = (count, label);
@@ -463,7 +463,7 @@ var pair = (count, label);
 
 接上回的数字下划线, 现在16进制和2进制可以用`_`开头了
 
-```C#
+```CSharp
 int binaryValue = 0b_0101_1100;
 ```
 
@@ -477,7 +477,7 @@ int binaryValue = 0b_0101_1100;
 
 现在可以通过简单的条件表达式来生成`ref`引用参数了.
 
-```C#
+```CSharp
 ref var r = ref (arr != null ? ref arr[0] : ref otherArr[0]);
 ```
 
@@ -496,7 +496,7 @@ r可能是arr或otherArr的第一个参数的引用.~~很快,但是不要滥用~
 
 ## in 参数修饰符
 
-```C#
+```CSharp
 static void M(S arg);
 static void M(in S arg);
 ```

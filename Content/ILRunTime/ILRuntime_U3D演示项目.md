@@ -32,7 +32,7 @@ tags:
 
 > 以`~`结尾的工程不会被Unity捕获,所以放在项目里面需要手动编译.
 
-```C#
+```CSharp
 //调用无参数静态方法，appdomain.Invoke("类名", "方法名", 对象引用, 参数列表);
 appdomain.Invoke("HotFix_Project.InstanceClass", "StaticFunTest", null, null);
  //调用带参数的静态方法
@@ -141,7 +141,7 @@ using(var ctx = appdomain.BeginInvoke(method))
 如果委托只在ILRuntime域中运行,那么无需注册.   
 如果任何委托需要前往域外,则需要注册
 
-```C#
+```CSharp
 //Action
 appDomain.DelegateManager.RegisterMethodDelegate<int, float>();
 //Function
@@ -150,7 +150,7 @@ appDomain.DelegateManager.RegisterFunctionDelegate<int, float, bool>();
 
 `ILRuntime`内部是使用`Action`,`Func`这两个系统自带委托类型来生成的委托实例，所以如果你需要将一个不是`Action`或者`Func`类型的委托实例传到`ILRuntime`外部使用的话，除了委托适配器，还需要额外写一个转换器，将`Action`和`Func`转换成你真正需要的那个委托类型
 
-```C#
+```CSharp
 app.DelegateManager.RegisterDelegateConvertor<SomeFunction>((action) =>
 {
     return new SomeFunction((a, b) =>
@@ -169,11 +169,11 @@ app.DelegateManager.RegisterDelegateConvertor<SomeFunction>((action) =>
 
 如果你想在`热更DLL`项目当中`继承一个`Unity主工程`里的类`，或者`实现一个主工程里的接口`，你需要在`Unity主工程`中实现一个继承适配器
 
-```C#
+```CSharp
 appdomain.RegisterCrossBindingAdaptor(new ClassInheritanceAdaptor());
 ```
 
-```C#
+```CSharp
 public class TestClass2Adapter : CrossBindingAdaptor
 {
 	//定义访问方法的方法信息
@@ -275,7 +275,7 @@ public class TestClass2Adapter : CrossBindingAdaptor
 
 在`Unity主工程`中，无法通过`Type.GetType`来取得`热更DLL`内部定义的类，而只能通过以下方式得到`System.Type`实例
 
-```C#
+```CSharp
 IType type = appdomain.LoadedTypes["TypeName"];
 Type t = type.ReflectedType;
 ```
@@ -284,7 +284,7 @@ Type t = type.ReflectedType;
 
 在`热更DLL`当中，可以直接通过`Activator`来创建实例
 
-```C#
+```CSharp
 Type t = Type.GetType("TypeName");//或者typeof(TypeName)
 //以下两种方式均可以
 object instance = Activator.CreateInstance(t);
@@ -292,7 +292,7 @@ object instance = Activator.CreateInstance<TypeName>();
 ```
 
 在`Unity主工程`中，无法通过`Activator`来创建`热更DLL`内类型的实例，必须通过`AppDomain`来创建实例
-```C#
+```CSharp
 object instance = appdomain.Instantiate("TypeName");
 ```
 
@@ -300,7 +300,7 @@ object instance = appdomain.Instantiate("TypeName");
 
 在`热更DLL`当中，通过反射调用方法跟通常C#用法没有任何区别
 
-```C#
+```CSharp
 Type type = typeof(TypeName);
 object instance = Activator.CreateInstance(type);
 MethodInfo mi = type.GetMethod("foo");
@@ -309,7 +309,7 @@ mi.Invoke(instance, null);
 
 在`Unity主工程`中，可以通过C#通常用法来调用，也可以通过ILRuntime自己的接口来调用，两个方式是等效的
 
-```C#
+```CSharp
 IType t = appdomain.LoadedTypes["TypeName"];
 Type type = t.ReflectedType;
 
@@ -328,7 +328,7 @@ appdomain.Invoke(m, instance, null);
 
 没有区别
 
-```C#
+```CSharp
 Type t;
 FieldInfo fi = t.GetField("field");
 object val = fi.GetValue(instance);
@@ -339,7 +339,7 @@ fi.SetValue(instance, val);
 
 没有区别
 
-```C#
+```CSharp
 Type t;
 FieldInfo fi = t.GetField("field");
 object[] attributeArr = fi.GetCustomAttributes(typeof(SomeAttribute), false);
@@ -353,7 +353,7 @@ object[] attributeArr = fi.GetCustomAttributes(typeof(SomeAttribute), false);
 
 展示怎么通过CLR重定向来实现在`Debug.Log`调用中打印热更DLL中的调用堆栈
 
-```C#
+```CSharp
 public unsafe static StackObject* DLog(ILIntepreter __intp, StackObject* __esp, List<object> __mStack, CLRMethod __method, bool isNewObj)
 {
     ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
@@ -381,7 +381,7 @@ appdomain.RegisterCLRMethodRedirection(typeof(Debug).GetMethod("Log"), DLog);
 
 > 一定要记得将`CLR绑定`的注册写在`CLR重定向`的注册后面，因为同一个方法只能被重定向一次，只有先注册的那个才能生效
 
-```C#
+```CSharp
 //注册方法如下
 ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
 ```
@@ -392,11 +392,11 @@ Json序列化是开发中非常经常需要用到的功能，考虑到其通用�
 
 在ILRuntime初始化阶段，在注册CLR绑定之前，执行下面这行代码
 
-```C#
+```CSharp
 LitJson.JsonMapper.RegisterILRuntimeCLRRedirection(appdomain);
 ```
 
-```C#
+```CSharp
 string json = JsonMapper.ToJson(obj);
 JsonTestClass obj = JsonMapper.ToObject<JsonTestClass>(json);
 ```
@@ -459,7 +459,7 @@ Release模式会比Debug模式的性能高至少2倍
 
 为了调用方便，ILRuntime的很多接口使用了params可变参数，但是有可能会无意间忽视这个操作带来的GCAlloc
 
-```C#
+```CSharp
 appdomain.Invoke("MyGame.Main", "Initialize", null);
 appdomain.Invoke("MyGame.Main", "Start", null, 100, 200);
 ```
@@ -468,7 +468,7 @@ appdomain.Invoke("MyGame.Main", "Start", null, 100, 200);
 
 如果你需要在Update等性能关键的地方调用热更DLL中的方法，应该按照以下方式缓存这个参数数组
 
-```C#
+```CSharp
 object[] param0 = new object[0];
 object[] param2 = new object[2];
 IMethod m, m2;
@@ -490,7 +490,7 @@ void Update()
 
 如果需要传递的参数或返回值中包含int, float等基础类型，那使用上面的方法依然无法消除GC Alloc，为了更高效率的调用，ILRuntime提供了`InvocationContext`这种调用方式，需要按照如下方式调用
 
-```C#
+```CSharp
 int result = 0;
 using(var ctx = appdomain.BeginInvoke(m))
 {
@@ -506,7 +506,7 @@ using(var ctx = appdomain.BeginInvoke(m))
 
 # 我要怎么才能在Profiler里看见热更内的方法耗时情况呢？
 
-```C#
+```CSharp
 //在ILRuntime的初始化处加入以下代码即可在Profiler中看见热更内方法的耗时情况，无需开启DeepProfile，真机上也可使用
 #if DEBUG && (UNITY_EDITOR || UNITY_ANDROID || UNITY_IPHONE)
         //由于Unity的Profiler接口只允许在主线程使用，为了避免出异常，需要告诉ILRuntime主线程的线程ID才能正确将函数运行耗时报告给Profiler
@@ -516,7 +516,7 @@ using(var ctx = appdomain.BeginInvoke(m))
 
 # 真机上调试或运行时出现随机闪退
 
-```C#
+```CSharp
 请确认XCode的编译选项中是否使用了Debug，由于iPhone的线程栈空间很小，调用层级稍微深一点就会出现爆栈，因此请使用Release选项编译XCode工程
 ```
 
@@ -528,7 +528,7 @@ using(var ctx = appdomain.BeginInvoke(m))
 
 # 跨域继承怎么写
 
-```C#
+```CSharp
 //这是Unity部分
 public abstract class TestClassBase
 {
@@ -669,7 +669,7 @@ public class TestInheritance : TestClassBase
 
 # 手动重定向来为代码增加下届
 
-```C#
+```CSharp
 unsafe static StackObject* Log_11(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
 {
 	//ILRuntime的调用约定为被调用者清理堆栈，因此执行这个函数后需要将参数从堆栈清理干净，并把返回值放在栈顶，具体请看ILRuntime实现原理文档
@@ -696,7 +696,7 @@ unsafe static StackObject* Log_11(ILIntepreter __intp, StackObject* __esp, IList
 ```
 注意, 需要有一个注册
 
-```C#
+```CSharp
 //这里做一些ILRuntime的注册
 var mi = typeof(Debug).GetMethod("Log", new System.Type[] { typeof(object) });
 appdomain.RegisterCLRMethodRedirection(mi, Log_11);

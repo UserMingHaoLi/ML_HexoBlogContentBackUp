@@ -14,7 +14,7 @@ tags:
 
 <!--more-->
 
-```C#
+```CSharp
 static void Main(string[] args)
 {
 	MyFormattable pFormattable = new MyFormattable();
@@ -96,12 +96,12 @@ public override string ToString()
 
 * 重写 Object.ToString 方法以定义对象值的自定义字符串表示形式
 * 定义格式说明符，格式说明符允许对象值的字符串表示形式采用多种形式。 例如，以下语句中的“X”格式说明符将整数转换为十六进制值的字符串表示形式
-```C#
+```CSharp
 int integerValue = 60312;
 Console.WriteLine(integerValue.ToString("X"));   // Displays EB98.
 ```
 * 使用格式提供程序以利用特定区域性的格式设置约定。 例如，以下语句通过使用 en-US 区域性的格式设置约定来显示货币值。
-```C#
+```CSharp
 double cost = 1632.54;
 Console.WriteLine(cost.ToString("C",
                   new System.Globalization.CultureInfo("en-US")));
@@ -125,7 +125,7 @@ Console.WriteLine(cost.ToString("C",
 
 结构继承自 `ValueType`，而后者又派生自 `Object`, `ValueType`一般都有重写`ToString()`
 
-```C#
+```CSharp
 using System;
 
 public class Temperature
@@ -174,7 +174,7 @@ public class Example
 如果省略或不支持精度说明符，则标准格式说明符等效于标准格式字符串
 
 传递给枚举值的 `ToString` 方法的格式字符串决定是使用其字符串名称（“G”和“F”格式说明符）、基础整数值（“D”格式说明符）还是十六进制值（“X”格式说明符）来显示值  
-```C#
+```CSharp
 DayOfWeek thisDay = DayOfWeek.Monday;
 string[] formatStrings = {"G", "F", "D", "X"};
 
@@ -191,7 +191,7 @@ foreach (string formatString in formatStrings)
 
 此外，数字格式字符串可以包含一个精度说明符。 该说明符的含义取决于与其一起使用的格式字符串，但是，它通常指示应在结果字符串中显示的总位数或小数位数
 
-```C#
+```CSharp
 byte[] byteValues = { 12, 163, 255 };
 foreach (byte byteValue in byteValues)
    Console.WriteLine(byteValue.ToString("X4"));
@@ -203,7 +203,7 @@ foreach (byte byteValue in byteValues)
 
 日期和时间值的标准格式字符串是由特定 `DateTimeFormatInfo` 属性存储的自定义格式字符串的别名
 
-```C#
+```CSharp
 using System;
 using System.Globalization;
 
@@ -229,7 +229,7 @@ public class Example
 * 个“G”格式说明符，表示对象的常用或通用格式
 * 支持等于空引用的格式说明符
 
-```C#
+```CSharp
 public string ToString(string format)
 {
 	// Handle null or empty string.
@@ -259,13 +259,13 @@ public string ToString(string format)
 # 自定义格式字符串
 
 如果格式字符串仅包含一个自定义格式说明符，则此格式说明符前面应带有百分比 (%) 符号，以免与标准格式说明符混淆
-```C#
+```CSharp
 DateTime date1 = new DateTime(2009, 9, 8);
 Console.WriteLine(date1.ToString("%M"));       // Displays 9
 ```
 日期和时间值的许多标准格式字符串均是由 `DateTimeFormatInfo` 对象的属性所定义的自定义格式字符串的别名
 
-```C#
+```CSharp
 string customFormat = "MMMM dd, yyyy (dddd)";
 DateTime date1 = new DateTime(2009, 8, 28);
 Console.WriteLine(date1.ToString(customFormat));
@@ -273,7 +273,7 @@ Console.WriteLine(date1.ToString(customFormat));
 // whose language is English:
 //       August 28, 2009 (Friday)
 ```
-```C#
+```CSharp
 using System;
 
 public class Example
@@ -309,7 +309,7 @@ public class Example
 
 默认情况下，数值的格式设置是区分区域性的。 如果在调用格式设置方法时不指定区域性，则将使用当前线程区域性的格式设置约定
 
-```C#
+```CSharp
 using System;
 using System.Globalization;
 using System.Threading;
@@ -349,7 +349,7 @@ public class Example
 
 默认情况下，日期和时间值的格式设置是区分区域性的。 如果在调用格式设置方法时不指定区域性，则将使用当前线程区域性的格式设置约定
 
-```C#
+```CSharp
 using System;
 using System.Globalization;
 using System.Threading;
@@ -397,7 +397,7 @@ public class Example
 
 * 支持复合格式设置。 如果使用包含格式字符串的格式项设置自定义类型的格式，则公共语言运行时自动调用 IFormattable 实现，并向其传递该格式字符串
 
-```C#
+```CSharp
 public string ToString(string format, IFormatProvider provider)
 {
 	// Handle null or empty arguments.
@@ -441,7 +441,7 @@ public static void Main()
 
 一些方法（如 `String.Format` 和 `StringBuilder.AppendFormat`）支持复合格式设置。 复合格式字符串是一种模板，该模板返回合并了零个、一个或多个对象的字符串表示形式的单一字符串
 
-```C#
+```CSharp
 String.Format("On {0:d}, the inventory of {1} was worth {2:C2}.",
                        thatDate, item1, item1.Value);
 ```
@@ -452,7 +452,7 @@ String.Format("On {0:d}, the inventory of {1} was worth {2:C2}.",
 
 > 还可以使用`,`来限制宽度和对齐
 
-```C#
+```CSharp
 DateTime startDate = new DateTime(2015, 8, 28, 6, 0, 0);
 decimal[] temps = { 73.452m, 68.98m, 72.6m, 69.24563m,
                    74.1m, 72.156m, 72.228m };
@@ -490,7 +490,7 @@ for (int ctr = 0; ctr < temps.Length; ctr++)
 该方法返回要设置格式的对象的带格式自定义字符串表示形式。 如果该方法无法设置对象的格式，则应返回空引用
 
 对于开篇的代码段来说,三个参数分别如下
-```C#
+```CSharp
 printString = string.Format(myFormater, "{0}", pFormattable);
 //null, pFormattable, myFormater
 printString = string.Format(myFormater, "{0:C}", pFormattable);
@@ -545,14 +545,14 @@ printString = string.Format(myFormater, "{0:MyFormater}", pFormattable);
 * “X”或“x”	十六进制
 * 任何其他单个字符	未知说明符	结果:在运行时引发 `FormatException。`
 
-```C#
+```CSharp
 decimal value = 123.456m;
 Console.WriteLine(value.ToString("C2"));
 // Displays $123.46
 ```
 *此例子中,默认区域为`en-US`*
 
-```C#
+```CSharp
 decimal[] amounts = { 16305.32m, 18794.16m };
 Console.WriteLine("   Beginning Balance           Ending Balance");
 Console.WriteLine("   {0,-28:C2}{1,14:C2}", amounts[0], amounts[1]);
@@ -572,7 +572,7 @@ Console.WriteLine("   {0,-28:C2}{1,14:C2}", amounts[0], amounts[1]);
 
 “00”说明符使得值被舍入到小数点前最近的数字，其中零位总被舍去。 例如，用“00”格式化 34.5 将得到值 35
 
-```C#
+```CSharp
 value = 123;
 Console.WriteLine(value.ToString("00000"));
 Console.WriteLine(String.Format("{0:00000}", value));
@@ -587,7 +587,7 @@ Console.WriteLine(String.Format("{0:00000}", value));
 
 “##”格式字符串使得值被舍入到小数点前最近的数字，其中零总被舍去。 例如，用“##”格式化 34.5 将得到值 35
 
-```C#
+```CSharp
 value = 1.2;
 Console.WriteLine(value.ToString("#.##", CultureInfo.InvariantCulture));
 Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
@@ -600,7 +600,7 @@ Console.WriteLine(String.Format("{0:[##-##-##]}", value));
 ```
 
 若要返回空缺数字或前导零替换为空格的结果字符串，请使用 *复合格式功能* 并指定字段宽度，如以下示例所示
-```C#
+```CSharp
 Double value = .324;
 Console.WriteLine("The value is: '{0,5:#.###}'", value);
 //The value is: ' .324'
@@ -614,7 +614,7 @@ Console.WriteLine("The value is: '{0,5:#.###}'", value);
 
 在结果字符串中用作小数分隔符的字符并非总是小数点；它由控制格式设置的 `NumberDecimalSeparator` 对象的 `NumberFormatInfo` 属性确定
 
-```C#
+```CSharp
 value = 1.2;
 Console.WriteLine(value.ToString("0.00", CultureInfo.InvariantCulture));
 Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
@@ -640,7 +640,7 @@ Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
 
 如果使用字符串“0,,”对数字 100000000 进行格式化，则输出为“100”
 
-```C#
+```CSharp
 double value = 1234567890;
 Console.WriteLine(value.ToString("#,#", CultureInfo.InvariantCulture));
 Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
@@ -658,7 +658,7 @@ Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
 
 本地化的百分比符号插入到数字在格式字符串中出现 % 的位置。 使用的百分比字符由当前 `PercentSymbol` 对象的 `NumberFormatInfo` 属性定义
 
-```C#
+```CSharp
 double value = .086;
 Console.WriteLine(value.ToString("#0.##%", CultureInfo.InvariantCulture));
 Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
@@ -669,7 +669,7 @@ Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
 ### “‰”自定义说明符
 
 基本同上
-```C#
+```CSharp
 double value = .00354;
 string perMilleFmt = "#0.## " + '\u2030';
 Console.WriteLine(value.ToString(perMilleFmt, CultureInfo.InvariantCulture));
@@ -684,7 +684,7 @@ Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
 
 跟在科学记数法指示符后面的零的数目确定指数输出的最小位数
 
-```C#
+```CSharp
 double value = 86000;
 Console.WriteLine(value.ToString("0.###E+0", CultureInfo.InvariantCulture));
 Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
@@ -708,7 +708,7 @@ Console.WriteLine(String.Format(CultureInfo.InvariantCulture,
 
 若在要结果字符串中包括反斜杠，必须使用另一个反斜杠 (`\\`)
 
-```C#
+```CSharp
 Console.WriteLine(value.ToString(@"\#\#\# ##0 dollars and \0\0 cents \#\#\#"));
 Console.WriteLine(String.Format(@"{0:\#\#\# ##0 dollars and \0\0 cents \#\#\#}",
                                 value));
@@ -731,7 +731,7 @@ Console.WriteLine(String.Format("{0:\\\\\\\\\\\\ ##0 dollars and \\0\\0 cents \\
 
 如果要设置格式的数字为非零值，但根据第一部分或第二部分中的格式舍入后为零，则最终的零根据第三部分进行格式设置。
 
-```C#
+```CSharp
 double posValue = 1234;
 double negValue = -1234;
 double zeroValue = 0;
@@ -756,7 +756,7 @@ Console.WriteLine(String.Format("{0:" + fmt3 + "}", zeroValue));
 
 所有其他字符始终解释为字符文本，在格式设置操作中，将按原样包含在结果字符串中
 
-```C#
+```CSharp
 double n = 123.8;
 Console.WriteLine($"{n:#,##0.0K}");
 // The example displays the following output:
@@ -769,7 +769,7 @@ Console.WriteLine($"{n:#,##0.0K}");
 * 通过对格式字符进行转义处理`\`
 * 通过将整个文本字符串括在单引号中
 
-```C#
+```CSharp
 double n = 9.3;
 Console.WriteLine($@"{n:##.0\%}");
 Console.WriteLine($@"{n:\'##\'}");
@@ -788,7 +788,7 @@ Console.WriteLine($@"{n:'\'##'\'}");
 
 ## 说明
 
-```C#
+```CSharp
 double number1 = 1234567890;
 string value1 = number1.ToString("(###) ###-####");
 Console.WriteLine(value1);
@@ -818,7 +818,7 @@ Console.WriteLine(value2);
 
 ### 使用特定数目的前导零填充整数
 
-```C#
+```CSharp
 int value = 160934;
 int decimalLength = value.ToString("D").Length + 5;
 int hexLength = value.ToString("X").Length + 5;
@@ -886,7 +886,7 @@ Console.WriteLine(value.ToString("X" + hexLength.ToString()));
 
 通过调用 `DateTimeFormatInfo.GetAllDateTimePatterns(Char)` 方法，你可以确定与标准格式字符串对应的自定义格式字符串
 
-```C#
+```CSharp
 Console.WriteLine("'d' standard format string:");
 foreach (var customString in DateTimeFormatInfo.CurrentInfo.GetAllDateTimePatterns('d'))
 	Console.WriteLine("   {0}", customString);
@@ -904,7 +904,7 @@ foreach (var customString in DateTimeFormatInfo.CurrentInfo.GetAllDateTimePatter
 
 ## 自定义日期和时间格式字符串
 
-```C#
+```CSharp
 DateTime thisDate1 = new DateTime(2011, 6, 10);
 Console.WriteLine("Today is " + thisDate1.ToString("MMMM dd, yyyy") + ".");
 
@@ -973,7 +973,7 @@ Console.WriteLine("The current date and time: {0:MM/dd/yy H:mm:ss zzz}",
 
 # 标准 TimeSpan 格式字符串
 
-```C#
+```CSharp
 TimeSpan duration = new TimeSpan(1, 12, 23, 62);
 string output = "Time of Travel: " + duration.ToString("c");
 Console.WriteLine(output);
@@ -1017,7 +1017,7 @@ Console.WriteLine("Time of Travel: {0:c}", duration);
 
 自定义 TimeSpan 格式说明符还不包括正负符号，无法区分正负时间间隔。 若要包含正负符号，必须使用条件逻辑构造格式字符串。
 
-```C#
+```CSharp
 using System;
 
 public class Example
@@ -1081,7 +1081,7 @@ public class Example
 
 * G 或 g
   * 如果枚举使用 Flags 属性集进行定义，则每个有效项的字符串值会连接在一起（以逗号分隔）。 如果未设置 Flags 属性，则将无效值显示为数字项
-```C#
+```CSharp
 Console.WriteLine(ConsoleColor.Red.ToString("G"));         // Displays Red
 FileAttributes attributes = FileAttributes.Hidden |
                             FileAttributes.Archive;
@@ -1090,7 +1090,7 @@ Console.WriteLine(attributes.ToString("G"));   // Displays Hidden, Archive
 
 * F 或 f
   * 如果值可以完全显示为枚举中项的总和（即使未提供 Flags 属性），则每个有效项的字符串值会连接在一起（以逗号分隔）。 如果值不能由枚举项完全确定，则值会格式化为整数值
-```C#
+```CSharp
 Console.WriteLine(ConsoleColor.Blue.ToString("F"));       // Displays Blue
 FileAttributes attributes = FileAttributes.Hidden |
                             FileAttributes.Archive;
@@ -1099,7 +1099,7 @@ Console.WriteLine(attributes.ToString("F"));   // Displays Hidden, Archive
 
 * D 或 d
   * 以尽可能短的表示形式将枚举项显示为整数值
-```C#
+```CSharp
 Console.WriteLine(ConsoleColor.Cyan.ToString("D"));         // Displays 11
 FileAttributes attributes = FileAttributes.Hidden |
                             FileAttributes.Archive;
@@ -1108,7 +1108,7 @@ Console.WriteLine(attributes.ToString("D"));                // Displays 34
 
 * X 或 x
   * 将枚举项显示为十六进制值。 根据需要以前导零表示此值，以确保在枚举类型的基础数值类型中，结果字符串的每个字节都有两个字符
-```C#
+```CSharp
 Console.WriteLine(ConsoleColor.Cyan.ToString("X"));   // Displays 0000000B
 FileAttributes attributes = FileAttributes.Hidden |
                             FileAttributes.Archive;
@@ -1147,7 +1147,7 @@ Console.WriteLine(attributes.ToString("X"));          // Displays 00000022
 固定文本是所选择的任何字符串，并且每个格式项对应于列表中的一个对象或装箱的结构  
 复合格式设置功能返回新的结果字符串，其中每个格式项都被列表中相应对象的字符串表示形式取代
 
-```C#
+```CSharp
 string name = "Fred";
 String.Format("Name = {0}, hours = {1:hh}", name, DateTime.Now);
 ```
@@ -1168,7 +1168,7 @@ String.Format("Name = {0}, hours = {1:hh}", name, DateTime.Now);
 
 从 0 开始的数字，可标识对象列表中对应的项
 
-```C#
+```CSharp
 string primes;
 primes = String.Format("Prime numbers less than 10: {0}, {1}, {2}, {3}",
                        2, 3, 5, 7 );
@@ -1192,7 +1192,7 @@ Console.WriteLine(primes);
  **如果指定 `alignment`，则需要使用逗号**
 
 
-```C#
+```CSharp
 string[] names = { "Adam", "Bridgette", "Carla", "Daniel",
                     "Ebenezer", "Francine", "George" };
 decimal[] hours = { 40, 6.667m, 40.39m, 82, 40.333m, 80,
@@ -1243,7 +1243,7 @@ for (int ctr = 0; ctr < names.Length; ctr++)
 
 在编写代码时，避免错误解释转义大括号和格式项的一种方法是单独设置大括号和格式项的格式
 
-```C#
+```CSharp
 int value = 6324;
 string output = string.Format("{0}{1:D}{2}",
                              "{", value, "}");

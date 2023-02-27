@@ -103,7 +103,7 @@ tags:
 ### 后缀递增运算符
 
 `x++` 的结果是此操作前的 `x` 的值
-```C#
+```CSharp
 int i = 3;
 Console.WriteLine(i);   // output: 3
 Console.WriteLine(i++); // output: 3
@@ -113,7 +113,7 @@ Console.WriteLine(i);   // output: 4
 ### 前缀增量运算符
 
 `++x` 的结果是此操作后的 `x` 的值
-```C#
+```CSharp
 double a = 1.5;
 Console.WriteLine(a);   // output: 1.5
 Console.WriteLine(++a); // output: 2.5
@@ -126,7 +126,7 @@ Console.WriteLine(a);   // output: 2.5
 
 ### 后缀递减运算符
 
-```C#
+```CSharp
 int i = 3;
 Console.WriteLine(i);   // output: 3
 Console.WriteLine(i--); // output: 3
@@ -135,7 +135,7 @@ Console.WriteLine(i);   // output: 2
 
 ### 前缀减量运算符
 
-```C#
+```CSharp
 double a = 1.5;
 Console.WriteLine(a);   // output: 1.5
 Console.WriteLine(--a); // output: 0.5
@@ -149,7 +149,7 @@ Console.WriteLine(a);   // output: 0.5
 一元 `+` 运算符返回其操作数的值。 一元 `-` 运算符对其操作数的数值取负  
 也就是正号和负号
 
-```C#
+```CSharp
 Console.WriteLine(+4);     // output: 4
 Console.WriteLine(-4);     // output: -4
 Console.WriteLine(-(-4));  // output: 4
@@ -163,7 +163,7 @@ Console.WriteLine(-double.NaN);  // output: NaN
 ## 乘法运算符 *
 
 乘法运算符 `*` 计算其操作数的乘积
-```C#
+```CSharp
 Console.WriteLine(5 * 2);         // output: 10
 Console.WriteLine(0.5 * 2.5);     // output: 1.25
 Console.WriteLine(0.1m * 23.4m);  // output: 2.34
@@ -177,7 +177,7 @@ Console.WriteLine(0.1m * 23.4m);  // output: 2.34
 
 对于整数类型的操作数，`/` 运算符的**结果为整数类型**，并且等于两个操作数之商**向零舍入**后的结果
 
-```C#
+```CSharp
 Console.WriteLine(13 / 5);    // output: 2
 Console.WriteLine(-13 / 5);   // output: -2
 Console.WriteLine(13 / -5);   // output: -2
@@ -190,7 +190,7 @@ Console.WriteLine(-13 / -5);  // output: 2
 
 对于 `float`、`double` 和 `decimal` 类型，`/` 运算符的结果为两个操作数之商
 
-```C#
+```CSharp
 Console.WriteLine(16.8f / 4.1f);   // output: 4.097561
 Console.WriteLine(16.8d / 4.1d);   // output: 4.09756097560976
 Console.WriteLine(16.8m / 4.1m);   // output: 4.0975609756097560975609756098
@@ -202,7 +202,7 @@ Console.WriteLine(16.8m / 4.1m);   // output: 4.0975609756097560975609756098
 
 ## 浮点余数
 
-```C#
+```CSharp
 Console.WriteLine(-5.2f % 2.0f); // output: -1.2
 Console.WriteLine(5.9 % 3.1);    // output: 2.8
 Console.WriteLine(5.9m % 3.1m);  // output: 2.8
@@ -220,18 +220,18 @@ Console.WriteLine(5.9m % 3.1m);  // output: 2.8
 
 即以上运算符的`=`复合模式  
 
-```C#
+```CSharp
 x op= y
 ```
 *其中`op`为上面的运算符*
 
 等效于
-```C#
+```CSharp
 x = x op y
 ```
 
 例子
-```C#
+```CSharp
 int a = 5;
 a += 9;
 Console.WriteLine(a);  // output: 14
@@ -275,7 +275,7 @@ Console.WriteLine(a);  // output: 2
 
 使用 `float` 和 `double` 类型的算术运算永远不会引发异常。 使用这些类型的算术运算的结果可能是表示无穷大和非数字的特殊值之一
 
-```C#
+```CSharp
 double a = 1.0 / 0.0;
 Console.WriteLine(a);                    // output: Infinity
 Console.WriteLine(double.IsInfinity(a)); // output: True
@@ -291,7 +291,7 @@ Console.WriteLine(double.IsNaN(b));  // output: True
 
 由于实数和浮点运算的浮点表达形式的常规限制，在使用浮点类型的计算中可能会发生舍入误差
 
-```C#
+```CSharp
 Console.WriteLine(.41f % .2f); // output: 0.00999999
 
 double a = 0.1;
@@ -324,7 +324,7 @@ Console.WriteLine(d);          // output: 0.9999999999999999999999999999
 
 如果操作数的计算结果为 `false`，它生成 `true`；如果操作数的计算结果为 `true`，它生成 `false`
 
-```C#
+```CSharp
 bool passed = false;
 Console.WriteLine(!passed);  // output: True
 Console.WriteLine(!true);    // output: False
@@ -338,7 +338,7 @@ Console.WriteLine(!true);    // output: False
 
 这些运算符*始终计算两个操作数*
 
-```C#
+```CSharp
 bool SecondOperand()
 {
     Console.WriteLine("Second operand is evaluated.");
@@ -363,7 +363,7 @@ Console.WriteLine(b);
 如果 `x` 计算结果为 `true` 且 `y` 计算结果为 `false`，或者 `x` 计算结果为 `false` 且 `y` 计算结果为 `true`，那么 `x ^ y` 的结果为 `true`  
 否则为`false`
 
-```C#
+```CSharp
 Console.WriteLine(true ^ true);    // output: False
 Console.WriteLine(true ^ false);   // output: True
 Console.WriteLine(false ^ true);   // output: True
@@ -427,7 +427,7 @@ Console.WriteLine(false ^ false);  // output: False
 
 `~` 运算符通过反转每个位产生其操作数的按位求补
 
-```C#
+```CSharp
 uint a = 0b_0000_1111_0000_1111_0000_1111_0000_1100;
 uint b = ~a;
 Console.WriteLine(Convert.ToString(b, toBase: 2));
@@ -441,7 +441,7 @@ Console.WriteLine(Convert.ToString(b, toBase: 2));
 
 左移运算会放弃超出结果类型范围的高阶位，并将低阶空位位置设置为零
 
-```C#
+```CSharp
 uint x = 0b_1100_1001_0000_0000_0000_0000_0001_0001;
 Console.WriteLine($"Before: {Convert.ToString(x, toBase: 2)}");
 uint y = x << 4;
@@ -456,7 +456,7 @@ Console.WriteLine($"After:  {Convert.ToString(y, toBase: 2)}");
 
 `>>` 运算符将其左侧操作数向右移动右侧操作数定义的位数
 
-```C#
+```CSharp
 uint x = 0b_1001;
 Console.WriteLine($"Before: {Convert.ToString(x, toBase: 2), 4}");
 uint y = x >> 2;
@@ -478,7 +478,7 @@ Console.WriteLine($"After:  {Convert.ToString(y, toBase: 2), 4}");
 
 `^` 运算符计算其整型操作数的位逻辑异或，也称为位逻辑 XOR
 
-```C#
+```CSharp
 uint a = 0b_1111_1000;
 uint b = 0b_0001_1100;
 uint c = a ^ b;
@@ -488,7 +488,7 @@ Console.WriteLine(Convert.ToString(c, toBase: 2));
 ```
 
 有一个小的交换算法
-```C#
+```CSharp
 int a = 0b_1111_1000;
 int b = 0b_0001_1100;
 //248,28
@@ -502,7 +502,7 @@ a=a^b;
 
 `|` 运算符计算其整型操作数的位逻辑 OR
 
-```C#
+```CSharp
 uint a = 0b_1010_0000;
 uint b = 0b_1001_0001;
 uint c = a | b;
@@ -530,7 +530,7 @@ Console.WriteLine(Convert.ToString(c, toBase: 2));
 * 如果 `x` 的类型为 `int` 或 `uint`，则移位计数由右侧操作数的低阶五位定义。 也就是说，移位计数通过 `count & 0x1F`（或 `count & 0b_1_1111`）计算得出。
 * 如果 `x` 的类型为 `long` 或 `ulong`，则移位计数由右侧操作数的低阶六位定义。 也就是说，移位计数通过 `count & 0x3F`（或 `count & 0b_11_1111`）计算得出。
 
-```C#
+```CSharp
 int count1 = 0b_0000_0001;
 int count2 = 0b_1110_0001;
 int a = 0b_0001;
@@ -591,7 +591,7 @@ Console.WriteLine($"{b} >> {count1} is {b >> count1}; {b} >> {count2} is {b >> c
 
 如果两个字符串均为 `null` 或者两个字符串实例具有相等长度且在每个字符位置有相同字符，则这两个字符串操作数相等
 
-```C#
+```CSharp
 string s1 = "hello!";
 string s2 = "HeLLo!";
 Console.WriteLine(s1 == s2.ToLower());  // output: True
@@ -603,7 +603,7 @@ Console.WriteLine(s1 == s3);  // output: False
 
 当两个委托操作数都是 null 或它们的调用列表长度相同并且在每个位置具有相同的条目时，运行时类型相同的两个委托操作数是相等的
 
-```C#
+```CSharp
 Action a = () => Console.WriteLine("a");
 Action b = a + a;
 Action c = a + a;
@@ -639,7 +639,7 @@ Console.WriteLine(b == c);  // output: True
 
 如果左侧操作数小于右侧操作数，`<` 运算符返回 `true`，否则返回 `false`
 
-```C#
+```CSharp
 Console.WriteLine(7.0 < 5.1);   // output: False
 Console.WriteLine(5.1 < 5.1);   // output: False
 Console.WriteLine(0.0 < 5.1);   // output: True
@@ -652,7 +652,7 @@ Console.WriteLine(double.NaN >= 5.1);  // output: False
 
 如果左侧操作数大于右侧操作数，`>`运算符返回 `true`，否则返回 `false`
 
-```C#
+```CSharp
 Console.WriteLine(7.0 > 5.1);   // output: True
 Console.WriteLine(5.1 > 5.1);   // output: False
 Console.WriteLine(0.0 > 5.1);   // output: False
@@ -686,7 +686,7 @@ Console.WriteLine(double.NaN <= 5.1);  // output: False
 
 即`.`
 
-```C#
+```CSharp
 using System.Collections.Generic;
 ```
 
@@ -705,7 +705,7 @@ using System.Collections.Generic;
 
 `NULL 条件运算符`采用最小化求值策略。 也就是说，如果条件成员或元素访问运算链中的一个运算返回 null，则链的其余部分**不会执行**
 
-```C#
+```CSharp
 PropertyChanged?.Invoke(…)
 ```
 *调委托很好用*  
@@ -723,7 +723,7 @@ PropertyChanged?.Invoke(…)
 
 对于长度为 `length` 的序列，`^n` 指向与序列开头偏移 `length - n` 的元素
 
-```C#
+```CSharp
 int[] xs = new[] { 0, 10, 20, 30, 40 };
 int last = xs[^1];
 Console.WriteLine(last);  // output: 40
@@ -744,7 +744,7 @@ Console.WriteLine(first);  // output: T
 
 左侧操作数是范围的包含性开头。 右侧操作数是范围的包含性末尾
 
-```C#
+```CSharp
 int[] numbers = new[] { 0, 10, 20, 30, 40, 50 };
 int start = 1;
 int amountToTake = 3;
@@ -771,7 +771,7 @@ void Display<T>(IEnumerable<T> xs) => Console.WriteLine(string.Join(" ", xs));
 * `..b` 等效于 `0..b`
 * `..` 等效于 `0..^0`
 
-```C#
+```CSharp
 int[] numbers = new[] { 0, 10, 20, 30, 40, 50 };
 int amountToDrop = numbers.Length / 2;
 
@@ -799,7 +799,7 @@ void Display<T>(IEnumerable<T> xs) => Console.WriteLine(string.Join(" ", xs));
 
 从 `C# 7.0` 开始，`is` 运算符还会对照某个模式测试表达式结果
 
-```C#
+```CSharp
 E is T
 ```
 *其中 `E` 是返回一个值的表达式，`T` 是类型或类型参数的名称。 `E` 不得为匿名方法或 `Lambda` 表达式*
@@ -809,7 +809,7 @@ E is T
 
 如果表达式结果的运行时类型派生自给定类型，即类型之间存在引用转换，`is` 运算符将返回 `true`
 
-```C#
+```CSharp
 object b = new Base();
 Console.WriteLine(b is Base);  // output: True
 Console.WriteLine(b is Derived);  // output: False
@@ -821,7 +821,7 @@ Console.WriteLine(d is Derived); // output: True
 
 `is` 运算符将考虑装箱和取消装箱转换，但不会考虑数值转换
 
-```C#
+```CSharp
 int i = 27;
 Console.WriteLine(i is System.IFormattable);  // output: True
 
@@ -832,7 +832,7 @@ Console.WriteLine(iBoxed is long);  // output: False
 
 ### 有模式匹配的类型测试
 
-```C#
+```CSharp
 int i = 23;
 object iBoxed = i;
 int? jNullable = 7;
@@ -846,11 +846,11 @@ if (iBoxed is int a && jNullable is int b)
 
 `as` 运算符将表达式结果显式转换为给定的引用或可以为 `null` 值的类型。 如果无法进行转换，则 `as` 运算符返回 `null`。 与强制转换表达式 不同，`as` 运算符永远**不会引发异常**
 
-```C#
+```CSharp
 E as T
 ```
 就如同
-```C#
+```CSharp
 E is T ? (T)(E) : (T)null
 ```
 *不同的是 `E` 只计算一次*
@@ -860,7 +860,7 @@ E is T ? (T)(E) : (T)null
 不能使用 as 运算符执行用户定义的转换,建议使用强制转换.
 
 以下是一个用法示例
-```C#
+```CSharp
 IEnumerable<int> numbers = new[] { 10, 20, 30 };
 IList<int> indexable = numbers as IList<int>;
 if (indexable != null)
@@ -884,7 +884,7 @@ if (indexable != null)
 
 `typeof` 运算符的实参必须是类型或类型形参的名称，如以下示例所示
 
-```C#
+```CSharp
 void PrintType<T>() => Console.WriteLine(typeof(T));
 
 Console.WriteLine(typeof(List<string>));
@@ -900,7 +900,7 @@ PrintType<Dictionary<int, char>>();
 
 你还可以使用具有未绑定泛型类型的 `typeof` 运算符。 未绑定泛型类型的名称必须包含适当数量的逗号，且此数量小于类型参数的数量
 
-```C#
+```CSharp
 Console.WriteLine(typeof(Dictionary<,>));
 // Output:
 // System.Collections.Generic.Dictionary`2[TKey,TValue]
@@ -910,7 +910,7 @@ Console.WriteLine(typeof(Dictionary<,>));
 
 ### 使用 typeof 运算符进行类型测试
 
-```C#
+```CSharp
 object b = new Giraffe();
 Console.WriteLine(b is Animal);  // output: True
 Console.WriteLine(b.GetType() == typeof(Animal));  // output: False
@@ -935,7 +935,7 @@ Console.WriteLine(b.GetType() == typeof(Giraffe));  // output: True
 
 `operator` 和 `implicit` 或 `explicit` 关键字分别用于定义隐式转换或显式转换
 
-```C#
+```CSharp
 using System;
 
 public readonly struct Digit
@@ -979,28 +979,28 @@ public static class UserDefinedConversions
 
 一元 `&` 运算符返回其操作数的地址
 
-```C#
+```CSharp
 int number = 27;
 int* pointerToNumber = &number;
 ```
 
 ## 指针间接运算符 *
 
-```C#
+```CSharp
 char letter = 'A';
 char* pointerToLetter = &letter;
 ```
 
 ## 指针成员访问运算符 ->
 
-```C#
+```CSharp
 x->y
 //等效于 (*x).y
 ```
 
 # 赋值运算符
 
-```C#
+```CSharp
 a = b = c
 //a = (b = c)
 ```
@@ -1011,7 +1011,7 @@ a = b = c
 
 ## 合赋值
 
-```C#
+```CSharp
 x op= y
 //x = x op y
 ```
@@ -1029,7 +1029,7 @@ x op= y
 
 实际上就是匿名方法.
 
-```C#
+```CSharp
 (input-parameters) => expression
 (input-parameters) => { <sequence-of-statements> }
 ```
@@ -1039,7 +1039,7 @@ x op= y
 
 通过使用 `async` 和 `await` 关键字，你可以轻松创建包含异步处理的 `lambda` 表达式和语句
 
-```C#
+```CSharp
 public partial class Form1 : Form
 {
     public Form1()
@@ -1062,7 +1062,7 @@ public partial class Form1 : Form
 }
 ```
 
-```C#
+```CSharp
 public partial class Form1 : Form
 {
     public Form1()
@@ -1085,7 +1085,7 @@ public partial class Form1 : Form
 
 ## lambda 表达式和元组
 
-```C#
+```CSharp
 Func<(int, int, int), (int, int, int)> doubleThem = ns => (2 * ns.Item1, 2 * ns.Item2, 2 * ns.Item3);
 ```
 
@@ -1113,7 +1113,7 @@ Func<(int, int, int), (int, int, int)> doubleThem = ns => (2 * ns.Item1, 2 * ns.
 
 ## 类型模式
 
-```C#
+```CSharp
 object greeting = "Hello, World!";
 if (greeting is string message)
 {
@@ -1122,7 +1122,7 @@ if (greeting is string message)
 ```
 既检查类型,又进行声明.
 
-```C#
+```CSharp
 int? xNullable = 7;
 int y = 23;
 object yBoxed = y;
@@ -1134,7 +1134,7 @@ if (xNullable is int a && yBoxed is int b)
 
 ## 常量模式
 
-```C#
+```CSharp
 public static decimal GetGroupTicketPrice(int visitorCount) => visitorCount switch
 {
     1 => 12.0m,
@@ -1147,7 +1147,7 @@ public static decimal GetGroupTicketPrice(int visitorCount) => visitorCount swit
 ```
 
 或者
-```C#
+```CSharp
 if (input is null)
 {
     return;
@@ -1156,7 +1156,7 @@ if (input is null)
 
 ## 关系模式
 
-```C#
+```CSharp
 static string Classify(double measurement) => measurement switch
 {
     < -4.0 => "Too low",
@@ -1171,7 +1171,7 @@ static string Classify(double measurement) => measurement switch
 
 添加额外的`not`,`and`,`or`来进行逻辑组合
 
-```C#
+```CSharp
 if (input is not null)
 {
     // ...
@@ -1182,12 +1182,12 @@ if (input is not null)
 
 ## 属性模式
 
-```C#
+```CSharp
 static bool IsConferenceDay(DateTime date) => date is { Year: 2020, Month: 5, Day: 19 or 20 or 21 };
 ```
 
 最后就能写出这么个折磨的玩意.
-```C#
+```CSharp
 static string TakeFive(object input) => input switch
 {
     string { Length: >= 5 } s => s.Substring(0, 5),
@@ -1205,7 +1205,7 @@ static string TakeFive(object input) => input switch
 
 也就是使用元组和解构的模式.
 
-```C#
+```CSharp
 public readonly struct Point
 {
     public int X { get; }
@@ -1226,7 +1226,7 @@ static string Classify(Point point) => point switch
 ```
 
 当然,没有元组和解构也可以使用多参数
-```C#
+```CSharp
 static decimal GetGroupTicketPriceDiscount(int groupSize, DateTime visitDate)
     => (groupSize, visitDate.DayOfWeek) switch
     {
@@ -1242,7 +1242,7 @@ static decimal GetGroupTicketPriceDiscount(int groupSize, DateTime visitDate)
 *但本质还是元组*
 
 加上类型就变成这样
-```C#
+```CSharp
 static string PrintIfAllCoordinatesArePositive(object point) => point switch
 {
     Point2D (> 0, > 0) p => p.ToString(),
@@ -1252,7 +1252,7 @@ static string PrintIfAllCoordinatesArePositive(object point) => point switch
 ```
 
 最后这个简直离谱
-```C#
+```CSharp
 if (input is WeightedPoint (> 0, > 0) { Weight: > 0.0 } p)
 {
     // ..
@@ -1264,12 +1264,12 @@ if (input is WeightedPoint (> 0, > 0) { Weight: > 0.0 } p)
 
 ## var模式
 
-```C#
+```CSharp
 SimulateDataFetch(id) is var results 
 ```
 这表示接受任何转化结果
 
-```C#
+```CSharp
 static Point Transform(Point point) => point switch
 {
     var (x, y) when x < y => new Point(-x, y),
@@ -1289,7 +1289,7 @@ static Point Transform(Point point) => point switch
 
 从 C# 9.0 开始，可在任何模式两边加上括号。 通常，这样做是为了强调或更改逻辑模式中的优先级
 
-```C#
+```CSharp
 if (input is not (float or double))
 {
     return;
@@ -1300,16 +1300,16 @@ if (input is not (float or double))
 
 可用于链接字符串,不过现在推荐`字符串内插`
 
-```C#
+```CSharp
 Console.WriteLine("Probably the oldest constant: " + Math.PI);
 ```
 
-```C#
+```CSharp
 Console.WriteLine($"Probably the oldest constant: {Math.PI:F2}");
 ```
 
 还可增加委托链
-```C#
+```CSharp
 Action a = () => Console.Write("a");
 Action b = () => Console.Write("b");
 Action ab = a + b;
@@ -1322,7 +1322,7 @@ ab();  // output: ab
 
 还支持`=`赋值的操作.
 
-```C#
+```CSharp
 Action a = () => Console.Write("a");
 Action b = () => Console.Write("b");
 
@@ -1341,7 +1341,7 @@ Console.WriteLine(nihil is null);  // output: True
 
 不连续的话,就删不掉
 
-```C#
+```CSharp
 Action a = () => Console.Write("a");
 Action b = () => Console.Write("b");
 
@@ -1364,7 +1364,7 @@ Console.WriteLine(object.ReferenceEquals(aba, unchanged));  // output: True
 ```
 
 还有`null`的情况,实际上是区分左右符号的
-```C#
+```CSharp
 Action a = () => Console.Write("a");
 
 var nothing = null - a;
@@ -1380,7 +1380,7 @@ Console.WriteLine(object.ReferenceEquals(first, a));  // output: True
 
 根据布尔表达式的计算结果为 `true` 还是 `false` 来返回两个表达式中的一个结果
 
-```C#
+```CSharp
 string GetWeatherDisplay(double tempInCelcius) => tempInCelcius < 20.0 ? "Cold." : "Perfect!";
 
 Console.WriteLine(GetWeatherDisplay(15));  // output: Cold.
@@ -1388,7 +1388,7 @@ Console.WriteLine(GetWeatherDisplay(27));  // output: Perfect!
 ```
 
 可以嵌套
-```C#
+```CSharp
 a ? b : c ? d : e
 //等同于
 a ? b : (c ? d : e)
@@ -1400,7 +1400,7 @@ a ? b : (c ? d : e)
 
 `null 包容运算符`在运行时不起作用。 它仅通过更改表达式的 `null` 状态来影响编译器的静态流分析
 
-```C#
+```CSharp
 #nullable enable
 public class Person
 {
@@ -1417,7 +1417,7 @@ public void NullNameShouldThrowTest()
 
 如果不使用 `null 包容运算符`，编译器将为前面的代码生成以下警告：*Warning CS8625: Cannot convert null literal to non-nullable reference type*
 
-```C#
+```CSharp
 public static void Main()
 {
     Person? p = Find("John");
@@ -1439,7 +1439,7 @@ public static bool IsValid(Person? person)
 
 `C# 8.0` 及更高版本中可使用空合并赋值运算符 `??=`，该运算符仅在左侧操作数的求值结果为 `null` 时，才将其右侧操作数的值赋值给左操作数。 如果左操作数的计算结果为非 `null`，则 `??=` 运算符不会计算其右操作数
 
-```C#
+```CSharp
 List<int> numbers = null;
 int? a = null;
 
@@ -1452,7 +1452,7 @@ Console.WriteLine(a);  // output: 0
 ```
 
 null 合并运算符是右结合运算符。
-```C#
+```CSharp
 a ?? b ?? c
 d ??= e ??= f
 //求值顺序为
@@ -1468,13 +1468,13 @@ d ??= (e ??= f)
 
 两者都属于匿名函数一类.
 
-```C#
+```CSharp
 int minimalLength = words
   .Where(w => w.StartsWith("a"))
   .Min(w => w.Length);
 ```
 
-```C#
+```CSharp
 public override string ToString() => $"{fname} {lname}".Trim();
 ```
 
@@ -1482,7 +1482,7 @@ public override string ToString() => $"{fname} {lname}".Trim();
 
 使用命名空间别名限定符 `::` 访问已设置别名的命名空间的成员
 
-```C#
+```CSharp
 using forwinforms = System.Drawing;
 using forwpf = System.Windows;
 
@@ -1494,7 +1494,7 @@ public class Converters
 
 `global` 别名，该别名是全局命名空间别名
 
-```C#
+```CSharp
 namespace MyCompany.MyProduct.System
 {
     class Program
@@ -1513,7 +1513,7 @@ namespace MyCompany.MyProduct.System
 
 `await` 运算符暂停对其所属的 `async` 方法的求值，直到其操作数表示的异步操作完成
 
-```C#
+```CSharp
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -1551,7 +1551,7 @@ public class AwaitOperator
 
 ## default 运算符
 
-```C#
+```CSharp
 Console.WriteLine(default(int));  // output: 0
 Console.WriteLine(default(object) is null);  // output: True
 
@@ -1574,7 +1574,7 @@ DisplayDefaultOf<System.Collections.Generic.List<int>>();
 
 `T`可推断时,可以省略.
 
-```C#
+```CSharp
 System.Numerics.Complex fillValue = default;
 //同
 System.Numerics.Complex fillValue = default(System.Numerics.Complex);
@@ -1584,13 +1584,13 @@ System.Numerics.Complex fillValue = default(System.Numerics.Complex);
 
 `delegate` 运算符创建一个可以转换为委托类型的匿名方法
 
-```C#
+```CSharp
 Func<int, int, int> sum = delegate (int a, int b) { return a + b; };
 Console.WriteLine(sum(3, 4));  // output: 7
 ```
 
 > 现在一般都用`=>`表达了.
-```C#
+```CSharp
 Func<int, int, int> sum = (a, b) => a + b;
 Console.WriteLine(sum(3, 4));  // output: 7
 ```
@@ -1598,7 +1598,7 @@ Console.WriteLine(sum(3, 4));  // output: 7
 使用 `delegate` 运算符时，可以省略参数列表。 如果这样做，可以将创建的匿名方法转换为具有任何参数列表的委托类型  
 这是 `lambda` 表达式不支持的匿名方法的唯一功能
 
-```C#
+```CSharp
 Action greet = delegate { Console.WriteLine("Hello!"); };
 greet();
 Action<int, double> introduce = delegate { Console.WriteLine("This is world!"); };
@@ -1613,7 +1613,7 @@ introduce(42, 2.7);
 
 `nameof` 表达式可生成变量、类型或成员的名称作为字符串常量
 
-```C#
+```CSharp
 Console.WriteLine(nameof(System.Collections.Generic));  // output: Generic
 Console.WriteLine(nameof(List<int>));  // output: List
 Console.WriteLine(nameof(List<int>.Count));  // output: Count
@@ -1626,7 +1626,7 @@ Console.WriteLine(nameof(numbers.Add));  // output: Add
 ```
 
 在逐字标识符的情况下，@ 字符不是名称的一部分
-```C#
+```CSharp
 var @new = 5;
 Console.WriteLine(nameof(@new));  // output: new
 ```
@@ -1676,7 +1676,7 @@ switch 更多内容,可以参考`模式`
 
 `with` 表达式在 `C# 9.0` 及更高版本中可用，使用修改的特定属性和字段生成其记录操作数的副本
 
-```C#
+```CSharp
 using System;
 public class WithExpressionBasicExample
 {
@@ -1707,7 +1707,7 @@ public class WithExpressionBasicExample
 
 下面的示例使用显式复制构造函数更新前面的示例。 复制记录时，新的复制行为是复制列表项而不是列表引用
 
-```C#
+```CSharp
 using System;
 using System.Collections.Generic;
 
@@ -1748,7 +1748,7 @@ public class UserDefinedCopyConstructorExample
 * 同时包含 `public` 和 `static` 修饰符。
 * 一元运算符有一个输入参数。 二元运算符有两个输入参数。 在每种情况下，都至少有一个参数必须具有类型 `T` 或 `T?`，其中 `T` 是包含运算符声明的类型
 
-```C#
+```CSharp
 using System;
 
 public readonly struct Fraction

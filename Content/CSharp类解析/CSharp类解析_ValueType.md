@@ -18,7 +18,7 @@ tags:
 
 `ValueType` 结构通常不在代码中直接使用。 但是，它可用作方法调用中的参数，以将可能的自变量限制为值类型而不是所有对象，或者允许方法处理许多不同的值类型
 
-```C#
+```CSharp
 public static NumericRelationship Compare(ValueType value1, ValueType value2)
 ```
 
@@ -39,7 +39,7 @@ public static NumericRelationship Compare(ValueType value1, ValueType value2)
 
 # Equals(Object)	
 
-```C#
+```CSharp
  [System.Security.SecuritySafeCritical]
 public override bool Equals (Object obj) {
    BCLDebug.Perf(false, "ValueType::Equals is not fast.  "+this.GetType().FullName+" should override Equals(Object)");
@@ -84,7 +84,7 @@ public override bool Equals (Object obj) {
 
 # ToString()	
 
-```C#
+```CSharp
 public override String ToString()
 {
     return this.GetType().ToString();

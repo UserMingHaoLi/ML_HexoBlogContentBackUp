@@ -69,7 +69,7 @@ C#共有以下内置类型,背后的class(*.NET 类型*)先不讲,以后有机�
 
 `char`实际被微软认为是整数类型,但又比较特殊.
 可以隐式转化为一些整数类型,最后得到Unicode编码的序号.
-```C#
+```CSharp
 char @char = 'A';
 //sbyte @sbyte = @char;
 //byte @byte = @char;
@@ -143,7 +143,7 @@ C#的`bool`类型是独特的, 不存在整数到bool的隐式转化.
 如果要使用组合枚举,则需要声明`[Flags]`特性.  
 如果不声明此特性也可以使用,但是需要自己定义计算方式.
 
-```C#
+```CSharp
 [Flags]
 public enum Days
 {//定义可组合枚举时,建议使用`0B`格式,方便查看和记忆.
@@ -163,7 +163,7 @@ public enum Days
 
 例子:  
 
-```C#
+```CSharp
 Console.WriteLine((Days)3);
 Console.WriteLine((Days)96);
 ```
@@ -189,7 +189,7 @@ Weekend
 使用`struct`来定义自己的结构类型
 
 例子:
-```C#
+```CSharp
 public struct Coords
 {
     public Coords(double x, double y)
@@ -228,7 +228,7 @@ public struct Coords
 
 定义可为空的值类型,需要在对于值类型后跟上一个`?`符号.  
 如 
-```C#
+```CSharp
 bool? isValue = null
 ```
 
@@ -236,7 +236,7 @@ bool? isValue = null
 所以使用时经常需要` Nullable<T>.HasValue `来检查.  
 或使用`is`运算符
 
-```C#
+```CSharp
 int? a = 42;
 if (a is int valueOfA)
 {
@@ -247,7 +247,7 @@ if (a is int valueOfA)
 可以使用`c != null`来比较,但还是推荐使用`HasValue`
 
 也可以使用`Null合并运算`来转化可空值类型  
-```C#
+```CSharp
 int? a = 28;
 int b = a ?? -1;
 ```
@@ -261,7 +261,7 @@ int b = a ?? -1;
 
 由于多出了一个`null`值的维度,很多的运算符结果会发生意想不到的变化.
 
-```C#
+```CSharp
 int? a = 10;
 int? b = null;
 int? c = 10;
@@ -279,7 +279,7 @@ a = a + b;  // a is null
 * 既不大于等于 null，
 * 也不小于 null
 
-```C#
+```CSharp
 int? a = 10;
 Console.WriteLine($"{a} >= null is {a >= null}");
 Console.WriteLine($"{a} < null is {a < null}");
@@ -289,7 +289,7 @@ Console.WriteLine($"{a} == null is {a == null}");
 // 10 == null is False
 ```
 
-```C#
+```CSharp
 int? b = null;
 int? c = null;
 Console.WriteLine($"null >= null is {b >= c}");
@@ -310,7 +310,7 @@ Console.WriteLine($"null == null is {b == c}");
 
 另外，请勿使用 is 运算符来确定实例是否是可为空的值类型  
 
-```C#
+```CSharp
 int? a = 14;
 if (a is int)
 {
@@ -329,7 +329,7 @@ if (b is int?)
 
 可使用以下示例中提供的代码来确定实例是否是可为空的值类型
 
-```C#
+```CSharp
 int? a = 14;
 Console.WriteLine(IsOfNullableType(a));  // output: True
 

@@ -136,7 +136,7 @@ tags:
 * 考虑为属性提供与其类型相同的名称
 * 例如，以下属性可正确获取和设置名为 `Color` 的枚举值，因此属性名为 `Color`
 
-```C#
+```CSharp
 public enum Color {...}
 public class Control {
     public Color Color { get {...} set {...} }
@@ -176,7 +176,7 @@ public class Control {
 * 在方法定义与属性定义之间添加至少一个空白行
 * 使用括号突出表达式中的子句，如下面的代码所示
 
-```C#
+```CSharp
 if ((val1 > val2) && (val1 > val3))
 {
     // Take appropriate action.
@@ -192,7 +192,7 @@ if ((val1 > val2) && (val1 > val3))
 * 请勿在注释周围创建格式化的星号块,
   * 即不要混用`//`和`/**/`
 
-```C#
+```CSharp
 // The following declaration creates a query. It does not run
 // the query.
 ```
@@ -203,13 +203,13 @@ if ((val1 > val2) && (val1 > val3))
 
 *使用字符串内插来编写文本字面量*
 
-```C#
+```CSharp
 string displayName = $"{nameList[n].LastName}, {nameList[n].FirstName}";
 ```
 
 *经常追加字符串,请使用`StringBuilder`*
 
-```C#
+```CSharp
 var phrase = "lalalalalalalalalalalalalalalalalalalalalalalalalalalalalala";
 var manyPhrases = new StringBuilder();
 for (var i = 0; i < 10000; i++)
@@ -256,12 +256,12 @@ for (var i = 0; i < 10000; i++)
 如果能确认初始化内容,则使用简易的初始化
 
 *简易初始化不能使用`var`*
-```C#
+```CSharp
 string[] vowels1 = { "a", "e", "i", "o", "u" };
 ```
 
 *显示初始化可以使用`var`*
-```C#
+```CSharp
 var vowels2 = new string[] { "a", "e", "i", "o", "u" };
 ```
 
@@ -272,7 +272,7 @@ var vowels2 = new string[] { "a", "e", "i", "o", "u" };
 尽量使用`C#`内置的`Func<>`和`Action<>`, 这有利于其他开发者理解其内容.
 
 *简单方法可以直接使用委托形式创建*
-```C#
+```CSharp
 public static Action<string> ActionExample1 = x => Console.WriteLine($"x is: {x}");
 
 public static Action<string, string> ActionExample2 = (x, y) => 
@@ -291,7 +291,7 @@ public static Func<int, int, int> FuncExample2 = (x, y) => x + y;
 
 > 在 `C# 8` 及更高版本中，使用无需大括号的新的 `using` 语法
 
-```C#
+```CSharp
 //C#8.0
 using Font font3 = new Font("Arial", 10.0f);
 byte charset3 = font3.GdiCharSet;
@@ -302,7 +302,7 @@ byte charset3 = font3.GdiCharSet;
 尽量使用短路运算符`&&`和`||`  
 它们尽可能少的计算表达式, 对以下列子很有用
 
-```C#
+```CSharp
 if (pizz != null && pizz.IsOver())
 {
 	 Console.WriteLine($"pizz = {pizz}");
@@ -316,12 +316,12 @@ if (pizz != null && pizz.IsOver())
 
 使用`var`来调用`new`关键字
 
-```C#
+```CSharp
 var instance1 = new ExampleClass();
 ```
 
 使用对象初始化器
-```C#
+```CSharp
 var instance3 = new ExampleClass 
 	{ 
 		Name = "Desktop",
@@ -352,7 +352,7 @@ var instance3 = new ExampleClass
 
 对于查询出来的小写字段,使用别名包装成大写,用于遵守`Pascal `风格
 
-```C#
+```CSharp
 var localDistributors =
     from customer in customers
     join distributor in distributors on customer.City equals distributor.City

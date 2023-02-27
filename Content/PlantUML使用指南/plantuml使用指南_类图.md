@@ -86,7 +86,7 @@ class 唐老鸭 {
 # 快速学习
 
 声明类可以直接用
-```C#
+```CSharp
 + class MyClass {
 + {static} void Main(String[] arg)
 }

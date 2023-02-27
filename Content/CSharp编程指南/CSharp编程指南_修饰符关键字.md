@@ -75,7 +75,7 @@ tags:
 
 用于指定抽象类和抽象方法.
 
-```C#
+```CSharp
 abstract class Shape
 {
     public abstract int GetArea();
@@ -90,7 +90,7 @@ abstract class Shape
 
 说明此方法包含 `await` 语句；也包含异步操作
 
-```C#
+```CSharp
 public async Task<int> ExampleMethodAsync()
 {
     //...
@@ -117,7 +117,7 @@ lambda和匿名方法都属于方法.
 
 常量是不变量,运行是不能进行任何更改,
 
-```C#
+```CSharp
 const int X = 0;
 ```
 
@@ -129,7 +129,7 @@ const int X = 0;
 用于声明事件  
 事件是委托的进一步包装
 
-```C#
+```CSharp
 //委托
 public delegate void SampleEventHandler(object sender, SampleEventArgs e);
 //事件
@@ -146,7 +146,7 @@ public event SampleEventHandler SampleEvent;
 `extern` 修饰符用于声明在外部实现的方法  
 这经常用于导入外部`dll`文件.  
 
-```C#
+```CSharp
 [DllImport("avifil32.dll")]
 private static extern void AVIFileInit();
 ```
@@ -163,7 +163,7 @@ private static extern void AVIFileInit();
 
 但是代价则是,你只能将声明为逆变的类型用作参数,而非返回值
 
-```C#
+```CSharp
 IContravariant<Object> iobj = new Sample<Object>();
 IContravariant<String> istr = new Sample<String>();
 istr = iobj;
@@ -175,7 +175,7 @@ istr = iobj;
 在用作声明修饰符时，`new` 关键字可以显式隐藏从基类继承的成员  
 可以不使用 `new` 修饰符来隐藏成员，但将收到编译器警告,编译器为你生成隐藏的`new`
 
-```C#
+```CSharp
 public class BaseC
 {
     public int x;
@@ -199,7 +199,7 @@ new 修饰符会用同样的名称创建一个新成员并使原始成员变为�
 
 但是代价则是,你只能将声明为协变的类型用作返回值,而非参数
 
-```C#
+```CSharp
 IEnumerable<Object> iobj = new IEnumerable<Object>();
 IEnumerable<String> istr = new IEnumerable<String>();
 iobj = istr;
@@ -214,7 +214,7 @@ iobj = istr;
 
 扩展或修改继承父类的成员.
 
-```C#
+```CSharp
 abstract class Shape
 {
     public abstract int GetArea();
@@ -262,7 +262,7 @@ class Square : Shape
 
 应用于某个类时,`sealed`修饰符可阻止其他类继承自己  
 
-```C#
+```CSharp
 class A {}
 sealed class B : A {}
 ```
@@ -271,7 +271,7 @@ sealed class B : A {}
 不对类使用而对基类中的虚方法或属性的方法或属性使用 `sealed` 修饰符  
 这使你可以允许类派生自你的类并防止它们替代特定虚方法或属性
 
-```C#
+```CSharp
 class X
 {
     protected virtual void F() { Console.WriteLine("X.F"); }
@@ -299,7 +299,7 @@ class Z : Y
 
 拥有此声明的成员无需实例即可访问.
 
-```C#
+```CSharp
 static class CompanyEmployee
 {
     public static void DoSomething() { /*...*/ }
@@ -324,7 +324,7 @@ CompanyEmployee.DoSomething();//无需实例化
 
 `virtual`用于指定自己的成员可以被子类重写
 
-```C#
+```CSharp
 public class A
 {
 `	public virtual double Area()

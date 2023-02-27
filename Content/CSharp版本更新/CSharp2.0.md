@@ -31,7 +31,7 @@ tags:
 泛型, 也就是我们经常看到的`T`类型这个`T`是一个约定俗成的参数名称, 实际可以随意自己命名.  
 我们经常在C#类库中看到`List<T>`, 这就是一种泛型. 下面使用一下试试.
 
-```C#
+```CSharp
 List<int> intList = new List<int>();
 ```
 
@@ -69,7 +69,7 @@ public T GetNode<T2>(T2 index)
 泛型到底是如何判断所谓的`T`到底是什么东西的呢?  
 下面我们介绍泛型的约束.  
 
-```C#
+```CSharp
 public T GetNode<T, T2>(T2 index) where T : class where T2 : class
 {
     return null;
@@ -144,7 +144,7 @@ public partial class Employee
 }
 ```
 
-```C#
+```CSharp
 class Container
 {
     partial class Nested
@@ -176,7 +176,7 @@ TestDelegate testDelB = delegate(string s) { Console.WriteLine(s); };
 
 看一个例子
 
-```C#
+```CSharp
  List<Action> actions = new List<Action>();
 for (int i = 0; i < 5; i++)
 {
@@ -194,7 +194,7 @@ foreach (var item in actions)
 
 解决办法是在匿名函数内部声明一个变量, 立刻存储一次.
 
-```C#
+```CSharp
 for (int i = 0; i < 5; i++)
 {
     int j = i;
@@ -329,7 +329,7 @@ yield的原理是运行到一个`yield return`后就停下, 等待下一次运�
 
 然后我们仿照 `IEnumerable<out T>` 来写一个接口和一个类型.
 
-```C#
+```CSharp
 interface IOut_Interface<out T>
 {
     T GetR();
@@ -347,7 +347,7 @@ class COut_Class<T> : IOut_Interface<T>
 这样就声明了一个协变的接口和一个实现该接口的类.  
 此时, 我们可以尝试添加T为参数
 
-```C#
+```CSharp
 T GetR(T t);//error
 ```
 
@@ -357,7 +357,7 @@ T GetR(T t);//error
 
 可见我们已经成功声明了协变, 之后声明一个逆变.
 
-```C#
+```CSharp
 interface IIn_Interface<U>
 {
     void SetU(U u);
@@ -467,7 +467,7 @@ reverseStringHandler = ReverseString;
 
 使用`static`修饰类, 如此修饰过的类中存在的任何都必须是静态的.  
 
-```C#
+```CSharp
 static class C1 {}
 ```
 
@@ -477,7 +477,7 @@ static class C1 {}
 
 实际上, 在任何类中书写的即刻赋值, 都会被移动到构造器中进行, 无论是实例构造还是静态构造.  
 
-```C#
+```CSharp
 int a = 1;  //移动到实例构造
 static int b = 2;   //移动到静态构造.
 ```

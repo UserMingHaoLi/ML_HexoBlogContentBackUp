@@ -20,14 +20,14 @@ tags:
 
 # 自动实现的属性
 
-```C#
+```CSharp
 int Myint { get; set;}
 ```
 
 以更简单的方式生成一条属性, 其背后的字段交给编辑器,  
 这种属性由于没有编写代码, 默认实现和一下代码相当
 
-```C#
+```CSharp
 int myint;
 int Myint 
 { 
@@ -53,7 +53,7 @@ int Myint
 
 匿名类型和js中的objcet有些相似.
 
-```C#
+```CSharp
 var v = new { Amount = 108, Message = "Hello" }; 
 ```
 
@@ -103,7 +103,7 @@ IEnumerable<int> highScoresQuery =
 # Lambda 表达式
 
 使用简短语句创建一个匿名函数, 和之前的方法组结合, 自动匹配对应代理.
-```C#
+```CSharp
 Action<string> action = a => Console.WriteLine(a);
 ```
 
@@ -116,7 +116,7 @@ Action<string> action = a => Console.WriteLine(a);
 `{}`代码块区域, 如果代码只有一行, 可以省略花括号和`return`  
 如果把上面代码写完整就是这样的.
 
-```C#
+```CSharp
 Action<string> action = (string a) => { return Console.WriteLine(a) }
 ```
 
@@ -127,7 +127,7 @@ Action<string> action = (string a) => { return Console.WriteLine(a) }
 但是具体数据还要等该委托被使用才知道.  
 `lambda`的本质还是方法. 是匿名方法, 而且进行了极大幅度的简写,方便使用.
 
-```C#
+```CSharp
 static void Main()  
 {  
   ShowValue(x => x * x);  
@@ -158,7 +158,7 @@ private static void ShowValue(Func<int,int> op)
 比如, 我想要一个 `double.TOInt()`这么一个方法, 实际是没有的.  
 这时候, 就可以使用扩展方法, 使自己写的方法像原生方法一样使用.
 
-```C#
+```CSharp
 static class sc
 {
     public static int ToInt(this double thas)
@@ -182,7 +182,7 @@ d.ToInt();
 
 `var`, 这就是一个偷懒写法, 如果编辑器可以推断类型, 你为什么要声明他呢.
 
-```C#
+```CSharp
 var i = 10;
 int i = 10;
 ```
@@ -194,7 +194,7 @@ int i = 10;
 分布方法可以让你在一处定义方法, 在另一处实现.  
 如果你不实现, 编译器在编译时删除该方法.
 
-```C#
+```CSharp
 partial class A
 {
     partial void OnSomethingHappened(string s);
@@ -220,7 +220,7 @@ partial class A
 你可以在初始化的时候访问任何可以访问的字段和属性.  
 甚至可以忽略构造方法, 默认调用空构造.
 
-```C#
+```CSharp
 Cat cat = new Cat { Age = 10, Name = "Fluffy" };
 Cat sameCat = new Cat("Fluffy"){ Age = 10 };
 ```
@@ -228,7 +228,7 @@ Cat sameCat = new Cat("Fluffy"){ Age = 10 };
 从 C# 6 开始，除了分配字段和属性外，对象初始值设定项还可以设置索引器。  
 使用`[]`声明索引.
 
-```C#
+```CSharp
 var identity = new Matrix
 {
     [0, 0] = 1.0,
