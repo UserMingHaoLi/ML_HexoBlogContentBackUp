@@ -49,7 +49,7 @@ private static void Foo()
 static void Main(string[] args)
 {
 	Foo foo = (IFoo) null;
-	foo.Name = "lindexi";
+	foo.Name = "ML";
 
 	Console.Read();
 }
@@ -78,7 +78,7 @@ class Program
 	static async Task Main(string[] args)
 	{
 		Foo foo = await (object) null;
-		foo.Name = "lindexi";
+		foo.Name = "ML";
 
 		Console.Read();
 	}
@@ -598,7 +598,7 @@ for (int i = 0; i < n; i++)
 ```CSharp
 try
 {
-	throw new ArgumentException("lindexi is doubi");
+	throw new ArgumentException("ML is doubi");
 }
 finally
 {
@@ -614,7 +614,7 @@ class Foo
 {
 	public Foo()
 	{
-		throw new Exception("lindexi is doubi");
+		throw new Exception("ML is doubi");
 	}
 
 	~Foo()
@@ -796,6 +796,8 @@ var invocationList = action.GetInvocationList();
 var afterAllocatedBytesForCurrentThread = GC.GetAllocatedBytesForCurrentThread();
 Console.WriteLine(afterAllocatedBytesForCurrentThread - beforeAllocatedBytesForCurrentThread);
 ```
+
+
 
 # 完毕
 
