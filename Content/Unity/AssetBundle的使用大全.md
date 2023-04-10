@@ -232,8 +232,21 @@ ABC ∩ Normal ABE -> Normal AB (AB is NewKeyword)
 * 或通过`IPreprocessShaders`接口来重写剔除方法实现自己想要的变体剔除
   * 内建keyword可能被引擎的一些设置功能先行剔除掉，在IPreprocessShaders接口传入时已经不存在，需要通过修改引擎设置解除剔除
 
+## Shader收集结论
 
-参考代码-变体收集修改
+1. 从所有材质中收集`keyword`来处理变体
+   1. 代码查找手动设置`keyword`的情况
+2. 实际运行时收集变体
+   1. 可以专用场景运行收集
+   2. 仅供参考, 理论所有都应走材质收集, 如果出现此条多而材质收集少的情况, 查找原因
+   3. 尝试收集真机运行, 并收集(`Graphics`面板上勾选`Log Shader Compilation`)
+3. 跑所有Shader,做宏定义的文本语义收集
+   1. 考虑Unity内置Shader
+   2. 考虑空Shader, 但使用其他Shader提供的Pass的情况
+
+> 注意多Pass且定义相同`keyword`的情况
+
+## 参考代码-变体收集修改
 ```CSharp
 //将SerializedProperty转化为ShaderVariant
 private ShaderVariantCollection.ShaderVariant PropToVariantObject(Shader shader, SerializedProperty variantInfo)
