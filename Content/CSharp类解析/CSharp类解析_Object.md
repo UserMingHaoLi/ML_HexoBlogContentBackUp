@@ -12,9 +12,9 @@ tags:
 	- CSharp
 ---
 
-语言通常不需要类来声明继承 `Object` ，因为继承是隐式的
+语言通常不需要类来声明继承 `Object` ,因为继承是隐式的
 
-因为 .NET 中的所有类都是从派生的 `Object` ，所以类中定义的每个方法 `Object` 都可用于系统中的所有对象
+因为 .NET 中的所有类都是从派生的 `Object` ,所以类中定义的每个方法 `Object` 都可用于系统中的所有对象
 
 所以, 任何类都有以下方法
 
@@ -40,7 +40,7 @@ tags:
 
 对类型进行装箱和取消装箱的过程会产生性能开销
 
-* 创建接受类型的常规方法 `Object` ，并创建一组特定于类型的方法重载，这些重载接受你希望类经常处理的每个值类型
+* 创建接受类型的常规方法 `Object` ,并创建一组特定于类型的方法重载,这些重载接受你希望类经常处理的每个值类型
 
 * 将类型及其成员设计为使用泛型
 
@@ -64,15 +64,15 @@ interface IEquatable<T>
 ```
 *不过并不能确认外部调用了那个`Equals`,所以还是要重写`Object`的`Equals`*
 
-* 如果当前实例是引用类型，则 `Equals(Object)` 方法会测试引用相等性，并调用 `Equals(Object)` 方法等效于调用 `ReferenceEquals` 方法
-  * 可以重写引用类型的的默认实现 `Equals` ，以测试值相等性而不是引用相等性，并定义值相等性的精确含义
-* 如果当前实例是值类型，则方法会 `Equals(Object)` 测试值是否相等
-  * 对于值类型，应始终重写 `Equals` ，因为依赖于反射的相等性测试会**降低性能**
+* 如果当前实例是引用类型,则 `Equals(Object)` 方法会测试引用相等性,并调用 `Equals(Object)` 方法等效于调用 `ReferenceEquals` 方法
+  * 可以重写引用类型的的默认实现 `Equals` ,以测试值相等性而不是引用相等性,并定义值相等性的精确含义
+* 如果当前实例是值类型,则方法会 `Equals(Object)` 测试值是否相等
+  * 对于值类型,应始终重写 `Equals` ,因为依赖于反射的相等性测试会**降低性能**
 * 枚举	`Enum.Equals`	值必须具有相同的枚举类型和基础值。
 * 委托	`MulticastDelegate.Equals`	委托必须具有相同的调用列表类型。
 * 接口	`Object.Equals(Object)`	引用相等性。
 
-例如，对象的值 `String` 基于字符串的字符; `String.Equals(Object)` 方法会重写 `Object.Equals(Object)` 方法，以便 `true` 为任意两个包含相同字符的字符串实例返回相同的顺序
+例如,对象的值 `String` 基于字符串的字符; `String.Equals(Object)` 方法会重写 `Object.Equals(Object)` 方法,以便 `true` 为任意两个包含相同字符的字符串实例返回相同的顺序
 
 重写示例
 ```CSharp
@@ -89,13 +89,13 @@ public override bool Equals(Object obj)
 **对于相等性比较,要注意一致,传递,交换,Null**  
 * `Equals` 不得引发异常*
 
-重写时，请遵循以下准则 `Equals(Object)` ：
+重写时,请遵循以下准则 `Equals(Object)` ：
 
 * 实现的类型 `IComparable` 必须重写 `Equals(Object)` 
-* 重写的类型 `Equals(Object)` 还必须重写 `GetHashCode` ; 否则，哈希表可能无法正常工作
-* 应考虑实现 `IEquatable<T>` 接口，以支持强类型化测试是否相等。 你的 `IEquatable<T>.Equals` 实现应返回与`Equals(Object)`一致的结果 
+* 重写的类型 `Equals(Object)` 还必须重写 `GetHashCode` ; 否则,哈希表可能无法正常工作
+* 应考虑实现 `IEquatable<T>` 接口,以支持强类型化测试是否相等。 你的 `IEquatable<T>.Equals` 实现应返回与`Equals(Object)`一致的结果 
 * 对于`==`和`Equals(Object)`,应该一并重载,并得出一致的结果
-  * 大多数引用类型不得重载相等运算符（即使它们重写`Equals`） 。 但是，如果要实现的引用类型应具有值语义，则必须重写相等运算符
+  * 大多数引用类型不得重载相等运算符（即使它们重写`Equals`） 。 但是,如果要实现的引用类型应具有值语义,则必须重写相等运算符
 * 不应覆盖 `Equals` 可变引用类型,这意味着可变引用类型的实例的哈希代码在其生存期内可能会更改,导致对象在哈希表中丢失
 
 # GetHashCode
@@ -147,23 +147,23 @@ public override int GetHashCode()
 
 * 不要序列化哈希代码值或将其存储在数据库中。
 * 不要使用哈希代码作为密钥来检索键控集合中的对象。
-* 不要跨应用程序域或进程发送哈希代码。 在某些情况下，可以基于每个进程或每个应用程序域来计算哈希代码
+* 不要跨应用程序域或进程发送哈希代码。 在某些情况下,可以基于每个进程或每个应用程序域来计算哈希代码
 * 如果需要加密型强哈希,参考`System.Security.Cryptography.HashAlgorithm` 或类的类 `System.Security.Cryptography.KeyedHashAlgorithm `
-* 不要测试哈希代码是否相等，以确定两个对象是否相等。 (不相等对象可以具有相同的哈希代码。 ) 要测试是否相等，请调用 `ReferenceEquals` 或 `Equals` 方法。
+* 不要测试哈希代码是否相等,以确定两个对象是否相等。 (不相等对象可以具有相同的哈希代码。 ) 要测试是否相等,请调用 `ReferenceEquals` 或 `Equals` 方法。
 
-对于此方法的默认实现`RuntimeHelpers.GetHashCode` 换言之，该方法返回的两个对象 `ReferenceEquals true` 具有相同的哈希代码
+对于此方法的默认实现`RuntimeHelpers.GetHashCode` 换言之,该方法返回的两个对象 `ReferenceEquals true` 具有相同的哈希代码
 
-如果值类型不重写 `GetHashCode` ，则 `ValueType.GetHashCode` 基类的方法使用反射根据类型字段的值来计算哈希代码  
-换句话说，其字段具有相等值的值类型具有相同的哈希代码
+如果值类型不重写 `GetHashCode` ,则 `ValueType.GetHashCode` 基类的方法使用反射根据类型字段的值来计算哈希代码  
+换句话说,其字段具有相等值的值类型具有相同的哈希代码
 
-*所以,如果重写 `GetHashCode` 方法，则还应重写 `Equals` ，反之亦然*
+*所以,如果重写 `GetHashCode` 方法,则还应重写 `Equals` ,反之亦然*
 
-如果用作哈希表中的键的对象不提供有用的实现 `GetHashCode` ，则可以通过 `IEqualityComparer` 向 `Hashtable` 类构造函数的重载之一提供实现来指定哈希代码提供程序
+如果用作哈希表中的键的对象不提供有用的实现 `GetHashCode` ,则可以通过 `IEqualityComparer` 向 `Hashtable` 类构造函数的重载之一提供实现来指定哈希代码提供程序
 
 
-对于每次允许,同一个对象应返回同样的哈希码,如果重新运行应用程序，则可以返回新的哈希代码(只要本次运行中相同即可)
+对于每次允许,同一个对象应返回同样的哈希码,如果重新运行应用程序,则可以返回新的哈希代码(只要本次运行中相同即可)
 
-对对象状态的小修改应该会导致对生成的哈希代码进行较大的修改，以获得最佳的哈希表性能
+对对象状态的小修改应该会导致对生成的哈希代码进行较大的修改,以获得最佳的哈希表性能
 
 哈希函数的计算成本应较低
 
@@ -183,9 +183,9 @@ public extern Type GetType();
 
 返回当前实例的准确运行时类型
 
-因为 `System.Object` 是 `.net` 类型系统中所有类型的基类，所以 `GetType` 方法可用于返回 `Type` 表示所有 `.net` 类型的对象
+因为 `System.Object` 是 `.net` 类型系统中所有类型的基类,所以 `GetType` 方法可用于返回 `Type` 表示所有 `.net` 类型的对象
 
-如果两个对象 `x`,  `y` 具有相同的运行时类型，则 `Object.ReferenceEquals(x.GetType(),y.GetType())` 返回 `true`  
+如果两个对象 `x`,  `y` 具有相同的运行时类型,则 `Object.ReferenceEquals(x.GetType(),y.GetType())` 返回 `true`  
 *也就是说,得到的`Type`是相同的*
 
 # ToString
@@ -209,7 +209,7 @@ public override String ToString()
 
 许多类型还重载 `ToString` 方法以提供接受多种参数的版本
 
-下面的示例调用重载 `Decimal.ToString(String, IFormatProvider)` 的方法，以显示货币值的区分区域性的格式设置
+下面的示例调用重载 `Decimal.ToString(String, IFormatProvider)` 的方法,以显示货币值的区分区域性的格式设置
 
 ```CSharp
 using System;
@@ -239,10 +239,10 @@ public class Example
 
 ## 扩展对象 ToString 方法
 
-尽管可能需要 `ToString` 数组或集合类来显示其成员的值，但它将显示类型完全限定的类型名称.  
+尽管可能需要 `ToString` 数组或集合类来显示其成员的值,但它将显示类型完全限定的类型名称.  
 这不是我们希望的. 所以可以有以下几个方式.
 
-* 对象或实现 `IEnumerable` 或 `IEnumerable<T>` ，则可以使用 `foreach`, 遍历每个单位输出  
+* 对象或实现 `IEnumerable` 或 `IEnumerable<T>` ,则可以使用 `foreach`, 遍历每个单位输出  
 * 如果类不 `sealed`, 则可以继承并重写`ToString`方法.
 * 使用`扩展方法`
 
@@ -287,14 +287,14 @@ public static string ToString2<T>(this List<T> l)
 
 方法的重写 `ToString()` 应遵循以下准则
 
-* 返回的字符串应该是友好的，可供人们阅读。
+* 返回的字符串应该是友好的,可供人们阅读。
 * 返回的字符串应唯一标识对象实例的值。
-* 返回的字符串应尽可能短，以便调试器能够显示它。
+* 返回的字符串应尽可能短,以便调试器能够显示它。
 * `ToString()` 重写不应返回 `Empty` 或为空字符串。
 * `ToString()` 重写不应引发异常。
-* 如果实例的字符串表示形式区分区域性或可通过多种方式进行格式化，则实现 `IFormattable` 接口
-* 如果返回的字符串包含敏感信息，则应首先请求适当的权限。 如果请求成功，则可以返回敏感信息;否则，应返回排除敏感信息的字符串
-* `ToString()` 重写应没有可观察到的副作用，以避免调试中的复杂。 例如，对方法的调用 `ToString()` 不应更改实例字段的值
+* 如果实例的字符串表示形式区分区域性或可通过多种方式进行格式化,则实现 `IFormattable` 接口
+* 如果返回的字符串包含敏感信息,则应首先请求适当的权限。 如果请求成功,则可以返回敏感信息;否则,应返回排除敏感信息的字符串
+* `ToString()` 重写应没有可观察到的副作用,以避免调试中的复杂。 例如,对方法的调用 `ToString()` 不应更改实例字段的值
 * 如果你的类型可以通过构造函数或从字符串实例化,则应确保该方法返回的字符串 `ToString()` 可转换为对象实例
 
 # Windows运行时
@@ -312,13 +312,13 @@ protected extern Object MemberwiseClone();
 
 执行浅表复制操作  
 
-将当前对象的非静态字段复制到新的对象。 如果字段是值类型，则执行字段的逐位副本。 如果字段是引用类型，则会复制引用，但不会复制引用的对象;因此，原始对象及其复本引用相同的对象。
+将当前对象的非静态字段复制到新的对象。 如果字段是值类型,则执行字段的逐位副本。 如果字段是引用类型,则会复制引用,但不会复制引用的对象;因此,原始对象及其复本引用相同的对象。
 
 浅层复制不能满足需要,则
 
 * 使用构造函数创建一个新的
 * 调用 `MemberwiseClone` 后手动赋值引用类型
-* 序列化要深层复制的对象，然后将序列化的数据还原到其他对象变量
+* 序列化要深层复制的对象,然后将序列化的数据还原到其他对象变量
 * 使用带有递归的反射来执行深层复制操作
 
 # 静态Equals
@@ -340,7 +340,7 @@ public static bool Equals(Object objA, Object objB)
 
 所以两个`null`可以返回`true`
 
-*如果 `objA` 重写 `Object.Equals(Object)` 方法，则将调用此重写*
+*如果 `objA` 重写 `Object.Equals(Object)` 方法,则将调用此重写*
 
 # 静态ReferenceEquals
 
@@ -354,7 +354,7 @@ public static bool ReferenceEquals (Object objA, Object objB) {
 
 可见,只比较了`==`
 
-`ReferenceEquals` 在这两种情况下，方法的返回值可能看起来是异常的
+`ReferenceEquals` 在这两种情况下,方法的返回值可能看起来是异常的
 
 * 比较值类型时, 由于装箱,会返回`false`
 * 比较字符串时, 取决于该字符串是否是缓存.
@@ -401,22 +401,22 @@ public Object()
 {
 }
 ```
-`Finalize`方法用于在销毁对象之前对当前对象占用的非托管资源执行清理操作。 方法是受保护的，因此只能通过此类或派生类访问
+`Finalize`方法用于在销毁对象之前对当前对象占用的非托管资源执行清理操作。 方法是受保护的,因此只能通过此类或派生类访问
 
 `Object`类不提供方法的实现
 
 `Finalize` 操作具有以下限制
 
-* 不确定终结器执行时的准确时间。 若要确保类的实例的资源的确定性版本，请实现 Close 方法或提供 IDisposable.Dispose 实现
+* 不确定终结器执行时的准确时间。 若要确保类的实例的资源的确定性版本,请实现 Close 方法或提供 IDisposable.Dispose 实现
 * 不能保证两个对象的终结器以任何特定顺序运行
 * 不指定终结器在其上运行的线程
 
-在 `Finalize` 以下异常情况下，该方法可能无法运行到完成或根本不会运行
+在 `Finalize` 以下异常情况下,该方法可能无法运行到完成或根本不会运行
 
-* 如果另一个终结器无限期地阻止 (进入无限循环，则尝试获取它永远无法获取的锁，依此类推) 。 因为运行时尝试运行终结器来完成，所以如果终结器无限期阻塞，则可能不会调用其他终结器
-* 如果进程终止，无需给运行时提供清理的机会。 在这种情况下，运行时的进程终止通知是 DLL_PROCESS_DETACH 通知
+* 如果另一个终结器无限期地阻止 (进入无限循环,则尝试获取它永远无法获取的锁,依此类推) 。 因为运行时尝试运行终结器来完成,所以如果终结器无限期阻塞,则可能不会调用其他终结器
+* 如果进程终止,无需给运行时提供清理的机会。 在这种情况下,运行时的进程终止通知是 DLL_PROCESS_DETACH 通知
 
-如果 `Finalize` 或的替代 `Finalize` 引发了异常，并且运行时不是由覆盖默认策略的应用程序承载，则运行时将终止进程，并且不会执行任何活动的 `try / finally` 块或终结器
+如果 `Finalize` 或的替代 `Finalize` 引发了异常,并且运行时不是由覆盖默认策略的应用程序承载,则运行时将终止进程,并且不会执行任何活动的 `try / finally` 块或终结器
 
 ---
 

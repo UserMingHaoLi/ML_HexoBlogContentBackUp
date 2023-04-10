@@ -72,7 +72,7 @@ tags:
 使用`Verify`
 
 ```
-// 在验证失败的时候，提供自定义的错误提示信息 
+// 在验证失败的时候,提供自定义的错误提示信息 
  mock.Verify(foo => foo.Execute("ping"), "When doing operation X, the service should be pinged always");  
 ```
 

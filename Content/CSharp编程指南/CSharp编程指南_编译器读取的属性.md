@@ -15,7 +15,7 @@ tags:
 
 # 保留的特性：程序集级别特性
 
-大多数特性应用于特定语言元素，如类或方法；但是，一些特性是全局特性 - 它们应用于整个程序集或模块
+大多数特性应用于特定语言元素,如类或方法；但是,一些特性是全局特性 - 它们应用于整个程序集或模块
 
 <!--more-->
 
@@ -58,7 +58,7 @@ tags:
 
 # 保留的特性：确定调用方信息
 
-使用信息属性，可以获取有关方法调用方的信息
+使用信息属性,可以获取有关方法调用方的信息
 
 可以获取源代码的文件路径、源代码中的行号和调用方的成员名称
 
@@ -97,7 +97,7 @@ public void TraceMessage(string message,
 
 # 保留的特性有助于编译器的 null 状态静态分析
 
-在可为 null 的上下文中，编译器对代码执行静态分析，以确定所有引用类型变量的 null 状态
+在可为 null 的上下文中,编译器对代码执行静态分析,以确定所有引用类型变量的 null 状态
 
 可使用以下属性之一来表示这些规则：
 
@@ -105,13 +105,13 @@ public void TraceMessage(string message,
 * DisallowNull：可为 null 的参数不应为 null。
 * MaybeNull：不可为 null 的返回值可以为 null。
 * NotNull：可为 null 的返回值永远不会为 null。
-* MaybeNullWhen：当方法返回指定的 bool 值时，不可为 null 的参数可以为 null。
-* NotNullWhen：当方法返回指定的 bool 值时，可以为 null 的参数不会为 null。
-* NotNullIfNotNull：如果指定参数的参数不为 null，则返回值不为 null。
-* DoesNotReturn：方法从不返回。 换句话说，它总是引发异常。
-* DoesNotReturnIf：如果关联的 bool 参数具有指定值，则此方法永远不会返回。
-* MemberNotNull：当方法返回时，列出的成员不会为 null。
-* MemberNotNullWhen：当方法返回指定的 bool 值时，列出的成员不会为 null。
+* MaybeNullWhen：当方法返回指定的 bool 值时,不可为 null 的参数可以为 null。
+* NotNullWhen：当方法返回指定的 bool 值时,可以为 null 的参数不会为 null。
+* NotNullIfNotNull：如果指定参数的参数不为 null,则返回值不为 null。
+* DoesNotReturn：方法从不返回。 换句话说,它总是引发异常。
+* DoesNotReturnIf：如果关联的 bool 参数具有指定值,则此方法永远不会返回。
+* MemberNotNull：当方法返回时,列出的成员不会为 null。
+* MemberNotNullWhen：当方法返回指定的 bool 值时,列出的成员不会为 null。
 
 > 把我看懵了, 这个应该是可为Null的上下文中准备的....
 
@@ -128,9 +128,9 @@ public static void Msg(string msg)
    Console.WriteLine(msg);
 }
 ```
-如果未定义 `TRACE_ON` 标识符，则不会显示跟踪输出
+如果未定义 `TRACE_ON` 标识符,则不会显示跟踪输出
 
-`Conditional` 特性通常与 `DEBUG` 标识符一起使用，以启用调试生成（而非发布生成）中的跟踪和日志记录功能
+`Conditional` 特性通常与 `DEBUG` 标识符一起使用,以启用调试生成（而非发布生成）中的跟踪和日志记录功能
 
 ```CSharp
 [Conditional("DEBUG")]
@@ -139,9 +139,9 @@ static void DebugMethod()
 }
 ```
 
-与将方法封闭在 `#if…#endif` 块内相比，`Conditional` 更简洁且较不容易出错
+与将方法封闭在 `#if…#endif` 块内相比,`Conditional` 更简洁且较不容易出错
 
-如果某个方法具有多个 `Conditional` 特性，则如果定义了一个或多个条件符号（通过使用 `OR` 运算符将这些符号逻辑链接在一起），则包含对该方法的调用。 在以下示例中，存在 A 或 B 将导致方法调用
+如果某个方法具有多个 `Conditional` 特性,则如果定义了一个或多个条件符号（通过使用 `OR` 运算符将这些符号逻辑链接在一起）,则包含对该方法的调用。 在以下示例中,存在 A 或 B 将导致方法调用
 
 ```CSharp
 [Conditional("A"), Conditional("B")]
@@ -153,7 +153,7 @@ static void DoIfAorB()
 
 ## 使用带有特性类的 Conditional
 
-`Conditional` 特性还可应用于特性类定义。 在以下示例中，如果定义了 `DEBUG`，则自定义特性 `Documentation` 将仅向元数据添加信息
+`Conditional` 特性还可应用于特性类定义。 在以下示例中,如果定义了 `DEBUG`,则自定义特性 `Documentation` 将仅向元数据添加信息
 
 ```CSharp
 [Conditional("DEBUG")]
@@ -218,7 +218,7 @@ namespace AttributeExamples
     }
 }
 ```
-* 因为应用于 `B.OldMethod` 的特性构造函数的第二个参数设置为 `true`，所以此方法将导致编译器错误，而使用类 A 只会生成警告*
+* 因为应用于 `B.OldMethod` 的特性构造函数的第二个参数设置为 `true`,所以此方法将导致编译器错误,而使用类 A 只会生成警告*
 
 调用 `B.NewMethod` 不会生成任何警告或错误
 
@@ -228,7 +228,7 @@ namespace AttributeExamples
 
 `AttributeUsage` 特性确定自定义特性类的使用方式
 
-* 可能应用到的具体程序元素特性。 除非使用限制，否则特性可能应用到以下任意程序元素：
+* 可能应用到的具体程序元素特性。 除非使用限制,否则特性可能应用到以下任意程序元素：
    * 程序集 (assembly)
    * name
    * field
@@ -247,16 +247,16 @@ namespace AttributeExamples
                    Inherited = true)]
 class NewAttribute : Attribute { }
 ```
-`NewAttribute` 类可应用于任何受支持的程序元素。 但是它对每个实体仅能应用一次。 特性应用于基类时，它由派生类继承
+`NewAttribute` 类可应用于任何受支持的程序元素。 但是它对每个实体仅能应用一次。 特性应用于基类时,它由派生类继承
 
-`AllowMultiple` 和 `Inherited` 参数是可选的，因此以下代码具有相同效果：
+`AllowMultiple` 和 `Inherited` 参数是可选的,因此以下代码具有相同效果：
 
 ```CSharp
 [AttributeUsage(AttributeTargets.All)]
 class NewAttribute : Attribute { }
 ```
 
-可将多个目标类型与 OR 运算符链接在一起，如下例所示：
+可将多个目标类型与 OR 运算符链接在一起,如下例所示：
 
 ```CSharp
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
@@ -265,9 +265,9 @@ class NewPropertyOrFieldAttribute : Attribute { }
 
 ## ModuleInitializer 特性
 
-从 `C# 9` 开始，`ModuleInitializer` 属性标记程序集加载时运行时调用的方法
+从 `C# 9` 开始,`ModuleInitializer` 属性标记程序集加载时运行时调用的方法
 
-`Init1` 和 `Init2` 方法在 `Main` 之前运行，并且每种方法都将一个字符串添加到 `Text` 属性。 因此，当 `Main` 运行时，`Text` 属性已具有来自两个初始化表达式方法中的字符串
+`Init1` 和 `Init2` 方法在 `Main` 之前运行,并且每种方法都将一个字符串添加到 `Text` 属性。 因此,当 `Main` 运行时,`Text` 属性已具有来自两个初始化表达式方法中的字符串
 
 ```CSharp
 using System.Runtime.CompilerServices;
@@ -292,11 +292,11 @@ internal class ModuleInitializerExampleModule
 
 ## SkipLocalsInit 特性
 
-从 `C# 9` 开始，`SkipLocalsInit` 属性可防止编译器在发出到元数据时设置 `.locals init` 标志
+从 `C# 9` 开始,`SkipLocalsInit` 属性可防止编译器在发出到元数据时设置 `.locals init` 标志
 
-在某些情况下，额外的零初始化可能会对性能产生显著影响
+在某些情况下,额外的零初始化可能会对性能产生显著影响
 
-在这些情况下，可添加 `SkipLocalsInit` 属性
+在这些情况下,可添加 `SkipLocalsInit` 属性
 
 
 下面的示例阐释 `SkipLocalsInit` 属性对使用 `stackalloc` 的方法的影响

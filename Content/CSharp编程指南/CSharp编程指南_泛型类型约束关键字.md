@@ -33,7 +33,7 @@ public class ItemFactory2<T>
 {  }
 ```
 
-可以声明一个泛型类 `AGenericClass`，以使类型参数 `T` 实现 `IComparable<T>` 接口
+可以声明一个泛型类 `AGenericClass`,以使类型参数 `T` 实现 `IComparable<T>` 接口
 
 ```CSharp
 public class AGenericClass<T> where T : IComparable<T> { }
@@ -41,10 +41,10 @@ public class AGenericClass<T> where T : IComparable<T> { }
 
 <!--more-->
 
-`where` 子句还可包括基类约束。 基类约束表明用作该泛型类型的类型参数的类型具有指定的类作为基类（或者是该基类）。 该基类约束一经使用，就必须出现在该类型参数的所有其他约束之前
+`where` 子句还可包括基类约束。 基类约束表明用作该泛型类型的类型参数的类型具有指定的类作为基类（或者是该基类）。 该基类约束一经使用,就必须出现在该类型参数的所有其他约束之前
 
 某些类型不允许作为基类约束：`Object`、`Array` 和 `ValueType`。   
-在 `C# 7.3` 之前，`Enum`、`Delegate` 和 `MulticastDelegate` 也不允许作为基类约束
+在 `C# 7.3` 之前,`Enum`、`Delegate` 和 `MulticastDelegate` 也不允许作为基类约束
 
 # 类型参数的约束
 
@@ -52,7 +52,7 @@ public class AGenericClass<T> where T : IComparable<T> { }
   * 不可为 null 的值类型
 * `where T : class`
   * 引用类型
-  * 在 `C#8.0` 或更高版本中的可为 `null` 上下文中，`T` 必须是不可为 `null` 的引用类型
+  * 在 `C#8.0` 或更高版本中的可为 `null` 上下文中,`T` 必须是不可为 `null` 的引用类型
 * `where T : class?`
   * 可为 null 或不可为 null 的引用类型
 * `where T : notnull`
@@ -63,12 +63,12 @@ public class AGenericClass<T> where T : IComparable<T> { }
   * 具有公共无参数构造函数
 * `where T : <base class name>`
   * 指定的基类或派生自指定的基类
-  * 在 `C#8.0` 或更高版本中的可为 `null` 上下文中，`T` 必须是不可为 `null` 的引用类型
+  * 在 `C#8.0` 或更高版本中的可为 `null` 上下文中,`T` 必须是不可为 `null` 的引用类型
 * `where T : <base class name>?`
   * 指定的基类或派生自指定的基类
 * `where T : <interface name>`
   * 指定的接口或实现指定的接口
-  * 在 `C#8.0` 或更高版本中的可为 `null` 上下文中，`T` 必须是不可为 `null` 的引用类型
+  * 在 `C#8.0` 或更高版本中的可为 `null` 上下文中,`T` 必须是不可为 `null` 的引用类型
 * `where T : <interface name>?`
   * 指定的接口或实现指定的接口
 * `where T : U`
@@ -77,7 +77,7 @@ public class AGenericClass<T> where T : IComparable<T> { }
 请避免对类型参数使用 == 和 != 运算符  
 如有需要,请使用`where T : IEquatable<T>` 或 `where T : IComparable<T>` 约束
 
-> 从 `C# 7.3` 开始，可将 `System.Delegate` 或 `System.MulticastDelegate` 用作基类约束
+> 从 `C# 7.3` 开始,可将 `System.Delegate` 或 `System.MulticastDelegate` 用作基类约束
 
 ```CSharp
 public static TDelegate TypeSafeCombine<TDelegate>(this TDelegate source, TDelegate target)
@@ -85,7 +85,7 @@ public static TDelegate TypeSafeCombine<TDelegate>(this TDelegate source, TDeleg
     => Delegate.Combine(source, target) as TDelegate;
 ```
 
-> 从 `C# 7.3` 开始，还可指定 `System.Enum` 类型作为基类约束
+> 从 `C# 7.3` 开始,还可指定 `System.Enum` 类型作为基类约束
 
 ```CSharp
 public static Dictionary<int, string> EnumNamedValues<T>() where T : System.Enum

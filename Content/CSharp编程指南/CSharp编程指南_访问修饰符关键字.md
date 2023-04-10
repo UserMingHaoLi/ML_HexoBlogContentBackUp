@@ -34,7 +34,7 @@ tags:
 
 <!--more-->
 
-除使用 `protected internal` 或`private protected` 组合的情况外，一个成员或类型仅允许一个访问修饰符
+除使用 `protected internal` 或`private protected` 组合的情况外,一个成员或类型仅允许一个访问修饰符
 
 命名空间中不允许出现访问修饰符。 命名空间没有任何访问限制(也就是默认`public`)
 
@@ -99,7 +99,7 @@ class B : A
 
 # internal
 
-只有在同一程序集的文件中，内部类型或成员才可访问  
+只有在同一程序集的文件中,内部类型或成员才可访问  
 也就是说,外部程序集无法访问
 
 内部访问通常用于基于组件的开发,因为它可使一组组件以私有方式进行协作,而不必向应用程序代码的其余部分公开
@@ -176,7 +176,7 @@ class PrivateTest
 
 可从当前程序集或派生自包含类的类型访问受保护的内部成员
 
-结构成员不能为 `protected internal`，因为无法继承结构
+结构成员不能为 `protected internal`,因为无法继承结构
 
 ```CSharp
 // Assembly1
@@ -211,7 +211,7 @@ class DerivedClass : BaseClass
 
 # private protected
 
-仅派生自包含类的类型可访问私有受保护成员，但仅能在其包含程序集中访问  
+仅派生自包含类的类型可访问私有受保护成员,但仅能在其包含程序集中访问  
 `private protected` 访问修饰符在 C# 版本 7.2 及更高版本中有效
 
 ```CSharp

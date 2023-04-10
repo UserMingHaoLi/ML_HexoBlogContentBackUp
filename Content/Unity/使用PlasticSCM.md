@@ -25,13 +25,13 @@ tags:
 [活动介绍][PlasticSCM_learn_Link]  
 [作业征集][plastichub_learnActivity_Link]
 
-将课程作业提交到 PlasticHub 上，就能获得 Unity 中文课堂价值 50 元代金券。
+将课程作业提交到 PlasticHub 上,就能获得 Unity 中文课堂价值 50 元代金券。
 
-成功提交作业的同学，可以在 Unity 社区里分享作业心得，并把心得链接发在 PlasticHub 活动作业征集贴中。这次有 6 门课，每门课选 6 位优秀作品，送经典款 Logo 周边。
+成功提交作业的同学,可以在 Unity 社区里分享作业心得,并把心得链接发在 PlasticHub 活动作业征集贴中。这次有 6 门课,每门课选 6 位优秀作品,送经典款 Logo 周边。
 
 * 提交作业步骤如下
 
-使用 PlasticSCM 提交作业时，记得在提交信息中使用如下格式
+使用 PlasticSCM 提交作业时,记得在提交信息中使用如下格式
 ```
 [user comments] + LearnId:[中文课堂用户24位learnId]
 ```
@@ -42,7 +42,7 @@ PlasticHub Homework LearnId:123456789012345678901234
 
 * 申请周边步骤如下
 
-大家完成中文课堂(learn.u3d.cn)如下6门课程后，将使用心得和经验总结成博客文章发表在官方社区中。并将文章链接，截图以及标题回复到该问题后面
+大家完成中文课堂(learn.u3d.cn)如下6门课程后,将使用心得和经验总结成博客文章发表在官方社区中。并将文章链接,截图以及标题回复到该问题后面
 
 回复格式参考：  
 [文章标题]  
@@ -58,7 +58,7 @@ https://developer.unity.cn/projects/ccd-workshop
 
 作业如下
 ```
-在分支查看器中创建新分支，改变卡丁车的材质后，将改动上传到PlasticSCM仓库中，最后将该任务分支合并到主线分支。
+在分支查看器中创建新分支,改变卡丁车的材质后,将改动上传到PlasticSCM仓库中,最后将该任务分支合并到主线分支。
 项目地址：https://plastichub.unity.cn/unity-tech-cn/PlasticTutorial_Karting
 贴心提示：将项目Fork(派生)到自己组织下完成提交
 ```
@@ -75,7 +75,7 @@ https://developer.unity.cn/projects/ccd-workshop
 * 勾选`隐藏电子邮件地址`
 * 勾选`隐藏个人资料页面中的活动`
 
-注意,如果只勾选以上两项,是无法修改成功的,有一个报错`Sensitive word check failed, please try again.(敏感字检查失败，请重试)`  
+注意,如果只勾选以上两项,是无法修改成功的,有一个报错`Sensitive word check failed, please try again.(敏感字检查失败,请重试)`  
 但是我甚至都没打字,只是进行了勾选, 推测是将空行识别为敏感字符, 所以额外填写了空着的三行  
 最后竟然告诉我等待**人工审核**...行吧
 

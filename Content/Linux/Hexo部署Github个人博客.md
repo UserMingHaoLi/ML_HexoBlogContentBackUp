@@ -86,7 +86,7 @@ cmd输入 `ssh-keygen -t rsa -C "Github的注册邮箱地址"`
 	# Site #站点信息
 	title:  #标题
 	subtitle:  #副标题
-	description:  #站点描述，给搜索引擎看的
+	description:  #站点描述,给搜索引擎看的
 	author:  #作者
 	email:  #电子邮箱
 	language: zh-CN #语言
@@ -104,7 +104,7 @@ cmd输入 `ssh-keygen -t rsa -C "Github的注册邮箱地址"`
 	public_dir: public #生成的网页文件目录
 	# Writing #写作
 	new_post_name: :title.md #新文章标题
-	default_layout: post #默认的模板，包括 post、page、photo、draft（文章、页面、照片、草稿）
+	default_layout: post #默认的模板,包括 post、page、photo、draft（文章、页面、照片、草稿）
 	titlecase: false #标题转换成大写
 	external_link: true #在新选项卡中打开连接
 	filename_case: 0
@@ -135,23 +135,23 @@ cmd输入 `ssh-keygen -t rsa -C "Github的注册邮箱地址"`
 	date_format: YYYY-MM-DD #参考http://momentjs.com/docs/#/displaying/format/
 	time_format: H:mm:ss
 	# Pagination #分页
-	per_page: 10 #每页文章数，设置成 0 禁用分页
+	per_page: 10 #每页文章数,设置成 0 禁用分页
 	pagination_dir: page
-	# Disqus #Disqus评论，替换为多说
+	# Disqus #Disqus评论,替换为多说
 	disqus_shortname:
 	# Extensions #拓展插件
 	theme: landscape-plus #主题
 	exclude_generator:
-	plugins: #插件，例如生成 RSS 和站点地图的
+	plugins: #插件,例如生成 RSS 和站点地图的
 	- hexo-generator-feed
 	- hexo-generator-sitemap
-	# Deployment #部署，将 lmintlcx 改成用户名
+	# Deployment #部署,将 lmintlcx 改成用户名
 	deploy:
 	type: git
 	repo: 刚刚github创库地址.git
 	branch: master
 
-> **特别提醒，在每个参数的`：`后都要加一个空格**
+> **特别提醒,在每个参数的`：`后都要加一个空格**
 
 *建议此次修改以下信息即可,后续信息可以搭建完毕后重新修改(需重启Hexo服务)*
 

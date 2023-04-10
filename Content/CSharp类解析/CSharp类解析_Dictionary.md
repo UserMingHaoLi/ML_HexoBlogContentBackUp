@@ -313,8 +313,8 @@ for (int i = (min | 1); i < Int32.MaxValue;i+=2)
 本文来自 [ML-Blog][ML-Blog_Link]
 
 <!-- 图片 -->
-[Dictionary_Image1]:https://github.com/UserMingHaoLi/ML_HexoBlogContentImages/blob/main/Content/CSharp%E7%B1%BB%E8%A7%A3%E6%9E%90/CSharp%E7%B1%BB%E8%A7%A3%E6%9E%90_Dictionary/Dictionary_Image1.jpg "Dictionary_Image1"
-[Dictionary_Image2]:https://github.com/UserMingHaoLi/ML_HexoBlogContentImages/blob/main/Content/CSharp%E7%B1%BB%E8%A7%A3%E6%9E%90/CSharp%E7%B1%BB%E8%A7%A3%E6%9E%90_Dictionary/Dictionary_Image2.jpg "Dictionary_Image2"
+[Dictionary_Image1]:https://github.com/UserMingHaoLi/ML_HexoBlogContentImages/blob/main/Content/CSharp%E7%B1%BB%E8%A7%A3%E6%9E%90/CSharp%E7%B1%BB%E8%A7%A3%E6%9E%90_Dictionary/Dictionary_Image1.jpg?raw=true "Dictionary_Image1"
+[Dictionary_Image2]:https://github.com/UserMingHaoLi/ML_HexoBlogContentImages/blob/main/Content/CSharp%E7%B1%BB%E8%A7%A3%E6%9E%90/CSharp%E7%B1%BB%E8%A7%A3%E6%9E%90_Dictionary/Dictionary_Image2.jpg?raw=true "Dictionary_Image2"
 <!-- 链接 -->
 
 <!-- 水印 -->

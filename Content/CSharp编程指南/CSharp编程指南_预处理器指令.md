@@ -12,7 +12,7 @@ tags:
 	- CSharp
 ---
 
-尽管编译器没有单独的预处理器，但本节中所述指令的处理方式与有预处理器时一样。 可使用这些指令来帮助条件编译。 不同于 C 和 C++ 指令，不能使用这些指令来创建宏。 预处理器指令必须是一行中唯一的说明
+尽管编译器没有单独的预处理器,但本节中所述指令的处理方式与有预处理器时一样。 可使用这些指令来帮助条件编译。 不同于 C 和 C++ 指令,不能使用这些指令来创建宏。 预处理器指令必须是一行中唯一的说明
 
 
 
@@ -20,25 +20,25 @@ tags:
 
 # 可为空上下文
 
-每个上下文要么处于已禁用状态，要么处于已启用状态
+每个上下文要么处于已禁用状态,要么处于已启用状态
 
 指令的效果如下所示：
-* #nullable disable：将可为空注释和警告上下文设置为“已禁用”。
-* #nullable enable：将可为空注释和警告上下文设置为“已启用”。
+* #nullable disable：将可为空注释和警告上下文设置为"已禁用"。
+* #nullable enable：将可为空注释和警告上下文设置为"已启用"。
 * #nullable restore：将可为空注释和警告上下文还原为项目设置。
-* #nullable disable annotations：将可为空注释上下文设置为“已禁用”。
-* #nullable enable annotations：将可为空注释上下文设置为“已启用”。
+* #nullable disable annotations：将可为空注释上下文设置为"已禁用"。
+* #nullable enable annotations：将可为空注释上下文设置为"已启用"。
 * #nullable restore annotations：将可为空注释上下文还原为项目设置。
-* #nullable disable warnings：将可为空警告上下文设置为“已禁用”。
-* #nullable enable warnings：将可为空警告上下文设置为“已启用”。
+* #nullable disable warnings：将可为空警告上下文设置为"已禁用"。
+* #nullable enable warnings：将可为空警告上下文设置为"已启用"。
 * #nullable restore warnings：将可为空警告上下文还原为项目设置。
 
 # 条件编译
 
 使用四个预处理器指令来控制条件编译：
-* #if：打开条件编译，其中仅在定义了指定的符号时才会编译代码。
-* #elif：关闭前面的条件编译，并基于是否定义了指定的符号打开一个新的条件编译。
-* #else：关闭前面的条件编译，如果没有定义前面指定的符号，打开一个新的条件编译。
+* #if：打开条件编译,其中仅在定义了指定的符号时才会编译代码。
+* #elif：关闭前面的条件编译,并基于是否定义了指定的符号打开一个新的条件编译。
+* #else：关闭前面的条件编译,如果没有定义前面指定的符号,打开一个新的条件编译。
 * #endif：关闭前面的条件编译。
 
 ```CSharp
@@ -80,7 +80,7 @@ tags:
 
 # 错误和警告信息
 
-使用以下指令指示编译器生成用户定义的编译器错误和警告，并控制行信息：
+使用以下指令指示编译器生成用户定义的编译器错误和警告,并控制行信息：
 * #error：使用指定的消息生成编译器错误。
 * #warning：使用指定的消息生成编译器警告。
 * #line：更改用编译器消息输出的行号。
@@ -91,9 +91,9 @@ tags:
 #error Deprecated code in this method.
 ```
 
-**借助 #line，可修改编译器的行号及（可选）用于错误和警告的文件名输出**
+**借助 #line,可修改编译器的行号及（可选）用于错误和警告的文件名输出**
 
-`#line 200` 指令将下一行的行号强制设为 200（尽管默认值为 #6）；在执行下一个 `#line` 指令前，文件名都会报告为“特殊”。 `#line default` 指令将行号恢复至默认行号，这会对上一指令重新编号的行进行计数。
+`#line 200` 指令将下一行的行号强制设为 200（尽管默认值为 #6）；在执行下一个 `#line` 指令前,文件名都会报告为"特殊"。 `#line default` 指令将行号恢复至默认行号,这会对上一指令重新编号的行进行计数。
 
 ```CSharp
 class MainClass
@@ -135,7 +135,7 @@ class MainClass
 
 # 杂注
 
-#pragma 为编译器给出特殊指令以编译它所在的文件。 这些指令必须受编译器支持。 换句话说，不能使用 #pragma 创建自定义的预处理指令
+#pragma 为编译器给出特殊指令以编译它所在的文件。 这些指令必须受编译器支持。 换句话说,不能使用 #pragma 创建自定义的预处理指令
 
 * #pragma warning：启用或禁用警告。
 * #pragma checksum：生成校验和。
@@ -144,7 +144,7 @@ class MainClass
 #pragma pragma-name pragma-arguments
 ```
 
-其中 pragma-name 是可识别 pragma 的名称，pragma-arguments 是特定于 pragma 的参数
+其中 pragma-name 是可识别 pragma 的名称,pragma-arguments 是特定于 pragma 的参数
 
 一般来说, 编译器会有提示, 是否关闭某个警告
 

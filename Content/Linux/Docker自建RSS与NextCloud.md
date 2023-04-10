@@ -244,7 +244,7 @@ services:
       - /home/ubuntu/NextCloud/www:/var/www/html
 ```
 
-volumes，作用是，将宿主机的目录挂载到docker容器中，这样操作文件时，不用登录docker容器了，直接在宿主机操作就可以了
+volumes,作用是,将宿主机的目录挂载到docker容器中,这样操作文件时,不用登录docker容器了,直接在宿主机操作就可以了
 
 注意其中的地址 `/home/ubuntu/NextCloud` 这个是我创建的文件夹, 根据你自己的需求修改.
 

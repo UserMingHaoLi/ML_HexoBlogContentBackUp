@@ -21,9 +21,9 @@ tags:
 
 Unity中使用 ShaderLab, HLSL
 
-在本文档中，该术语的用法如下：
+在本文档中,该术语的用法如下：
 
-* `shader or shader program` - 在 GPU 上运行的程序。除非另有说明，否则这意味着着色器程序是图形管线的一部分。
+* `shader or shader program` - 在 GPU 上运行的程序。除非另有说明,否则这意味着着色器程序是图形管线的一部分。
 * `Shader object` - Shader 类的一个实例。Shader 对象是着色器程序和其他信息的封装器。
 * `ShaderLab` - 一种用于编写着色器的 Unity 特定语言。
 * `Shader Graph` - 一种无需编写代码即可创建着色器的工具。
@@ -32,8 +32,8 @@ Unity中使用 ShaderLab, HLSL
 
 # 创建
 
-* 可以编写代码来创建一个着色器资源，这是一个带有 .shader 扩展名的文本文件。
-* 可以使用 Shader Graph，创建一个 Shader Graph 资源。
+* 可以编写代码来创建一个着色器资源,这是一个带有 .shader 扩展名的文本文件。
+* 可以使用 Shader Graph,创建一个 Shader Graph 资源。
 
 > `Project View` 上下文菜单中的 `Assets > Create > Shader`
 
@@ -43,7 +43,7 @@ Unity中使用 ShaderLab, HLSL
 
 1. Unity creates a list of SubShaders for the Shader object. It adds all of the SubShaders defined in the Shader object, and then adds all of the SubShaders in any fallback Shader objects, in order
 
-当 Unity 首次使用 Shader 对象渲染几何体时，或者当着色器 LOD 值或活动渲染管道更改时
+当 Unity 首次使用 Shader 对象渲染几何体时,或者当着色器 LOD 值或活动渲染管道更改时
 
 1. Unity iterates over the list of all SubShaders and examines them to determine if they are: compatible with the device hardware; at or below the current shader LOD
  value; and compatible with the active render pipeline
@@ -53,7 +53,7 @@ Unity中使用 ShaderLab, HLSL
    2. If the list contains one or more SubShaders that meet the hardware requirements (but do not meet the LOD or render pipeline requirements), Unity selects the first one. This is the active SubShader
 
 Unity 可以识别使用相同着色器变体的几何体并将其组织成批次实现更高效的渲染。  
-每帧一次，对于每批几何体
+每帧一次,对于每批几何体
 
 
 # HLSL 编程指南
@@ -62,8 +62,8 @@ Unity 可以识别使用相同着色器变体的几何体并将其组织成批�
 
 ## 变量
 
-与 C 类似，变量有一些命名限制，具有依赖于它们声明位置的范围属性，并可以附加用户元数据  
-与 C 不同，HLSL 定义了其他数据类型，有助于最大程度地提高使用矩阵数学对三维图形数据进行操作的4个分量矢量的性能
+与 C 类似,变量有一些命名限制,具有依赖于它们声明位置的范围属性,并可以附加用户元数据  
+与 C 不同,HLSL 定义了其他数据类型,有助于最大程度地提高使用矩阵数学对三维图形数据进行操作的4个分量矢量的性能
 
 使用以下语法规则声明 HLSL 变量
 
@@ -92,7 +92,7 @@ const float4 lightDirection = {0,0,1};
 * dword -32 位无符号整数。
 * half  16 位浮点值。 此数据类型仅用于语言兼容性。 Direct3D 10 着色器目标将所有半个数据类型映射为 float 数据类型。 在统一全局变量上不能使用半种数据类型 (如果需要此功能) 使用/Gec 标志。
 * float -32 位浮点值。
-* double  64 位浮点值。 不能使用双精度值作为流的输入和输出。 若要在着色器之间传递双精度值，请将每个 双 精度值声明为一对 uint 数据类型。 然后，使用 asuint 函数将每个 double 打包到一对 uint s，并使用 asdouble 函数将一对 uint s 重新打包回 double。
+* double  64 位浮点值。 不能使用双精度值作为流的输入和输出。 若要在着色器之间传递双精度值,请将每个 双 精度值声明为一对 uint 数据类型。 然后,使用 asuint 函数将每个 double 打包到一对 uint s,并使用 asdouble 函数将一对 uint s 重新打包回 double。
 
 从 Windows 8 HLSL 开始也支持最小精度标量数据类型  
 图形驱动程序可能会以完整的32位精度对 min16float 值执行算术运算,这取决于是否支持最小精度
@@ -116,7 +116,7 @@ float3  fVector = { 0.2f, 0.3f, 0.4f };
 vector <double, 4> dVector = { 0.2, 0.3, 0.4, 0.5 };
 ```
 
-矢量最多包含四个组件，每个组件都可以使用以下两个命名集之一进行访问
+矢量最多包含四个组件,每个组件都可以使用以下两个命名集之一进行访问
 
 * 位置集： x、y、z 和 w
 * 颜色集： r、g、b、a
@@ -137,8 +137,8 @@ f_4D.xzyw = pos.w; // write one component to more than one component
 f_4D.wzyx = pos;
 
 
-//f_4D.xx = pos.xy;   // 不能将分配多次写入同一组件。 因此，此语句的左侧无效
-//f_4D.xg = pos.rgrg;    // 而且，组件名称空间不能混合。 这是无效的组件写入
+//f_4D.xx = pos.xy;   // 不能将分配多次写入同一组件。 因此,此语句的左侧无效
+//f_4D.xg = pos.rgrg;    // 而且,组件名称空间不能混合。 这是无效的组件写入
 
 //下面两个语句是等效的
 f_4D.a = pos * 5.0f;
@@ -147,7 +147,7 @@ f_4D.a = pos.r * 5.0f;
 
 # 矩阵类型
 
-矩阵是一种特殊数据类型，包含一到十六个组件。 矩阵的每一个分量都必须具有相同的类型
+矩阵是一种特殊数据类型,包含一到十六个组件。 矩阵的每一个分量都必须具有相同的类型
 
 ```HLSL
 float2x2 fMatrix = { 0.0f, 0.1, // row 1
@@ -178,7 +178,7 @@ f_1D = matrix._m11; // read the value in row 2, column 2: 2.1
 f_1D = matrix._11;  // read the value in row 1, column 1: 1.0
 f_1D = matrix._22;  // read the value in row 2, column 2: 2.1
 
-//与矢量一样，命名集可以使用命名集中的一个或多个组件
+//与矢量一样,命名集可以使用命名集中的一个或多个组件
 // Given
 float2x2 fMatrix = { 1.0f, 1.1f, // row 1
                      2.0f, 2.1f  // row 2
@@ -209,13 +209,13 @@ temp = fMatrix[0][0] // single component read
 temp = fMatrix[0][1] // single component read
 ```
 
-请注意，结构运算符 "." 不用于访问数组, 也不能同时访问多个数据
+请注意,结构运算符 "." 不用于访问数组, 也不能同时访问多个数据
 
 ```HLSL
 float2 temp;
-temp = fMatrix[0][0]_[0][1] // 无效，无法读取两个组件
+temp = fMatrix[0][0]_[0][1] // 无效,无法读取两个组件
 
-//但是，数组访问可以读取多组件向量
+//但是,数组访问可以读取多组件向量
 temp = fMatrix[0] // read the first row
 ```
 
@@ -234,11 +234,11 @@ temp = fMatrix[0] // read the first row
  31 32 33 34  
  41 42 43 44  
 
-> 默认情况下，统一参数的矩阵封装顺序设置为列-主
+> 默认情况下,统一参数的矩阵封装顺序设置为列-主
 
 # 运算
 
-默认情况下，统一参数的矩阵封装顺序设置为列-主
+默认情况下,统一参数的矩阵封装顺序设置为列-主
 
 ```HLSL
 float4 v = a*b;
@@ -469,35 +469,35 @@ Shader "CS02/MiniShader" //Shader的真正名字  可以是路径式的格式
 		_Vector("Vector", Vector) = (.34, .85, .92, 1) 
 	}
 	/*
-	这是为了让你可以在一个Shader文件中写多种版本的Shader，但只有一个会被使用。
-	提供多个版本的SubShader，Unity可以根据对应平台选择最合适的Shader
+	这是为了让你可以在一个Shader文件中写多种版本的Shader,但只有一个会被使用。
+	提供多个版本的SubShader,Unity可以根据对应平台选择最合适的Shader
 	或者配合LOD机制一起使用。
 	一般写一个即可
 	*/
 	SubShader
 	{
 		/*
-		标签属性，有两种：一种是SubShader层级，一种在Pass层级
+		标签属性,有两种：一种是SubShader层级,一种在Pass层级
 		https://docs.unity3d.com/cn/current/Manual/SL-SubShaderTags.html
 		https://docs.unity3d.com/cn/current/Manual/SL-PassTags.html
 		*/
 		Tags { "RenderType"="Opaque" } 
 		/*
-		Pass里面的内容Shader代码真正起作用的地方，
+		Pass里面的内容Shader代码真正起作用的地方,
 		一个Pass对应一个真正意义上运行在GPU上的完整着色器(Vertex-Fragment Shader)
-		一个SubShader里面可以包含多个Pass，每个Pass会被按顺序执行
+		一个SubShader里面可以包含多个Pass,每个Pass会被按顺序执行
 		*/
 		Pass 
 		{
 			CGPROGRAM  // Shader代码从这里开始
 			#pragma vertex vert //指定一个名为"vert"的函数为顶点Shader
 			#pragma fragment frag //指定一个名为"frag"函数为片元Shader
-			#include "UnityCG.cginc"  //引用Unity内置的文件，很方便，有很多现成的函数提供使用
+			#include "UnityCG.cginc"  //引用Unity内置的文件,很方便,有很多现成的函数提供使用
 
 			//https://docs.unity3d.com/Manual/SL-VertexProgramInputs.html
 			struct appdata  //CPU向顶点Shader提供的模型数据
 			{
-				//冒号后面的是特定语义词，告诉CPU需要哪些类似的数据
+				//冒号后面的是特定语义词,告诉CPU需要哪些类似的数据
 				float4 vertex : POSITION; //模型空间顶点坐标
 				half2 texcoord0 : TEXCOORD0; //第一套UV
 				half2 texcoord1 : TEXCOORD1; //第二套UV
@@ -509,18 +509,18 @@ Shader "CS02/MiniShader" //Shader的真正名字  可以是路径式的格式
 				half4 tangent : TANGENT; //顶点切线(模型导入Unity后自动计算得到)
 			};
 
-			struct v2f  //自定义数据结构体，顶点着色器输出的数据，也是片元着色器输入数据
+			struct v2f  //自定义数据结构体,顶点着色器输出的数据,也是片元着色器输入数据
 			{
-				float4 pos : SV_POSITION; //输出裁剪空间下的顶点坐标数据，给光栅化使用，必须要写的数据
+				float4 pos : SV_POSITION; //输出裁剪空间下的顶点坐标数据,给光栅化使用,必须要写的数据
 				float2 uv : TEXCOORD0; //自定义数据体
-				//注意跟上方的TEXCOORD的意义是不一样的，上方代表的是UV，这里可以是任意数据。
-				//插值器：输出后会被光栅化进行插值，而后作为输入数据，进入片元Shader
+				//注意跟上方的TEXCOORD的意义是不一样的,上方代表的是UV,这里可以是任意数据。
+				//插值器：输出后会被光栅化进行插值,而后作为输入数据,进入片元Shader
 				//最多可以写16个：TEXCOORD0 ~ TEXCOORD15。
 				float3 normal : TEXCOORD1;
 			};
 
 			/*
-			Shader内的变量声明，如果跟上面Properties模块内的参数同名，就可以产生链接
+			Shader内的变量声明,如果跟上面Properties模块内的参数同名,就可以产生链接
 			*/
 			sampler2D _MainTex;
 			float4 _MainTex_ST;

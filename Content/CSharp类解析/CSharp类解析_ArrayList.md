@@ -21,7 +21,7 @@ tags:
 
 > 官方建议使用`List<T>`, 说这个性能不好, 毕竟有类型强转和装箱拆箱
 
-*仅 `.NET Framework`： 对于非常大的 `ArrayList` 对象，可以通过 `enabled` `<gcAllowVeryLargeObjects>` `true` 在运行时环境中将配置元素的属性设置为，来将64位系统上的最大容量增加到`2000000000`个元素。*
+*仅 `.NET Framework`： 对于非常大的 `ArrayList` 对象,可以通过 `enabled` `<gcAllowVeryLargeObjects>` `true` 在运行时环境中将配置元素的属性设置为,来将64位系统上的最大容量增加到`2000000000`个元素。*
 
 可以使用整数索引访问此集合中的元素。 此集合中的索引从零开始。
 
@@ -218,7 +218,7 @@ InsertRange(_size, c);
 
 # BinarySearch
 
-使用指定的比较器在已排序 ArrayList 的某个元素范围中搜索元素，并返回该元素从零开始的索引
+使用指定的比较器在已排序 ArrayList 的某个元素范围中搜索元素,并返回该元素从零开始的索引
 
 也就是搜索查找
 
@@ -499,7 +499,7 @@ for(int i=0; i<count; i++)
 return list;
 ```
 
-返回 `ArrayList`，其元素是指定值的副本。
+返回 `ArrayList`,其元素是指定值的副本。
 
 # Reverse
 

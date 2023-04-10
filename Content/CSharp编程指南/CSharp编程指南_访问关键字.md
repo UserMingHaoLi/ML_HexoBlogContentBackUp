@@ -22,7 +22,7 @@ tags:
 * 调用基类上已被其他方法重写的方法。
 * 指定创建派生类实例时应调用的基类构造函数。
 
-所访问的基类是类声明中指定的基类。 例如，如果指定 `class ClassB : ClassA`，则从 `ClassB` 访问 `ClassA` 的成员，而不考虑 `ClassA` 的基类。
+所访问的基类是类声明中指定的基类。 例如,如果指定 `class ClassB : ClassA`,则从 `ClassB` 访问 `ClassA` 的成员,而不考虑 `ClassA` 的基类。
 
 ```CSharp
 public class Person
@@ -64,7 +64,7 @@ Employee ID: ABC567EFG
 
 # this
 
-`this` 关键字指代类的当前实例，还可用作扩展方法的第一个参数的修饰符
+`this` 关键字指代类的当前实例,还可用作扩展方法的第一个参数的修饰符
 
 访问限定类似名称隐藏的成员
 ```CSharp

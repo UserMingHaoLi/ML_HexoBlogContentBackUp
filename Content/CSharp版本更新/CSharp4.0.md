@@ -35,7 +35,7 @@ tags:
 使用该关键字修饰的参数不会再编译时验证数据类型, 只在运行时转化为相应的类型.
 
 dynamic 的实现是基于`IDynamicObject`接口和`DynamicObject`抽象类。而动态方法、属性的调用都被转为了`GetMember`、`Invoke`等方法的调用。  
-如果想在自己的代码中实现一个动态类型对象，可以继承`DynamicObject`类，并实现自己的若干get和set方法。	
+如果想在自己的代码中实现一个动态类型对象,可以继承`DynamicObject`类,并实现自己的若干get和set方法。	
 
 > `DLR(Dynamic Language Runtime)`提供了`Microsoft.CSharp.RuntimeBinder`命名空间
 
@@ -71,7 +71,7 @@ anExample.ExampleMethod(3, optionalint: 4);
 
 上次讲了.
 
-其实，做这些本质上都是要在保证运行时类型安全的前提下提高代码的可重用性和灵活性
+其实,做这些本质上都是要在保证运行时类型安全的前提下提高代码的可重用性和灵活性
 
 > 要理解这些,只要记住**宽进严出**, 进入参数可以使用子类,出去的返回值要明确.
 

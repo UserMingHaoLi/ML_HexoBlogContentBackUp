@@ -29,7 +29,7 @@ tags:
 
 # true和false
 
-`bool` 类型关键字是 .NET `System.Boolean` 结构类型的别名，它表示一个布尔值，可为 `true` 或 `false`
+`bool` 类型关键字是 .NET `System.Boolean` 结构类型的别名,它表示一个布尔值,可为 `true` 或 `false`
 
 可使用 `true` 和 `false` 文本来初始化 `bool` 变量或传递 `bool` 值
 

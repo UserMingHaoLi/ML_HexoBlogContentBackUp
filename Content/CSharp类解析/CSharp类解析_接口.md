@@ -62,7 +62,7 @@ tags:
 * `DisposeAsync()`	
   * 以异步方式执行与释放或重置非托管资源相关的应用程序定义的任务。
 
-使用此方法（而不是 `IDisposable.Dispose` ），可以在不阻止 `GUI` 应用程序的主线程的情况下执行占用大量资源的释放操作
+使用此方法（而不是 `IDisposable.Dispose` ）,可以在不阻止 `GUI` 应用程序的主线程的情况下执行占用大量资源的释放操作
 
 > 异步方法与 `async` `await` 配合使用更佳
 
@@ -79,13 +79,13 @@ tags:
 表示异步操作的状态
 
 * `AsyncState`	
-  * 获取一个用户定义的对象，该对象限定或包含有关异步操作的信息。
+  * 获取一个用户定义的对象,该对象限定或包含有关异步操作的信息。
 * `AsyncWaitHandle`	
   * 获取用于等待异步操作完成的 WaitHandle。
 * `CompletedSynchronously`	
-  * 获取一个值，该值指示异步操作是否同步完成。
+  * 获取一个值,该值指示异步操作是否同步完成。
 * `IsCompleted`	
-  * 获取一个值，该值指示异步操作是否已完成。
+  * 获取一个值,该值指示异步操作是否已完成。
 
 ### AsyncState
 
@@ -103,7 +103,7 @@ public System.Threading.WaitHandle AsyncWaitHandle { get; }
 `System.Threading.WaitHandle`有点复杂, 一般使用
 
 * `WaitOne()`
-  * 阻止当前线程，直到当前 `WaitHandle` 收到信号
+  * 阻止当前线程,直到当前 `WaitHandle` 收到信号
 
 ### CompletedSynchronously
 
@@ -111,7 +111,7 @@ public System.Threading.WaitHandle AsyncWaitHandle { get; }
 public bool CompletedSynchronously { get; }
 ```
 
-如果在委托中检测到调用的同步完成 `AsyncCallback` ，则启动异步操作的线程可能是当前线程
+如果在委托中检测到调用的同步完成 `AsyncCallback` ,则启动异步操作的线程可能是当前线程
 
 例如 如果 `i/o` 请求太小, 可以直接在主线程完成
 
@@ -132,7 +132,7 @@ public bool IsCompleted { get; }
 
 ## ICloneable
 
-支持克隆，即用与现有实例相同的值创建类的新实例
+支持克隆,即用与现有实例相同的值创建类的新实例
 
 * `Clone()`	
   * 创建作为当前实例副本的新对象
@@ -143,10 +143,10 @@ public bool IsCompleted { get; }
 
 ## IComparable
 
-定义由值类型或类实现的特定于类型的通用比较方法，旨在对其实例进行排序
+定义由值类型或类实现的特定于类型的通用比较方法,旨在对其实例进行排序
 
 * `CompareTo(Object)`	
-  * 将当前实例与同一类型的另一个对象进行比较，并返回一个整数，该整数指示当前实例在排序顺序中的位置是位
+  * 将当前实例与同一类型的另一个对象进行比较,并返回一个整数,该整数指示当前实例在排序顺序中的位置是位
   于另一个对象之前、之后还是与其位置相同。
 
 很多提供排序的方法都会要求被排序单位实现此接口,如`Array.Sort` `ArrayList.Sort`
@@ -186,32 +186,32 @@ public bool IsCompleted { get; }
 
 我们自己一般不会继承此接口.通常直接使用`Convert`类
 
-大多数转换方法具有类型为的参数 `IFormatProvider` ，该参数表示当前区域性 (`CurrentCulture`) 或特定区域性。 大多数情况下， `IConvertible` 基类型的实现会忽略此参数。 但是，你自己实现的话可以选择是否在代码中使用它
+大多数转换方法具有类型为的参数 `IFormatProvider` ,该参数表示当前区域性 (`CurrentCulture`) 或特定区域性。 大多数情况下, `IConvertible` 基类型的实现会忽略此参数。 但是,你自己实现的话可以选择是否在代码中使用它
 
 ## ICustomFormatter
 
-定义一个方法，该方法支持自定义对象值的格式
+定义一个方法,该方法支持自定义对象值的格式
 
 * Format(String, Object, IFormatProvider)	
   * 使用指定的格式和区域性特定格式信息将指定对象的值转换为它的等效字符串表示形式
   * `String` 包含格式规范的格式字符串
   * `Object` 要设置其格式的对象
-  * `IFormatProvider` 一个对象，提供有关当前实例的区域性特定格式信息
+  * `IFormatProvider` 一个对象,提供有关当前实例的区域性特定格式信息
     * 此接口提供`GetFormat(Type)`方法
 
 `ICustomFormatter.Format` 为回调方法。 它由支持自定义格式设置的方法（如或） `String.Format(IFormatProvider, String, Object[])`  `StringBuilder.AppendFormat(IFormatProvider, String, Object[])` 
 
-为复合格式字符串中的每个格式项调用一次实现。 例如，在下面的语句中， `ICustomFormatter.Format` 方法被调用三次
+为复合格式字符串中的每个格式项调用一次实现。 例如,在下面的语句中, `ICustomFormatter.Format` 方法被调用三次
 
 ```CSharp
 Console.WriteLine(String.Format(new BinaryFormatter(),"{0} (binary: {0:B}) (hex: {0:H})", byteValue));
 ```
 *因为有三个格式`{}`*
 
-如果提供对象值的自定义表示形式，则需要执行以下操作
+如果提供对象值的自定义表示形式,则需要执行以下操作
 
 * 定义一个实现 `ICustomFormatter` 接口的类
-* 定义一个实现 `IFormatProvider` 接口的类, `GetFormat`方法返回实现的实例 `ICustomFormatter`, 通常，单个类实现 `ICustomFormatter` 和 `IFormatProvider`, 在这种情况下，类的 `GetFormat` 实现只返回自身的实例
+* 定义一个实现 `IFormatProvider` 接口的类, `GetFormat`方法返回实现的实例 `ICustomFormatter`, 通常,单个类实现 `ICustomFormatter` 和 `IFormatProvider`, 在这种情况下,类的 `GetFormat` 实现只返回自身的实例
 * 将 `IFormatProvider` 实现作为方法的参数或类似的方法传递给此类函数`String.Format(IFormatProvider, String, Object[])`
 
 由于接受`Object`参数,可能需要做类型判断,并需要注意装箱拆箱  
@@ -219,7 +219,7 @@ Console.WriteLine(String.Format(new BinaryFormatter(),"{0} (binary: {0:B}) (hex:
 对于不支持的内容,考虑` FormatException`异常  
 不建议引发其他种类的异常
 
-它们不能与类型的现有格式字符串冲突。 例如，如果要扩展类型的格式 `Int32` ，则不应实现 *"C"、"D"、"E"、"F" 和 "G"* 格式说明符
+它们不能与类型的现有格式字符串冲突。 例如,如果要扩展类型的格式 `Int32` ,则不应实现 *"C"、"D"、"E"、"F" 和 "G"* 格式说明符
 
 ## IDisposable
 
@@ -228,20 +228,20 @@ Console.WriteLine(String.Format(new BinaryFormatter(),"{0} (binary: {0:B}) (hex:
 * `Dispose()`  
 * 执行与释放或重置非托管资源关联的应用程序定义的任务。
 
-实现此方法时，请确保通过包含层次结构传播调用来释放所有保存的资源(即,逐级释放)  
+实现此方法时,请确保通过包含层次结构传播调用来释放所有保存的资源(即,逐级释放)  
 总的来说,就是先死亡的先销毁
 
-如果多次调用对象的 `Dispose` 方法，则对象必须忽略第一个调用之后的所有调用  
+如果多次调用对象的 `Dispose` 方法,则对象必须忽略第一个调用之后的所有调用  
 因为要避免引发除`ObjectDisposedException`之外的异常
 
-用户可能希望资源类型使用特定约定来表示已分配状态与已释放状态。 这种情况的一个示例是流类，通常将其视为 "打开" 或 "已关闭"  
+用户可能希望资源类型使用特定约定来表示已分配状态与已释放状态。 这种情况的一个示例是流类,通常将其视为 "打开" 或 "已关闭"  
 所以有`Close`方法来调用`Dispose`
 
 > 官方推荐使用`using`来自动调用接口释放资源  
 > 另一种推荐是在`finally`块中手动调用  
 > `using`语句实际上就是`try / finally`的语法糖
 
-**警告: 将 `IDisposable` 接口添加到现有类的一项重大更改。 由于您的类型的预先存在的使用者无法调用 `Dispose` ，因此您不能确定您的类型持有的非托管资源是否会被释放**
+**警告: 将 `IDisposable` 接口添加到现有类的一项重大更改。 由于您的类型的预先存在的使用者无法调用 `Dispose` ,因此您不能确定您的类型持有的非托管资源是否会被释放**
 
 额外的释放机制,可以考虑` System.Runtime.InteropServices.SafeHandle `, `构析器`
 
@@ -324,7 +324,7 @@ class BaseClass : IDisposable
 
 子类应实现以下可释放模式：  
 * 它们必须重写 `Dispose(Boolean)` 并调用基类 `Dispose(Boolean)` 实现。
-* 如果需要，他们可以提供终结器。 终结器必须调用 `Dispose(false)`
+* 如果需要,他们可以提供终结器。 终结器必须调用 `Dispose(false)`
 
 对于子类,代码如下
 ```CSharp
@@ -358,7 +358,7 @@ public class IDisponseTest : IDisposable
 
     ~IDisponseTest()
     {
-        //析构函数调用时不释放托管资源，因为交由GC进行释放
+        //析构函数调用时不释放托管资源,因为交由GC进行释放
         Disponse(false);
     }
 
@@ -366,10 +366,10 @@ public class IDisponseTest : IDisposable
     {
         //用户手动释放托管资源和非托管资源
         Disponse(true);
-        //用户已经释放了托管和非托管资源，所以不需要再调用析构函数
+        //用户已经释放了托管和非托管资源,所以不需要再调用析构函数
         GC.SuppressFinalize(this);
         
-        //如果子类继承此类时，需要按照如下写法进行。
+        //如果子类继承此类时,需要按照如下写法进行。
         //try
         //{
         //    Disponse(true);
@@ -387,8 +387,8 @@ public class IDisponseTest : IDisposable
             return;
         if (isDisponse)
         {
-            //析构函数调用时不释放托管资源，因为交由GC进行释放
-            //如果析构函数释放托管资源可能之前GC释放过，就会导致出现异常
+            //析构函数调用时不释放托管资源,因为交由GC进行释放
+            //如果析构函数释放托管资源可能之前GC释放过,就会导致出现异常
 
             //托管资源释放
         }
@@ -407,23 +407,23 @@ public class IDisponseTest : IDisposable
   * 指示当前对象是否等于同一类型的另一个对象。
 
 泛型在面对值类型时提供更好的性能  
-若要处理某个类的对象将存储在数组或泛型集合对象中的可能性，最好实现此方法
+若要处理某个类的对象将存储在数组或泛型集合对象中的可能性,最好实现此方法
 
 任何比较需要注意*(对称,交换,传递,重复可靠)*
 
 实现此方法通常还需重写`Equals`,`GetHashCode`,`==`,`!=`  
 确保所有相等测试都返回一致的结果
 
-如果你的类型实现 `IComparable<T>` ，你几乎始终都实现 `IEquatable<T>`
+如果你的类型实现 `IComparable<T>` ,你几乎始终都实现 `IEquatable<T>`
 
 ## IFormatProvider
 
-提供一种机制，用于检索对象以控制格式化
+提供一种机制,用于检索对象以控制格式化
 
 * `GetFormat(Type)`	
-  * 返回一个对象，该对象为指定类型提供格式设置服务
+  * 返回一个对象,该对象为指定类型提供格式设置服务
 
-如果 `IFormatProvider` 实现能够提供该类型的对象，则为返回所指定对象的实例；否则为 `null`
+如果 `IFormatProvider` 实现能够提供该类型的对象,则为返回所指定对象的实例；否则为 `null`
 
 就是外界想你要一个类型,你是否能提供,通常,这个类型会用做提供格式化内容,所以本接口实际上是格式化筛选器.  用于通过参数(外界需求)来选取需要的格式化工具
 
@@ -445,8 +445,8 @@ public class MyFormatProvider : IFormatProvider
 
 `.NET Framework` 包含以下三个预定义的 `IFormatProvider` 实现.
 
-* `NumberFormatInfo`，它提供用于设置数字格式的信息
-* `DateTimeFormatInfo`，它提供用于设置日期和时间格式的信息
+* `NumberFormatInfo`,它提供用于设置数字格式的信息
+* `DateTimeFormatInfo`,它提供用于设置日期和时间格式的信息
 * `CultureInfo`,表示特定区域性的类
 
 其中`NumberFormatInfo`涉及此接口的源码如下
@@ -459,7 +459,7 @@ public Object GetFormat(Type formatType)
 
 ## IFormattable
 
-提供一种功能，用以将对象的值格式化为字符串表示形式
+提供一种功能,用以将对象的值格式化为字符串表示形式
 
 * `ToString(String, IFormatProvider)`	
   * 使用指定格式对当前实例的值设置格式。
@@ -493,14 +493,14 @@ public string ToString(string format, IFormatProvider provider)
 
 所谓格式,是指如下内容  
 
-* 如果格式项不包含格式字符串 例如 `{0}`，则会将其 `null` 作为参数的值传递
-* 如果格式项包含格式字符串 例如 `{0:G}`，则该格式字符串将作为参数的值传递,本例中为`G`
+* 如果格式项不包含格式字符串 例如 `{0}`,则会将其 `null` 作为参数的值传递
+* 如果格式项包含格式字符串 例如 `{0:G}`,则该格式字符串将作为参数的值传递,本例中为`G`
 
-`ToString(String, IFormatProvider)`仅当对象未传递 `ICustomFormatter` 格式提供程序或 `IFormatProvider` 自定义格式提供程序的方法返回`null`时，复合格式设置方法才能调用该对象的实现  
+`ToString(String, IFormatProvider)`仅当对象未传递 `ICustomFormatter` 格式提供程序或 `IFormatProvider` 自定义格式提供程序的方法返回`null`时,复合格式设置方法才能调用该对象的实现  
 等同于实现`ICustomFormatter`的提供者返回一个`((IFormattable)arg).ToString(format, CultureInfo.CurrentCulture);`返回
 
 > `ToString(String, IFormatProvider)`方法必须支持**常规格式说明符**的 "G"  
-> 此外，必须准备好处理`null`格式说明符
+> 此外,必须准备好处理`null`格式说明符
 
 > 类似于`Equals`的扩种,这些接口也可以看作是`ToString`的扩充
 
@@ -515,7 +515,7 @@ public string ToString(string format, IFormatProvider provider)
     * 将接收通知的对象。
   * 返回
     * IDisposable
-    * 对接口的引用，它允许观察程序在提供程序完成发送通知前停止接收通知
+    * 对接口的引用,它允许观察程序在提供程序完成发送通知前停止接收通知
 
 ```CSharp
 private List<IObserver<Location>> observers;
@@ -670,7 +670,7 @@ public class LocationTracker : IObservable<Location>
 
 ## IServiceProvider
 
-定义用于检索服务对象的机制；也即，向其他对象提供自定义支持的对象
+定义用于检索服务对象的机制；也即,向其他对象提供自定义支持的对象
 
 * object? GetService(Type)	
   * 获取指定类型的服务对象
@@ -690,13 +690,13 @@ IServiceProvider接口由多种类型实现
 * Count	
   * 获取 `ICollection` 中包含的元素数。
 * IsSynchronized	
-  * 获取一个值，该值指示是否同步对 `ICollection` 的访问（线程安全）。
+  * 获取一个值,该值指示是否同步对 `ICollection` 的访问（线程安全）。
 * SyncRoot	
   * 获取可用于同步对 `ICollection` 的访问的对象。
 
 **方法**
 * CopyTo(Array, Int32)	
-  * 从特定的 `ICollection` 索引开始，将 `Array` 的元素复制到一个 `Array` 中。
+  * 从特定的 `ICollection` 索引开始,将 `Array` 的元素复制到一个 `Array` 中。
 * GetEnumerator()	
   * 返回循环访问集合的枚举数。(继承自 `IEnumerable`)
 
@@ -728,18 +728,18 @@ lock(myCollection.SyncRoot)
 提供比较两个对象的方法。
 
 * Compare(Object, Object)	
-  * 比较两个对象并返回一个值，该值指示一个对象小于、等于还是大于另一个对象
+  * 比较两个对象并返回一个值,该值指示一个对象小于、等于还是大于另一个对象
 
 一般是各种比较方法要用到此接口
 
 返回`Int32`
 
-一个带符号整数，指示 x 和y 的相对值：
-- 如果小于 0，则 x 小于 y。
-- 如果为 0，则 x 等于 y。
-- 如果大于 0，则 x 大于 y。
+一个带符号整数,指示 x 和y 的相对值：
+- 如果小于 0,则 x 小于 y。
+- 如果为 0,则 x 等于 y。
+- 如果大于 0,则 x 大于 y。
 
-`null`允许与任何类型进行比较，并且在使用时不会生成异常 `IComparable` 。 进行排序时， `null` 视为小于任何其他对象
+`null`允许与任何类型进行比较,并且在使用时不会生成异常 `IComparable` 。 进行排序时, `null` 视为小于任何其他对象
 
 > 首选的实现方法是使用 `Compare` 其中一个参数的方法.
 
@@ -755,19 +755,19 @@ lock(myCollection.SyncRoot)
 * Count	
   * 获取 ICollection 中包含的元素数。(继承自 ICollection)
 * IsFixedSize	
-  * 获取一个值，该值指示 IDictionary 对象是否具有固定大小。
+  * 获取一个值,该值指示 IDictionary 对象是否具有固定大小。
 * IsReadOnly	
-  * 获取一个值，该值指示 IDictionary 对象是否为只读。
+  * 获取一个值,该值指示 IDictionary 对象是否为只读。
 * IsSynchronized	
-  * 获取一个值，该值指示是否同步对 ICollection 的访问（线程安全）。(继承自 ICollection)
+  * 获取一个值,该值指示是否同步对 ICollection 的访问（线程安全）。(继承自 ICollection)
 * Item[Object]	
   * 获取或设置具有指定键的元素。
 * Keys	
-  * 获取 ICollection 对象，它包含 IDictionary 对象的键。
+  * 获取 ICollection 对象,它包含 IDictionary 对象的键。
 * SyncRoot	
   * 获取可用于同步对 ICollection 的访问的对象。(继承自 ICollection)
 * Values	
-  * 获取 ICollection 对象，它包含 IDictionary 对象中的值。
+  * 获取 ICollection 对象,它包含 IDictionary 对象中的值。
 **方法**
 * Add(Object, Object)	
   * 在 IDictionary 对象中添加一个带有所提供的键和值的元素。
@@ -776,7 +776,7 @@ lock(myCollection.SyncRoot)
 * Contains(Object)	
   * 确定 IDictionary 对象是否包含具有指定键的元素。
 * CopyTo(Array, Int32)	
-  * 从特定的 ICollection 索引开始，将 Array 的元素复制到一个 Array 中。(继承自 ICollection)
+  * 从特定的 ICollection 索引开始,将 Array 的元素复制到一个 Array 中。(继承自 ICollection)
 * GetEnumerator()	
   * 返回 IDictionary 对象的 IDictionaryEnumerator 对象。
 * Remove(Object)	
@@ -808,7 +808,7 @@ lock(myCollection.SyncRoot)
 * MoveNext()	
   * 将枚举数推进到集合的下一个元素。(继承自 IEnumerator)
 * Reset()	
-  * 将枚举数设置为其初始位置，该位置位于集合中第一个元素之前。(继承自 IEnumerator)
+  * 将枚举数设置为其初始位置,该位置位于集合中第一个元素之前。(继承自 IEnumerator)
 
 ## IEnumerable
 
@@ -838,7 +838,7 @@ lock(myCollection.SyncRoot)
 * MoveNext()	
   * 将枚举数推进到集合的下一个元素。
 * Reset()	
-  * 将枚举数设置为其初始位置，该位置位于集合中第一个元素之前。
+  * 将枚举数设置为其初始位置,该位置位于集合中第一个元素之前。
 
 *从头到尾对一个集合进行枚举在本质上不是一个线程安全的过程*
 
@@ -852,11 +852,11 @@ public interface IWaitable
 ​
 public class CCoroutineMgr : CSingletonBehaviour<CCoroutineMgr>
 {
-    //开启一个协程，用户传进来的iter传入协程调度器中，协程调度器本身也是一个协程，被Unity管理
+    //开启一个协程,用户传进来的iter传入协程调度器中,协程调度器本身也是一个协程,被Unity管理
     public new WaitForCoroutine StartCoroutine(IEnumerator iter)
     {
         WaitForCoroutine wait = new WaitForCoroutine();
-        //开启协程调度器，使用base.StartCoroutine可以开启Unity自带协程
+        //开启协程调度器,使用base.StartCoroutine可以开启Unity自带协程
         Coroutine co = base.StartCoroutine(CoScheduler(iter, wait));
         mCoroutines.Add(wait, co);
         return wait;
@@ -914,11 +914,11 @@ public class CCoroutineMgr : CSingletonBehaviour<CCoroutineMgr>
 * Count	
   * 获取 ICollection 中包含的元素数。(继承自ICollection)
 * IsFixedSize	
-  * 获取一个值，该值指示 IList 是否具有固定大小。
+  * 获取一个值,该值指示 IList 是否具有固定大小。
 * IsReadOnly	
-  * 获取一个值，该值指示 IList 是否为只读。
+  * 获取一个值,该值指示 IList 是否为只读。
 * IsSynchronized	
-  * 获取一个值，该值指示是否同步对 ICollection * 的访问（线程安全）。(继承自 ICollection)
+  * 获取一个值,该值指示是否同步对 ICollection * 的访问（线程安全）。(继承自 ICollection)
 * Item[Int32]	
   * 获取或设置指定索引处的元素。
 * SyncRoot	
@@ -931,7 +931,7 @@ public class CCoroutineMgr : CSingletonBehaviour<CCoroutineMgr>
 * Contains(Object)	
   * 确定 IList 是否包含特定值。
 * CopyTo(Array, Int32)	
-  * 从特定的 ICollection 索引开始，将 Array 的元* 素复制到一个 Array 中。(继承自 ICollection)
+  * 从特定的 ICollection 索引开始,将 Array 的元* 素复制到一个 Array 中。(继承自 ICollection)
 * GetEnumerator()	
   * 返回循环访问集合的枚举数。(继承自 * IEnumerable)
 * IndexOf(Object)	
@@ -972,7 +972,7 @@ public class CCoroutineMgr : CSingletonBehaviour<CCoroutineMgr>
 * GetHashCode(IEqualityComparer)	
   * 返回当前实例的哈希代码。
 
-某些情况下，你可能希望比较 `NaN` 相等性的值以返回 `false` 
+某些情况下,你可能希望比较 `NaN` 相等性的值以返回 `false` 
 
 ```CSharp
 public new bool Equals(object x, object y)

@@ -225,7 +225,7 @@ Cat cat = new Cat { Age = 10, Name = "Fluffy" };
 Cat sameCat = new Cat("Fluffy"){ Age = 10 };
 ```
 
-从 C# 6 开始，除了分配字段和属性外，对象初始值设定项还可以设置索引器。  
+从 C# 6 开始,除了分配字段和属性外,对象初始值设定项还可以设置索引器。  
 使用`[]`声明索引.
 
 ```CSharp

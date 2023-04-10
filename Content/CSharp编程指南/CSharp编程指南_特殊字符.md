@@ -20,7 +20,7 @@ tags:
 
 # $ - 字符串内插
 
-与使用`字符串复合格式设置`功能创建格式化字符串相比，字符串内插提供的语法更具可读性，且更加方便
+与使用`字符串复合格式设置`功能创建格式化字符串相比,字符串内插提供的语法更具可读性,且更加方便
 ```CSharp
 Console.WriteLine("Hello, {0}! Today is {1}, it's {2:HH:mm} now.", name, date.DayOfWeek, date);
 Console.WriteLine($"Hello, {name}! Today is {date.DayOfWeek}, it's {date:HH:mm} now.");
@@ -35,8 +35,8 @@ Console.WriteLine($"Hello, {name}! Today is {date.DayOfWeek}, it's {date:HH:mm} 
 | 元素                    | 描述                                                                                                                                                         |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | interpolationExpression | 生成需要设置格式的结果的表达式。 null 的字符串表示形式为 String.Empty                                                                                        |
-| alignment               | 常数表达式，它的值定义表达式结果的字符串表示形式中的最小字符数。 如果值为正，则字符串表示形式为右对齐；如果值为负，则为左对齐。 有关详细信息，请参阅对齐组件 |
-| formatString            | 受表达式结果类型支持的格式字符串。 有关更多信息，请参阅格式字符串组件                                                                                        |
+| alignment               | 常数表达式,它的值定义表达式结果的字符串表示形式中的最小字符数。 如果值为正,则字符串表示形式为右对齐；如果值为负,则为左对齐。 有关详细信息,请参阅对齐组件 |
+| formatString            | 受表达式结果类型支持的格式字符串。 有关更多信息,请参阅格式字符串组件                                                                                        |
 
 ```CSharp
 Console.WriteLine($"|{"Left",-7}|{"Right",7}|");
@@ -51,9 +51,9 @@ Console.WriteLine($"{Math.PI,FieldWidthRightAligned:F3} - display only three dec
 
 ## 特殊字符
 
-要在内插字符串生成的文本中包含大括号 "{" 或 "}"，请使用两个大括号，即 "{{" 或 "}}"
+要在内插字符串生成的文本中包含大括号 "{" 或 "}",请使用两个大括号,即 "{{" 或 "}}"
 
-因为冒号（“:”）在内插表达式项中具有特殊含义，为了在内插表达式中使用条件运算符，请将表达式放在括号内
+因为冒号（":"）在内插表达式项中具有特殊含义,为了在内插表达式中使用条件运算符,请将表达式放在括号内
 
 ```CSharp
 string name = "Horace";
@@ -67,34 +67,34 @@ Console.WriteLine($"{name} is {age} year{(age == 1 ? "" : "s")} old.");
 
 ## 隐式转换和指定 IFormatProvider 实现的方式
 
-* 将内插字符串转换为 String 实例，该类例是内插字符串的解析结果，其中内插表达式项被替换为结果的格式设置正确的字符串表示形式。 此转换使用 CurrentCulture 设置表达式结果的格式
-* 将内插字符串转换为表示复合格式字符串的 FormattableString 实例，同时也将表达式结果格式化。 这允许通过单个 FormattableString 实例创建多个包含区域性特定内容的结果字符串。 要执行此操作，请调用以下方法之一
-  * ToString() 重载，生成 CurrentCulture 的结果字符串。
-  * Invariant 方法，生成 InvariantCulture 的结果字符串。
-  * ToString(IFormatProvider) 方法，生成特定区域性的结果字符串。
-还可以使用 ToString(IFormatProvider) 方法，以提供支持自定义格式设置的 IFormatProvider 接口的用户定义实现。 有关详细信息，请参阅在 .NET 中设置类型格式一文中的使用 ICustomFormatter 进行自定义格式设置部分
+* 将内插字符串转换为 String 实例,该类例是内插字符串的解析结果,其中内插表达式项被替换为结果的格式设置正确的字符串表示形式。 此转换使用 CurrentCulture 设置表达式结果的格式
+* 将内插字符串转换为表示复合格式字符串的 FormattableString 实例,同时也将表达式结果格式化。 这允许通过单个 FormattableString 实例创建多个包含区域性特定内容的结果字符串。 要执行此操作,请调用以下方法之一
+  * ToString() 重载,生成 CurrentCulture 的结果字符串。
+  * Invariant 方法,生成 InvariantCulture 的结果字符串。
+  * ToString(IFormatProvider) 方法,生成特定区域性的结果字符串。
+还可以使用 ToString(IFormatProvider) 方法,以提供支持自定义格式设置的 IFormatProvider 接口的用户定义实现。 有关详细信息,请参阅在 .NET 中设置类型格式一文中的使用 ICustomFormatter 进行自定义格式设置部分
 
-* 将内插字符串转换为 IFormattable 实例，使用此实例也可通过单个 IFormattable 实例创建多个包含区域性特定内容的结果字符串
+* 将内插字符串转换为 IFormattable 实例,使用此实例也可通过单个 IFormattable 实例创建多个包含区域性特定内容的结果字符串
 
 ## 内插字符串编译
 
-如果内插字符串类型为 string，则通常将其转换为 String.Format 方法调用
+如果内插字符串类型为 string,则通常将其转换为 String.Format 方法调用
 
-如果分析的行为等同于串联，则编译器可将 String.Format 替换为 String.Concat
+如果分析的行为等同于串联,则编译器可将 String.Format 替换为 String.Concat
 
-如果内插字符串类型为 IFormattable 或 FormattableString，则编译器会生成对 FormattableStringFactory.Create 方法的调用
+如果内插字符串类型为 IFormattable 或 FormattableString,则编译器会生成对 FormattableStringFactory.Create 方法的调用
 
 ## 复合格式设置
 
 复合格式设置功能受诸如以下方法的支持
 
-* String.Format，它返回格式化的结果字符串。
-* StringBuilder.AppendFormat，它将格式化的结果字符串追加到 StringBuilder 对象。
-* Console.WriteLine 方法的某些重载，它将格式化的结果字符串显示到控制台上。
-* TextWriter.WriteLine 方法的某些重载，它将格式化的结果字符串写入流或文件中。 派生自 TextWriter 的类（如 StreamWriter 和 HtmlTextWriter）也共享此功能。
-* Debug.WriteLine(String, Object[])，它将格式化消息输出到跟踪侦听器。
-* Trace.TraceError(String, Object[])、Trace.TraceInformation(String, Object[]) 和 Trace.TraceWarning(String, Object[]) 方法，它们将格式化消息输出到跟踪侦听器。
-* TraceSource.TraceInformation(String, Object[]) 方法，它将信息性方法写入跟踪侦听器中。
+* String.Format,它返回格式化的结果字符串。
+* StringBuilder.AppendFormat,它将格式化的结果字符串追加到 StringBuilder 对象。
+* Console.WriteLine 方法的某些重载,它将格式化的结果字符串显示到控制台上。
+* TextWriter.WriteLine 方法的某些重载,它将格式化的结果字符串写入流或文件中。 派生自 TextWriter 的类（如 StreamWriter 和 HtmlTextWriter）也共享此功能。
+* Debug.WriteLine(String, Object[]),它将格式化消息输出到跟踪侦听器。
+* Trace.TraceError(String, Object[])、Trace.TraceInformation(String, Object[]) 和 Trace.TraceWarning(String, Object[]) 方法,它们将格式化消息输出到跟踪侦听器。
+* TraceSource.TraceInformation(String, Object[]) 方法,它将信息性方法写入跟踪侦听器中。
 
 复合格式字符串和对象列表将用作支持复合格式设置功能的方法的参数。 复合格式字符串由零个或多个固定文本段与一个或多个格式项混和组成
 
@@ -111,9 +111,9 @@ String.Format("Name = {0}, hours = {1:hh}", name, DateTime.Now);
 
 类似于`{0,-20}`或`{1,5:N1}`
 
-使 20 字符字段中的姓名左对齐，使 5 字符字段中的工作小时数右对齐
+使 20 字符字段中的姓名左对齐,使 5 字符字段中的工作小时数右对齐
 
-注意“N1”标准格式字符串还用于设置带有小数位的小时数格式
+注意"N1"标准格式字符串还用于设置带有小数位的小时数格式
 
 # 格式字符串组件
 
@@ -175,7 +175,7 @@ public class InfoAttribute : Attribute
    }
 }
 
-[Info("A simple executable.")] // "Info”在“Info”和“InfoAttribute”之间不明确；请使用“@Info”或“InfoAttribute”
+[Info("A simple executable.")] // "Info"在"Info"和"InfoAttribute"之间不明确；请使用"@Info"或"InfoAttribute"
 //[@Info("A simple executable.")] 
 public class Example
 {
@@ -186,8 +186,8 @@ public class Example
 }
 ```
 
-从 C# 8.0 开始，可以按任意顺序使用 $ 和 @ 标记  
-之前的版本只能以 $ 字符开头，后跟 @ 字符  
+从 C# 8.0 开始,可以按任意顺序使用 $ 和 @ 标记  
+之前的版本只能以 $ 字符开头,后跟 @ 字符  
 
 # 完毕
 

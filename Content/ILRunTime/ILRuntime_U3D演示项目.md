@@ -33,11 +33,11 @@ tags:
 > 以`~`结尾的工程不会被Unity捕获,所以放在项目里面需要手动编译.
 
 ```CSharp
-//调用无参数静态方法，appdomain.Invoke("类名", "方法名", 对象引用, 参数列表);
+//调用无参数静态方法,appdomain.Invoke("类名", "方法名", 对象引用, 参数列表);
 appdomain.Invoke("HotFix_Project.InstanceClass", "StaticFunTest", null, null);
  //调用带参数的静态方法
 appdomain.Invoke("HotFix_Project.InstanceClass", "StaticFunTest2", null, 123);
-//预先获得IMethod，可以减低每次调用查找方法耗用的时间
+//预先获得IMethod,可以减低每次调用查找方法耗用的时间
 IType type = appdomain.LoadedTypes["HotFix_Project.InstanceClass"];
 //根据方法名称和参数个数获取方法
 IMethod method = type.GetMethod("StaticFunTest2", 1);
@@ -94,9 +94,9 @@ using(var ctx = appdomain.BeginInvoke(method))
 	ctx.PushObject(obj);
 	//压入参数1:addition
 	ctx.PushInteger(100);
-	//压入参数2: lst,由于是ref/out，需要压引用，这里是引用0号位，也就是第一个PushObject的位置
+	//压入参数2: lst,由于是ref/out,需要压引用,这里是引用0号位,也就是第一个PushObject的位置
 	ctx.PushReference(0);
-	//压入参数3,val，同ref/out
+	//压入参数3,val,同ref/out
 	ctx.PushReference(1);
 	ctx.Invoke();
 	//读取0号位的值
@@ -109,10 +109,10 @@ using(var ctx = appdomain.BeginInvoke(method))
 
 # 使用
 
-> 如果你使用的是`中国特别版Unity`，那直接打开`Package Manager`即可找到`ILRuntime`  
-> 如果你使用的是`国际版Unity`，或者无法在`PackageManager`中找到`ILRuntime`，则需要按照以下步骤设置项目
+> 如果你使用的是`中国特别版Unity`,那直接打开`Package Manager`即可找到`ILRuntime`  
+> 如果你使用的是`国际版Unity`,或者无法在`PackageManager`中找到`ILRuntime`,则需要按照以下步骤设置项目
 
-首先需要在项目的`Packages/manifest.json`中，添加`ILRuntime`的源信息，在这个文件的`dependencies`节点前增加以下代码
+首先需要在项目的`Packages/manifest.json`中,添加`ILRuntime`的源信息,在这个文件的`dependencies`节点前增加以下代码
 
 ```json
 "scopedRegistries": [
@@ -126,15 +126,15 @@ using(var ctx = appdomain.BeginInvoke(method))
 ],
 ```
 
-然后通过`Unity`的`Window->Package Manager`菜单，打开`Package Manager`，将上部标签页选项选择为`All Packages`，`Advanced`里勾上`Show Preview Packages`，等待`Unity`加载完包信息，应该就能在左侧列表中找到`ILRuntime`，点击安装即可
+然后通过`Unity`的`Window->Package Manager`菜单,打开`Package Manager`,将上部标签页选项选择为`All Packages`,`Advanced`里勾上`Show Preview Packages`,等待`Unity`加载完包信息,应该就能在左侧列表中找到`ILRuntime`,点击安装即可
 
-部分`Unity`版本可以无法直接在列表中刷出`ILRuntime`，如果左边列表找不着，那就在项目的`manifest.json`中的`dependencies`段的开头，增加如下代码手动将`ILRuntime`添加进项目
+部分`Unity`版本可以无法直接在列表中刷出`ILRuntime`,如果左边列表找不着,那就在项目的`manifest.json`中的`dependencies`段的开头,增加如下代码手动将`ILRuntime`添加进项目
 
 ```json
 "com.ourpalm.ilruntime": "1.6.0",
 ```
 
-`ILRuntime`包安装完毕后，在`Package Manager`中选中`ILRuntime`， 右边详细页面中有`Samples`，点击右方的`Import to project`可以将`ILRuntime`的示例`Demo`直接导入当前工程。
+`ILRuntime`包安装完毕后,在`Package Manager`中选中`ILRuntime`, 右边详细页面中有`Samples`,点击右方的`Import to project`可以将`ILRuntime`的示例`Demo`直接导入当前工程。
 
 # 委托适配器
 
@@ -148,7 +148,7 @@ appDomain.DelegateManager.RegisterMethodDelegate<int, float>();
 appDomain.DelegateManager.RegisterFunctionDelegate<int, float, bool>();
 ```
 
-`ILRuntime`内部是使用`Action`,`Func`这两个系统自带委托类型来生成的委托实例，所以如果你需要将一个不是`Action`或者`Func`类型的委托实例传到`ILRuntime`外部使用的话，除了委托适配器，还需要额外写一个转换器，将`Action`和`Func`转换成你真正需要的那个委托类型
+`ILRuntime`内部是使用`Action`,`Func`这两个系统自带委托类型来生成的委托实例,所以如果你需要将一个不是`Action`或者`Func`类型的委托实例传到`ILRuntime`外部使用的话,除了委托适配器,还需要额外写一个转换器,将`Action`和`Func`转换成你真正需要的那个委托类型
 
 ```CSharp
 app.DelegateManager.RegisterDelegateConvertor<SomeFunction>((action) =>
@@ -160,14 +160,14 @@ app.DelegateManager.RegisterDelegateConvertor<SomeFunction>((action) =>
 });
 ```
 
-> 为了避免不必要的麻烦，以及后期热更出现问题，建议项目遵循以下几点：
+> 为了避免不必要的麻烦,以及后期热更出现问题,建议项目遵循以下几点：
 
 * 尽量避免不必要的跨域委托调用  
 * 尽量使用Action以及Func这两个系统内置万用委托类型
 
 # 跨域继承
 
-如果你想在`热更DLL`项目当中`继承一个`Unity主工程`里的类`，或者`实现一个主工程里的接口`，你需要在`Unity主工程`中实现一个继承适配器
+如果你想在`热更DLL`项目当中`继承一个`Unity主工程`里的类`,或者`实现一个主工程里的接口`,你需要在`Unity主工程`中实现一个继承适配器
 
 ```CSharp
 appdomain.RegisterCrossBindingAdaptor(new ClassInheritanceAdaptor());
@@ -221,7 +221,7 @@ public class TestClass2Adapter : CrossBindingAdaptor
 
 		public ILTypeInstance ILInstance { get { return instance; } }
 
-		//下面将所有虚函数都重载一遍，并中转到热更内
+		//下面将所有虚函数都重载一遍,并中转到热更内
 		public override void VMethod1()
 		{
 			if (mVMethod1_0.CheckShouldInvokeBase(this.instance))
@@ -265,15 +265,15 @@ public class TestClass2Adapter : CrossBindingAdaptor
 
 # 反射
 
-默认情况下，`System.Reflection`命名空间中的方法，并不可能得知`ILRuntime`中定义的类型，因此无法通过`Type.GetType`等接口取得`热更DLL`里面的类型
+默认情况下,`System.Reflection`命名空间中的方法,并不可能得知`ILRuntime`中定义的类型,因此无法通过`Type.GetType`等接口取得`热更DLL`里面的类型
 
-为了解决这个问题，ILRuntime额外实现了几个用于反射的辅助类：`ILRuntimeType`，`ILRuntimeMethodInfo`，`ILRuntimeFieldInfo`等
+为了解决这个问题,ILRuntime额外实现了几个用于反射的辅助类：`ILRuntimeType`,`ILRuntimeMethodInfo`,`ILRuntimeFieldInfo`等
 
 # 通过反射获取Type
 
-在`热更DLL`当中，直接调用`Type.GetType(“TypeName”)`或者`typeof(TypeName)`均可以得到有效`System.Type`类型实例
+在`热更DLL`当中,直接调用`Type.GetType("TypeName")`或者`typeof(TypeName)`均可以得到有效`System.Type`类型实例
 
-在`Unity主工程`中，无法通过`Type.GetType`来取得`热更DLL`内部定义的类，而只能通过以下方式得到`System.Type`实例
+在`Unity主工程`中,无法通过`Type.GetType`来取得`热更DLL`内部定义的类,而只能通过以下方式得到`System.Type`实例
 
 ```CSharp
 IType type = appdomain.LoadedTypes["TypeName"];
@@ -282,7 +282,7 @@ Type t = type.ReflectedType;
 
 # 通过反射创建实例
 
-在`热更DLL`当中，可以直接通过`Activator`来创建实例
+在`热更DLL`当中,可以直接通过`Activator`来创建实例
 
 ```CSharp
 Type t = Type.GetType("TypeName");//或者typeof(TypeName)
@@ -291,14 +291,14 @@ object instance = Activator.CreateInstance(t);
 object instance = Activator.CreateInstance<TypeName>();
 ```
 
-在`Unity主工程`中，无法通过`Activator`来创建`热更DLL`内类型的实例，必须通过`AppDomain`来创建实例
+在`Unity主工程`中,无法通过`Activator`来创建`热更DLL`内类型的实例,必须通过`AppDomain`来创建实例
 ```CSharp
 object instance = appdomain.Instantiate("TypeName");
 ```
 
 # 通过反射调用方法
 
-在`热更DLL`当中，通过反射调用方法跟通常C#用法没有任何区别
+在`热更DLL`当中,通过反射调用方法跟通常C#用法没有任何区别
 
 ```CSharp
 Type type = typeof(TypeName);
@@ -307,7 +307,7 @@ MethodInfo mi = type.GetMethod("foo");
 mi.Invoke(instance, null);
 ```
 
-在`Unity主工程`中，可以通过C#通常用法来调用，也可以通过ILRuntime自己的接口来调用，两个方式是等效的
+在`Unity主工程`中,可以通过C#通常用法来调用,也可以通过ILRuntime自己的接口来调用,两个方式是等效的
 
 ```CSharp
 IType t = appdomain.LoadedTypes["TypeName"];
@@ -358,16 +358,16 @@ public unsafe static StackObject* DLog(ILIntepreter __intp, StackObject* __esp, 
 {
     ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
     StackObject* ptr_of_this_method;
-    //只有一个参数，所以返回指针就是当前栈指针ESP - 1
+    //只有一个参数,所以返回指针就是当前栈指针ESP - 1
     StackObject* __ret = ILIntepreter.Minus(__esp, 1);
-    //第一个参数为ESP -1， 第二个参数为ESP - 2，以此类推
+    //第一个参数为ESP -1, 第二个参数为ESP - 2,以此类推
     ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
     //获取参数message的值
     object message = StackObject.ToObject(ptr_of_this_method, __domain, __mStack);
     //需要清理堆栈
     __intp.Free(ptr_of_this_method);
-    //如果参数类型是基础类型，例如int，可以直接通过int param = ptr_of_this_method->Value获取值，
-    //关于具体原理和其他基础类型如何获取，请参考ILRuntime实现原理的文档。
+    //如果参数类型是基础类型,例如int,可以直接通过int param = ptr_of_this_method->Value获取值,
+    //关于具体原理和其他基础类型如何获取,请参考ILRuntime实现原理的文档。
 			
     //通过ILRuntime的Debug接口获取调用热更DLL的堆栈
     string stackTrace = __domain.DebugService.GetStackTrance(__intp);
@@ -379,7 +379,7 @@ public unsafe static StackObject* DLog(ILIntepreter __intp, StackObject* __esp, 
 appdomain.RegisterCLRMethodRedirection(typeof(Debug).GetMethod("Log"), DLog);
 ```
 
-> 一定要记得将`CLR绑定`的注册写在`CLR重定向`的注册后面，因为同一个方法只能被重定向一次，只有先注册的那个才能生效
+> 一定要记得将`CLR绑定`的注册写在`CLR重定向`的注册后面,因为同一个方法只能被重定向一次,只有先注册的那个才能生效
 
 ```CSharp
 //注册方法如下
@@ -388,9 +388,9 @@ ILRuntime.Runtime.Generated.CLRBindings.Initialize(appdomain);
 
 # Json
 
-Json序列化是开发中非常经常需要用到的功能，考虑到其通用性，因此ILRuntime对`LitJson`这个序列化库进行了集成
+Json序列化是开发中非常经常需要用到的功能,考虑到其通用性,因此ILRuntime对`LitJson`这个序列化库进行了集成
 
-在ILRuntime初始化阶段，在注册CLR绑定之前，执行下面这行代码
+在ILRuntime初始化阶段,在注册CLR绑定之前,执行下面这行代码
 
 ```CSharp
 LitJson.JsonMapper.RegisterILRuntimeCLRRedirection(appdomain);
@@ -405,9 +405,9 @@ JsonTestClass obj = JsonMapper.ToObject<JsonTestClass>(json);
 
 ## 类型裁剪
 
-IL2CPP在打包时会自动对Unity工程的DLL进行裁剪，将代码中没有引用到的类型裁剪掉，以达到减小发布后ipa包的尺寸的目的
+IL2CPP在打包时会自动对Unity工程的DLL进行裁剪,将代码中没有引用到的类型裁剪掉,以达到减小发布后ipa包的尺寸的目的
 
-Assets目录中建立一个叫link.xml的XML文件，然后按照下面的格式指定你需要保留的类型
+Assets目录中建立一个叫link.xml的XML文件,然后按照下面的格式指定你需要保留的类型
 
 ```XML
 <linker>
@@ -421,23 +421,23 @@ Assets目录中建立一个叫link.xml的XML文件，然后按照下面的格式
 
 ## 泛型
 
-每个泛型实例实际上都是一个独立的类型，`List<A>` 和 `List<B>`是两个完全没有关系的类型
+每个泛型实例实际上都是一个独立的类型,`List<A>` 和 `List<B>`是两个完全没有关系的类型
 
 在ILRuntime中解决这个问题有两种方式
 
-一个是使用CLR绑定，把用到的泛型实例都进行CLR绑定  
-另外一个方式是在Unity主工程中，建立一个类，然后在里面定义用到的那些泛型实例的public变量。这两种方式都可以告诉IL2CPP保留这个类型的代码供运行中使用
+一个是使用CLR绑定,把用到的泛型实例都进行CLR绑定  
+另外一个方式是在Unity主工程中,建立一个类,然后在里面定义用到的那些泛型实例的public变量。这两种方式都可以告诉IL2CPP保留这个类型的代码供运行中使用
 
-> 因此建议大家在实际开发中，尽量使用热更DLL内部的类作为泛型参数  
+> 因此建议大家在实际开发中,尽量使用热更DLL内部的类作为泛型参数  
 
 因为DLL内部的类型都是ILTypeInstance  
-此外如果泛型模版类就是在DLL里定义的的话，那就完全不需要进行任何处理
+此外如果泛型模版类就是在DLL里定义的的话,那就完全不需要进行任何处理
 
 ### 泛型方法
 
 跟泛型实例一样
 
-尝试在Unity的主工程中随便写一个static的方法，然后对这个泛型方法调用一下即可，这个方法无需被调用，只是用来告诉IL2CPP我们需要这个方法
+尝试在Unity的主工程中随便写一个static的方法,然后对这个泛型方法调用一下即可,这个方法无需被调用,只是用来告诉IL2CPP我们需要这个方法
 
 # ILRuntime的性能优化建议
 
@@ -447,26 +447,26 @@ Release模式会比Debug模式的性能高至少2倍
 
 ## CLR绑定
 
-默认情况下，ILRuntime中调用Unity主工程的方法，ILRuntime会通过反射对目标方法进行调用
+默认情况下,ILRuntime中调用Unity主工程的方法,ILRuntime会通过反射对目标方法进行调用
 
 ## 值类型
 
-由于值类型的特殊和ILRuntime的实现原理，使用ILRuntime外部定义的值类型（例如UnityEngine.Vector3）在默认情况下会造成额外的装箱拆箱开销，以及相对应的GC Alloc内存分配。
+由于值类型的特殊和ILRuntime的实现原理,使用ILRuntime外部定义的值类型（例如UnityEngine.Vector3）在默认情况下会造成额外的装箱拆箱开销,以及相对应的GC Alloc内存分配。
 
-通过对这些值类型添加绑定器，可以大幅增加值类型的执行效率
+通过对这些值类型添加绑定器,可以大幅增加值类型的执行效率
 
 # 接口调用建议
 
-为了调用方便，ILRuntime的很多接口使用了params可变参数，但是有可能会无意间忽视这个操作带来的GCAlloc
+为了调用方便,ILRuntime的很多接口使用了params可变参数,但是有可能会无意间忽视这个操作带来的GCAlloc
 
 ```CSharp
 appdomain.Invoke("MyGame.Main", "Initialize", null);
 appdomain.Invoke("MyGame.Main", "Start", null, 100, 200);
 ```
 
-这两个操作在调用的时候，会分别生成一个`object[0]`和`object[2]`，从而产生GC Alloc
+这两个操作在调用的时候,会分别生成一个`object[0]`和`object[2]`,从而产生GC Alloc
 
-如果你需要在Update等性能关键的地方调用热更DLL中的方法，应该按照以下方式缓存这个参数数组
+如果你需要在Update等性能关键的地方调用热更DLL中的方法,应该按照以下方式缓存这个参数数组
 
 ```CSharp
 object[] param0 = new object[0];
@@ -488,13 +488,13 @@ void Update()
 }
 ```
 
-如果需要传递的参数或返回值中包含int, float等基础类型，那使用上面的方法依然无法消除GC Alloc，为了更高效率的调用，ILRuntime提供了`InvocationContext`这种调用方式，需要按照如下方式调用
+如果需要传递的参数或返回值中包含int, float等基础类型,那使用上面的方法依然无法消除GC Alloc,为了更高效率的调用,ILRuntime提供了`InvocationContext`这种调用方式,需要按照如下方式调用
 
 ```CSharp
 int result = 0;
 using(var ctx = appdomain.BeginInvoke(m))
 {
-    //依次将参数压入栈，如果为成员方法，第一个参数固定为对象实例
+    //依次将参数压入栈,如果为成员方法,第一个参数固定为对象实例
     ctx.PushObject(this);
 	ctx.PushInteger(123);
 	//开始调用
@@ -507,9 +507,9 @@ using(var ctx = appdomain.BeginInvoke(m))
 # 我要怎么才能在Profiler里看见热更内的方法耗时情况呢？
 
 ```CSharp
-//在ILRuntime的初始化处加入以下代码即可在Profiler中看见热更内方法的耗时情况，无需开启DeepProfile，真机上也可使用
+//在ILRuntime的初始化处加入以下代码即可在Profiler中看见热更内方法的耗时情况,无需开启DeepProfile,真机上也可使用
 #if DEBUG && (UNITY_EDITOR || UNITY_ANDROID || UNITY_IPHONE)
-        //由于Unity的Profiler接口只允许在主线程使用，为了避免出异常，需要告诉ILRuntime主线程的线程ID才能正确将函数运行耗时报告给Profiler
+        //由于Unity的Profiler接口只允许在主线程使用,为了避免出异常,需要告诉ILRuntime主线程的线程ID才能正确将函数运行耗时报告给Profiler
         appdomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
 ```
@@ -517,14 +517,14 @@ using(var ctx = appdomain.BeginInvoke(m))
 # 真机上调试或运行时出现随机闪退
 
 ```CSharp
-请确认XCode的编译选项中是否使用了Debug，由于iPhone的线程栈空间很小，调用层级稍微深一点就会出现爆栈，因此请使用Release选项编译XCode工程
+请确认XCode的编译选项中是否使用了Debug,由于iPhone的线程栈空间很小,调用层级稍微深一点就会出现爆栈,因此请使用Release选项编译XCode工程
 ```
 
 # 使用ILRuntime后产生的性能问题
 
-是否在热更代码中使用了`foreach`，由于原理限制，在热更中使用`foreach`无法避免产生GC Alloc
+是否在热更代码中使用了`foreach`,由于原理限制,在热更中使用`foreach`无法避免产生GC Alloc
 
-由于热更都是解译执行，所以执行效率跟直接执行天然就有20-100倍的差距，因此不大适合需要进行大量遍历计算的操作，可将耗时的工具方法放入主工程辅助
+由于热更都是解译执行,所以执行效率跟直接执行天然就有20-100倍的差距,因此不大适合需要进行大量遍历计算的操作,可将耗时的工具方法放入主工程辅助
 
 # 跨域继承怎么写
 
@@ -672,20 +672,20 @@ public class TestInheritance : TestClassBase
 ```CSharp
 unsafe static StackObject* Log_11(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
 {
-	//ILRuntime的调用约定为被调用者清理堆栈，因此执行这个函数后需要将参数从堆栈清理干净，并把返回值放在栈顶，具体请看ILRuntime实现原理文档
+	//ILRuntime的调用约定为被调用者清理堆栈,因此执行这个函数后需要将参数从堆栈清理干净,并把返回值放在栈顶,具体请看ILRuntime实现原理文档
 	ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
 	StackObject* ptr_of_this_method;
-	//这个是最后方法返回后esp栈指针的值，应该返回清理完参数并指向返回值，这里是只需要返回清理完参数的值即可
+	//这个是最后方法返回后esp栈指针的值,应该返回清理完参数并指向返回值,这里是只需要返回清理完参数的值即可
 	StackObject* __ret = ILIntepreter.Minus(__esp, 1);
-	//取Log方法的参数，如果有两个参数的话，第一个参数是esp - 2,第二个参数是esp -1, 因为Mono的bug，直接-2值会错误，所以要调用ILIntepreter.Minus
+	//取Log方法的参数,如果有两个参数的话,第一个参数是esp - 2,第二个参数是esp -1, 因为Mono的bug,直接-2值会错误,所以要调用ILIntepreter.Minus
 	ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
 
-	//这里是将栈指针上的值转换成object，如果是基础类型可直接通过ptr->Value和ptr->ValueLow访问到值，具体请看ILRuntime实现原理文档
+	//这里是将栈指针上的值转换成object,如果是基础类型可直接通过ptr->Value和ptr->ValueLow访问到值,具体请看ILRuntime实现原理文档
 	object message = typeof(object).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack));
 	//所有非基础类型都得调用Free来释放托管堆栈
 	__intp.Free(ptr_of_this_method);
 
-	//在真实调用Debug.Log前，我们先获取DLL内的堆栈
+	//在真实调用Debug.Log前,我们先获取DLL内的堆栈
 	var stacktrace = __domain.DebugService.GetStackTrace(__intp);
 
 	//我们在输出信息后面加上DLL堆栈

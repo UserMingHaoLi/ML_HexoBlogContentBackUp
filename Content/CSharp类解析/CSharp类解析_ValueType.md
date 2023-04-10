@@ -16,7 +16,7 @@ tags:
 
 无法创建直接从`ValueType`继承的类 , 但可以使用`struct `关键字来来达到效果
 
-`ValueType` 结构通常不在代码中直接使用。 但是，它可用作方法调用中的参数，以将可能的自变量限制为值类型而不是所有对象，或者允许方法处理许多不同的值类型
+`ValueType` 结构通常不在代码中直接使用。 但是,它可用作方法调用中的参数,以将可能的自变量限制为值类型而不是所有对象,或者允许方法处理许多不同的值类型
 
 ```CSharp
 public static NumericRelationship Compare(ValueType value1, ValueType value2)
@@ -94,9 +94,9 @@ public override String ToString()
 
 # GetHashCode()
 
-如果调用派生类型的 `GetHashCode` 方法，则返回值不可能适合用作哈希表中的键
+如果调用派生类型的 `GetHashCode` 方法,则返回值不可能适合用作哈希表中的键
 
-如果其中一个或多个字段的值发生更改，则返回值可能不适合用作哈希表中的键
+如果其中一个或多个字段的值发生更改,则返回值可能不适合用作哈希表中的键
 
 考虑编写您自己的方法的实现 GetHashCode 
 
