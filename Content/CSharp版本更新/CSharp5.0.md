@@ -81,9 +81,9 @@ public void TraceMessage(string message,
 
 |特性| 	描述 |	类型|
 |---|---|---|
-|CallerFilePathAttribute |	包含调用方的源文件的完整路径。 这是编译时的文件路径。 |String
-|CallerLineNumberAttribute |	源文件中调用方法的行号。 	|Integer
-|CallerMemberNameAttribute |	调用方的方法或属性名称。 请参阅本主题后面的成员名称。 	|String
+|CallerFilePathAttribute |	包含调用方的源文件的完整路径. 这是编译时的文件路径. |String
+|CallerLineNumberAttribute |	源文件中调用方法的行号. 	|Integer
+|CallerMemberNameAttribute |	调用方的方法或属性名称. 请参阅本主题后面的成员名称. 	|String
 
 
 

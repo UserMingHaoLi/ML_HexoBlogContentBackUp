@@ -35,8 +35,8 @@ tags:
 
 # default
 
-* 指定 `switch` 语句中的默认标签。
-* 作为 `default` 默认运算符或文本生成类型的默认值。
+* 指定 `switch` 语句中的默认标签.
+* 作为 `default` 默认运算符或文本生成类型的默认值.
 
 ```CSharp
 int caseSwitch = 1;

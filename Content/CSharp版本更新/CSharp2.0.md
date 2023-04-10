@@ -84,15 +84,15 @@ public T GetNode<T, T2>(T2 index) where T : class where T2 : class
 
 | 约束                 | 说明                                                                                                                          |
 | :------------------- | :---------------------------------------------------------------------------------------------------------------------------- |
-| where T : struct     | 类型参数必须是值类型。 可以指定除 Nullable<T> 以外的任何值类型。 有关可以为 null 的类型的详细信息,请参阅可以为 null 的类型。 |
-| where T : class      | 类型参数必须是引用类型。 此约束还应用于任何类、接口、委托或数组类型。                                                         |
-| where T : unmanaged  | 类型参数不能是引用类型,并且任何嵌套级别均不能包含任何引用类型成员。                                                          |
-| where T : new()      | 类型参数必须具有公共无参数构造函数。 与其他约束一起使用时,new() 约束必须最后指定。                                           |
-| where T : <基类名>   | 类型参数必须是指定的基类或派生自指定的基类。                                                                                  |
-| where T : <接口名称> | 类型参数必须是指定的接口或实现指定的接口。 可指定多个接口约束。 约束接口也可以是泛型。                                        |
-| where T : U          | 为 T 提供的类型参数必须是为 U 提供的参数或派生自为 U 提供的参数。                                                             |
+| where T : struct     | 类型参数必须是值类型. 可以指定除 Nullable<T> 以外的任何值类型. 有关可以为 null 的类型的详细信息,请参阅可以为 null 的类型. |
+| where T : class      | 类型参数必须是引用类型. 此约束还应用于任何类、接口、委托或数组类型.                                                         |
+| where T : unmanaged  | 类型参数不能是引用类型,并且任何嵌套级别均不能包含任何引用类型成员.                                                          |
+| where T : new()      | 类型参数必须具有公共无参数构造函数. 与其他约束一起使用时,new() 约束必须最后指定.                                           |
+| where T : <基类名>   | 类型参数必须是指定的基类或派生自指定的基类.                                                                                  |
+| where T : <接口名称> | 类型参数必须是指定的接口或实现指定的接口. 可指定多个接口约束. 约束接口也可以是泛型.                                        |
+| where T : U          | 为 T 提供的类型参数必须是为 U 提供的参数或派生自为 U 提供的参数.                                                             |
 
-某些约束是互斥的。 所有值类型必须具有可访问的无参数构造函数。 `struct` 约束包含 `new()` 约束,且 `new()` 约束不能与 `struct` 约束结合使用。 `unmanaged` 约束包含 `struct` 约束。 `unmanaged` 约束不能与 `struct` 或 `new()` 约束结合使用。
+某些约束是互斥的. 所有值类型必须具有可访问的无参数构造函数. `struct` 约束包含 `new()` 约束,且 `new()` 约束不能与 `struct` 约束结合使用. `unmanaged` 约束包含 `struct` 约束. `unmanaged` 约束不能与 `struct` 或 `new()` 约束结合使用.
 
 > unmanaged 是C#7.2新增的.
 
@@ -120,13 +120,13 @@ public T GetNode<T, T2>(T2 index) where T : class where T2 : class
 他允许你在两个不同的文件中使用同一个类, 接口, 方法.  
 
 一般用于  
-处理大型项目时,使一个类分布于多个独立文件中可以让多位程序员同时对该类进行处理。  
+处理大型项目时,使一个类分布于多个独立文件中可以让多位程序员同时对该类进行处理.  
 使用自动生成的源文件时, 例如Windows 窗体  
 Web服务包装器代码等.你可以创建使用这些类的代码,这样就不需要修改由Visual Studio生成的文件.
 
-> 如果将任意部分声明为抽象的,则整个类型都被视为抽象的。 如果将任意部分声明为密封的,则整个类型都被视为密封的。 如果任意部分声明基类型,则整个类型都将继承该类。
+> 如果将任意部分声明为抽象的,则整个类型都被视为抽象的. 如果将任意部分声明为密封的,则整个类型都被视为密封的. 如果任意部分声明基类型,则整个类型都将继承该类.
 
-> 各个部分可以指定不同的基接口,最终类型将实现所有分部声明所列出的全部接口。
+> 各个部分可以指定不同的基接口,最终类型将实现所有分部声明所列出的全部接口.
 
 ```csharp
 public partial class Employee
@@ -172,7 +172,7 @@ TestDelegate testDelA = new TestDelegate(M);
 TestDelegate testDelB = delegate(string s) { Console.WriteLine(s); };
 ```
 
-> 创建委托时,对外部变量的引用被视为已捕获   不同于本地变量,已捕获的变量的生存期一直延伸至引用匿名方法的委托具有垃圾回收资格为止。
+> 创建委托时,对外部变量的引用被视为已捕获   不同于本地变量,已捕获的变量的生存期一直延伸至引用匿名方法的委托具有垃圾回收资格为止.
 
 看一个例子
 
@@ -232,9 +232,9 @@ return x ?? 10
 
 实际上可空类型是一个泛型 ` System.Nullable<T>`结构的实例  
 例如声明 `int?` 的时候, 实际是声明了一个 `System.Nullable<int>`  
-基础类型 T 可以是任何不可为 null 的值类型。 T 不能是引用类型。
+基础类型 T 可以是任何不可为 null 的值类型. T 不能是引用类型.
 
-> 不得嵌套可以为 null 的类型。 不会编译下面的一行代码：Nullable<Nullable<int>> n;
+> 不得嵌套可以为 null 的类型. 不会编译下面的一行代码:Nullable<Nullable<int>> n;
 
 如个使用运算符, 其中任何一方为`null`结果为null
 
@@ -248,7 +248,7 @@ a = a * c;  // a is 110.
 a = a + b;  // a is null.
 ```
 
-如果使用比较运算符的有一方为null, 那么结果 既不大于等于 null,也不小于 null。
+如果使用比较运算符的有一方为null, 那么结果 既不大于等于 null,也不小于 null.
 
 ```
 int? num1 = 10;
@@ -308,7 +308,7 @@ public static System.Collections.IEnumerable SomeNumbers()
 }
 ```
 
-> 可以使用 `yield break` 语句来终止迭代。
+> 可以使用 `yield break` 语句来终止迭代.
 
 yield的原理是运行到一个`yield return`后就停下, 等待下一次运行. 直到结束.  
 这样就形成了一个集合, 于是可以被转化为迭代器, 实际上就是在模拟`MoveNext()`
@@ -353,7 +353,7 @@ T GetR(T t);//error
 
 ==报错了, 错误信息是==
 
-> 类型参数"T"必须是在"Program.IOut_Interface<T>.GetR(T)"上有效的逆变式。"T"为 协变
+> 类型参数"T"必须是在"Program.IOut_Interface<T>.GetR(T)"上有效的逆变式."T"为 协变
 
 可见我们已经成功声明了协变, 之后声明一个逆变.
 
@@ -373,7 +373,7 @@ class CIn_Class<U> : IIn_Interface<U>
 
 ==老规矩. 将接口返回的`void` 修改为`U`==
 
->  类型参数"U"必须是在"Program.IIn_Interface<U>.SetU(U)"上有效的 协变式。"U"为 逆变。
+>  类型参数"U"必须是在"Program.IIn_Interface<U>.SetU(U)"上有效的 协变式."U"为 逆变.
 
 准备工作完毕后, 我们准备写`Main`
 
@@ -402,7 +402,7 @@ static void Main(string[] args)
 
 我们尝试删除接口的`out`关键字.
 
-> 无法将类型"HelloWorldTests.Program.IOut_Interface<string>"隐式转换为"HelloWorldTests.Program.IOut_Interface<object>"。存在一个显式转换(是否缺少强制转换?)
+> 无法将类型"HelloWorldTests.Program.IOut_Interface<string>"隐式转换为"HelloWorldTests.Program.IOut_Interface<object>".存在一个显式转换(是否缺少强制转换?)
 
 并不是. 这是为什么呢, 这就关系到一个类型安全问题.  
 因为泛型并没有约束你用它做任何事, 你可以将它做参数, 也可以做返回值, 甚至什么也不做. 但是一旦你使用它做参数, 那么`c1 = c12`还正确吗?  

@@ -38,10 +38,10 @@ tags:
 使用`using static`显示声明引用静态命名
 
 
-* 导入的成员签名和现有的成员签名相同时,使用现有的成员。
-* 导入的成员之间出现成员签名相同的情况,使用的时候会编译不通过,需要移除一个using static才可,或者改为正常的调用方式。
-* class,struct,emun类型可以使用using static导人。
-* 扩展方法也可以使用using static,但是需要按照实例方法的调用方式来使用。
+* 导入的成员签名和现有的成员签名相同时,使用现有的成员.
+* 导入的成员之间出现成员签名相同的情况,使用的时候会编译不通过,需要移除一个using static才可,或者改为正常的调用方式.
+* class,struct,emun类型可以使用using static导人.
+* 扩展方法也可以使用using static,但是需要按照实例方法的调用方式来使用.
 
 
 ## 异常筛选器
@@ -70,7 +70,7 @@ public ICollection<double> Grades { get; } = new List<double>();
 
 ## Expression bodied 成员
 
-你编写的许多成员是可以作为单个表达式的单个语句。 改为编写 `expression-bodied` 成员。 这适用于方法和只读属性。 例如,重写 `ToString()` 通常是理想之选
+你编写的许多成员是可以作为单个表达式的单个语句. 改为编写 `expression-bodied` 成员. 这适用于方法和只读属性. 例如,重写 `ToString()` 通常是理想之选
 
 ```CSharp
 public override string ToString() => $"{LastName}, {FirstName}";
@@ -88,7 +88,7 @@ public string FullName => $"{FirstName} {LastName}";
 var first = person?.FirstName; 
 ```
 
-还可以将 null 条件运算符用于数组或索引器访问。 将索引表达式中的 [] 替换为 ?[]\
+还可以将 null 条件运算符用于数组或索引器访问. 将索引表达式中的 [] 替换为 ?[]\
 
 此时如果`person`为null, 返回null, 而不是引发空引用异常.
 
@@ -110,7 +110,7 @@ ${Grades.Average()}
 
 ## nameof 运算符
 
-`nameof` 表达式的计算结果为符号的名称。 他是一个关键字 每当需要变量、属性或成员字段的名称时,这是让工具正常运行的好办法。`nameof` 的其中一个最常见的用途是提供引起异常的符号的名称：
+`nameof` 表达式的计算结果为符号的名称. 他是一个关键字 每当需要变量、属性或成员字段的名称时,这是让工具正常运行的好办法.`nameof` 的其中一个最常见的用途是提供引起异常的符号的名称:
 
 ```CSharp
 if (IsNullOrWhiteSpace(lastName))
@@ -139,7 +139,7 @@ private Dictionary<int, string> webErrors = new Dictionary<int, string>
 
 ## Catch/Finally 块中的 Await
 
- 使用 C# 6,现在可以在 catch 或 finally 表达式中使用 await。 这通常用于日志记录方案：
+ 使用 C# 6,现在可以在 catch 或 finally 表达式中使用 await. 这通常用于日志记录方案:
  
  ```CSharp
  catch (System.Net.Http.HttpRequestException e) when (e.Message.Contains("301"))

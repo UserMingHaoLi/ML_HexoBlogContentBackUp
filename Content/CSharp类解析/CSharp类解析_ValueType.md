@@ -16,7 +16,7 @@ tags:
 
 无法创建直接从`ValueType`继承的类 , 但可以使用`struct `关键字来来达到效果
 
-`ValueType` 结构通常不在代码中直接使用。 但是,它可用作方法调用中的参数,以将可能的自变量限制为值类型而不是所有对象,或者允许方法处理许多不同的值类型
+`ValueType` 结构通常不在代码中直接使用. 但是,它可用作方法调用中的参数,以将可能的自变量限制为值类型而不是所有对象,或者允许方法处理许多不同的值类型
 
 ```CSharp
 public static NumericRelationship Compare(ValueType value1, ValueType value2)
@@ -24,15 +24,15 @@ public static NumericRelationship Compare(ValueType value1, ValueType value2)
 
 **方法**
 * Equals(Object)	
-  * 指示此实例与指定对象是否相等。
+  * 指示此实例与指定对象是否相等.
 * GetHashCode()	
-  * 返回此实例的哈希代码。
+  * 返回此实例的哈希代码.
 * GetType()	
-  * 获取当前实例的 Type。(继承自 Object)
+  * 获取当前实例的 Type.(继承自 Object)
 * MemberwiseClone()	
-  * 创建当前 Object 的浅表副本。(继承自 Object)
+  * 创建当前 Object 的浅表副本.(继承自 Object)
 * ToString()	
-  * 返回此实例的完全限定类型名称。
+  * 返回此实例的完全限定类型名称.
 
 
 <!--more-->

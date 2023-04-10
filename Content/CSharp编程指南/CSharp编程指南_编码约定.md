@@ -45,7 +45,7 @@ tags:
 
 > 实际上`CamelCasing`还用做非公开字段.
 
-**不要假设所有编程语言都区分大小写。 它们不是。 名称不能单独区分**
+**不要假设所有编程语言都区分大小写. 它们不是. 名称不能单独区分**
 
 ## 通用命名约定
 
@@ -109,24 +109,24 @@ tags:
 | System.Attribute                 | ✔️将后缀 "Attribute" 添加到自定义特性类的名称中                                                               |
 | System.Delegate                  | ✔️将后缀 "EventHandler" 添加到在事件中使用的委托的名称                                                        |
 |                                  | ✔️将后缀 "Callback" 添加到作为事件处理程序使用的委托的名称                                                    |
-|                                  | ❌ 不要将后缀 "Delegate" 添加到委托。                                                                         |
+|                                  | ❌ 不要将后缀 "Delegate" 添加到委托.                                                                         |
 | System.EventArgs                 | ✔️添加后缀 "EventArgs"                                                                                        |
 | System.Enum                      | ❌ 不要从此类派生;改为使用您的语言支持的关键字;例如,在 c # 中,使用 enum 关键字                              |
 |                                  | ❌ 不要添加后缀 "Enum" 或 "标志"                                                                              |
 | System.Exception                 | ✔️添加后缀 "Exception"                                                                                        |
 | IDictionary                      |                                                                                                              |
-| IDictionary<TKey,TValue>         | ✔️添加后缀 "Dictionary"。 请注意, IDictionary 是一种特定类型的集合,但是此准则优先于下面的更常见的集合原则。 |
+| IDictionary<TKey,TValue>         | ✔️添加后缀 "Dictionary". 请注意, IDictionary 是一种特定类型的集合,但是此准则优先于下面的更常见的集合原则. |
 | IEnumerable                      |                                                                                                              |
 | ICollection                      |                                                                                                              |
 | IList                            |                                                                                                              |
 | IEnumerable<T>                   |                                                                                                              |
 | ICollection<T>                   |                                                                                                              |
-| IList<T>                         | ✔️添加后缀 "Collection"。                                                                                     |
-| System.IO.Stream                 | ✔️添加后缀 "Stream"。                                                                                         |
+| IList<T>                         | ✔️添加后缀 "Collection".                                                                                     |
+| System.IO.Stream                 | ✔️添加后缀 "Stream".                                                                                         |
 | CodeAccessPermission IPermission | ✔️添加后缀 "Permission"                                                                                       |
 
 > **不要**在枚举类型名称中使用 "Enum" 后缀  
-> **不要**在枚举类型名称中使用 "Flag" 或 "Flags" 后缀。
+> **不要**在枚举类型名称中使用 "Flag" 或 "Flags" 后缀.
 > **不要**在枚举值名称上使用前缀 (例如,将 "ad" 用于 ADO 枚举,使用 "rtf" 进行丰富文本枚举等 ) 
 
 ## 类型成员的名称
@@ -165,7 +165,7 @@ public class Control {
 
 ## 额外
 
-标识符不应包含两个连续的 `_` 字符。 这些名称保留给编译器生成的标识符
+标识符不应包含两个连续的 `_` 字符. 这些名称保留给编译器生成的标识符
 
 # 布局约定
 

@@ -50,7 +50,7 @@ tags:
 
 # 全局 using 指令
 
-可将 `global` 修饰符添加到任何 `using` 指令,以指示编译器该指令适用于编译中的所有源文件。 这通常是项目中的所有源文件
+可将 `global` 修饰符添加到任何 `using` 指令,以指示编译器该指令适用于编译中的所有源文件. 这通常是项目中的所有源文件
 
 # 文件范围的命名空间声明
 
@@ -82,7 +82,7 @@ var parse = (string s) => int.Parse(s);
 
 编译器可以将 `parse` 推断为 `Func<string, int>`
 
-编译器选择可用的 `Func` 或 `Action` 委托（如果存在合适的委托）。 否则,它将合成委托类型
+编译器选择可用的 `Func` 或 `Action` 委托（如果存在合适的委托）. 否则,它将合成委托类型
 
 > 不推荐吧, 还是声明类型好点
 
@@ -90,18 +90,18 @@ var parse = (string s) => int.Parse(s);
 
 从 `C# 10` 开始,可以使用字符串内插来初始化常量字符串
 
-用于占位符的所有表达式都必须是常量字符串。 换言之,每个内插表达式都必须是一个字符串,并且必须是编译时常量。
+用于占位符的所有表达式都必须是常量字符串. 换言之,每个内插表达式都必须是一个字符串,并且必须是编译时常量.
 
 
 # 记录类型可以密封 ToString
 
-在 `C# 10` 中,在记录类型中重写 `ToString` 时可以添加 `sealed` 修饰符。 密封 `ToString` 方法可阻止编译器为任何派生的记录类型合成 `ToString` 方法
+在 `C# 10` 中,在记录类型中重写 `ToString` 时可以添加 `sealed` 修饰符. 密封 `ToString` 方法可阻止编译器为任何派生的记录类型合成 `ToString` 方法
 
 确保了所有派生记录类型都使用某个通用基记录类型中定义的 `ToString` 方法
 
 # 在同一解构中进行赋值和声明
 
-此更改取消了早期 C# 版本中的限制。 以前,析构可以将所有值赋给现有变量,或将新声明的变量初始化：
+此更改取消了早期 C# 版本中的限制. 以前,析构可以将所有值赋给现有变量,或将新声明的变量初始化:
 
 ```CSharp
 // Initialization:
@@ -113,7 +113,7 @@ int y1 = 0;
 (x1, y1) = point;
 ```
 
-`C# 10` 取消了此限制：
+`C# 10` 取消了此限制:
 ```CSharp
 int x = 0;
 (x, int y) = point;
@@ -121,13 +121,13 @@ int x = 0;
 
 # 改进型明确赋值
 
-此次改进的主要影响是,针对明确赋值和 Null 状态分析的警告更加准确。
+此次改进的主要影响是,针对明确赋值和 Null 状态分析的警告更加准确.
 
 
 
 # CallerArgumentExpression 属性诊断
 
-如果条件为 `false`,则异常消息包含传递给 `condition` 的参数的文本表示形式：
+如果条件为 `false`,则异常消息包含传递给 `condition` 的参数的文本表示形式:
 
 ```CSharp
 public static void Validate(bool condition, [CallerArgumentExpression("condition")] string? message=null)

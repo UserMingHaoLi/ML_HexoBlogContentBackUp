@@ -134,7 +134,7 @@ using(var ctx = appdomain.BeginInvoke(method))
 "com.ourpalm.ilruntime": "1.6.0",
 ```
 
-`ILRuntime`包安装完毕后,在`Package Manager`中选中`ILRuntime`, 右边详细页面中有`Samples`,点击右方的`Import to project`可以将`ILRuntime`的示例`Demo`直接导入当前工程。
+`ILRuntime`包安装完毕后,在`Package Manager`中选中`ILRuntime`, 右边详细页面中有`Samples`,点击右方的`Import to project`可以将`ILRuntime`的示例`Demo`直接导入当前工程.
 
 # 委托适配器
 
@@ -160,7 +160,7 @@ app.DelegateManager.RegisterDelegateConvertor<SomeFunction>((action) =>
 });
 ```
 
-> 为了避免不必要的麻烦,以及后期热更出现问题,建议项目遵循以下几点：
+> 为了避免不必要的麻烦,以及后期热更出现问题,建议项目遵循以下几点:
 
 * 尽量避免不必要的跨域委托调用  
 * 尽量使用Action以及Func这两个系统内置万用委托类型
@@ -267,7 +267,7 @@ public class TestClass2Adapter : CrossBindingAdaptor
 
 默认情况下,`System.Reflection`命名空间中的方法,并不可能得知`ILRuntime`中定义的类型,因此无法通过`Type.GetType`等接口取得`热更DLL`里面的类型
 
-为了解决这个问题,ILRuntime额外实现了几个用于反射的辅助类：`ILRuntimeType`,`ILRuntimeMethodInfo`,`ILRuntimeFieldInfo`等
+为了解决这个问题,ILRuntime额外实现了几个用于反射的辅助类:`ILRuntimeType`,`ILRuntimeMethodInfo`,`ILRuntimeFieldInfo`等
 
 # 通过反射获取Type
 
@@ -367,7 +367,7 @@ public unsafe static StackObject* DLog(ILIntepreter __intp, StackObject* __esp, 
     //需要清理堆栈
     __intp.Free(ptr_of_this_method);
     //如果参数类型是基础类型,例如int,可以直接通过int param = ptr_of_this_method->Value获取值,
-    //关于具体原理和其他基础类型如何获取,请参考ILRuntime实现原理的文档。
+    //关于具体原理和其他基础类型如何获取,请参考ILRuntime实现原理的文档.
 			
     //通过ILRuntime的Debug接口获取调用热更DLL的堆栈
     string stackTrace = __domain.DebugService.GetStackTrance(__intp);
@@ -426,7 +426,7 @@ Assets目录中建立一个叫link.xml的XML文件,然后按照下面的格式�
 在ILRuntime中解决这个问题有两种方式
 
 一个是使用CLR绑定,把用到的泛型实例都进行CLR绑定  
-另外一个方式是在Unity主工程中,建立一个类,然后在里面定义用到的那些泛型实例的public变量。这两种方式都可以告诉IL2CPP保留这个类型的代码供运行中使用
+另外一个方式是在Unity主工程中,建立一个类,然后在里面定义用到的那些泛型实例的public变量.这两种方式都可以告诉IL2CPP保留这个类型的代码供运行中使用
 
 > 因此建议大家在实际开发中,尽量使用热更DLL内部的类作为泛型参数  
 
@@ -451,7 +451,7 @@ Release模式会比Debug模式的性能高至少2倍
 
 ## 值类型
 
-由于值类型的特殊和ILRuntime的实现原理,使用ILRuntime外部定义的值类型（例如UnityEngine.Vector3）在默认情况下会造成额外的装箱拆箱开销,以及相对应的GC Alloc内存分配。
+由于值类型的特殊和ILRuntime的实现原理,使用ILRuntime外部定义的值类型（例如UnityEngine.Vector3）在默认情况下会造成额外的装箱拆箱开销,以及相对应的GC Alloc内存分配.
 
 通过对这些值类型添加绑定器,可以大幅增加值类型的执行效率
 

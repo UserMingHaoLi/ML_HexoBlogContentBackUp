@@ -21,11 +21,11 @@ tags:
 
 > 官方建议使用`List<T>`, 说这个性能不好, 毕竟有类型强转和装箱拆箱
 
-*仅 `.NET Framework`： 对于非常大的 `ArrayList` 对象,可以通过 `enabled` `<gcAllowVeryLargeObjects>` `true` 在运行时环境中将配置元素的属性设置为,来将64位系统上的最大容量增加到`2000000000`个元素。*
+*仅 `.NET Framework`: 对于非常大的 `ArrayList` 对象,可以通过 `enabled` `<gcAllowVeryLargeObjects>` `true` 在运行时环境中将配置元素的属性设置为,来将64位系统上的最大容量增加到`2000000000`个元素.*
 
-可以使用整数索引访问此集合中的元素。 此集合中的索引从零开始。
+可以使用整数索引访问此集合中的元素. 此集合中的索引从零开始.
 
-接受 null 为有效的值。 还允许重复元素
+接受 null 为有效的值. 还允许重复元素
 
 不支持使用多维数组作为集合中的元素
 
@@ -194,7 +194,7 @@ public virtual Object this[int index] {
 
 # Adapter
 
-为特定 IList 创建 ArrayList 包装。   
+为特定 IList 创建 ArrayList 包装.   
 `static`的, 没用过.
 
 # Add()
@@ -499,7 +499,7 @@ for(int i=0; i<count; i++)
 return list;
 ```
 
-返回 `ArrayList`,其元素是指定值的副本。
+返回 `ArrayList`,其元素是指定值的副本.
 
 # Reverse
 
@@ -547,9 +547,9 @@ public virtual ArrayList GetRange(int index, int count) {
 # Synchronized
 
 Synchronized(ArrayList)	
-返回同步的（线程安全）ArrayList 包装器。
+返回同步的（线程安全）ArrayList 包装器.
 Synchronized(IList)	
-返回同步的（线程安全）IList 包装器。
+返回同步的（线程安全）IList 包装器.
 
 # ToArray
 

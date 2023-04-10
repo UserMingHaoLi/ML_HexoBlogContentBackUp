@@ -25,9 +25,9 @@ tags:
 [活动介绍][PlasticSCM_learn_Link]  
 [作业征集][plastichub_learnActivity_Link]
 
-将课程作业提交到 PlasticHub 上,就能获得 Unity 中文课堂价值 50 元代金券。
+将课程作业提交到 PlasticHub 上,就能获得 Unity 中文课堂价值 50 元代金券.
 
-成功提交作业的同学,可以在 Unity 社区里分享作业心得,并把心得链接发在 PlasticHub 活动作业征集贴中。这次有 6 门课,每门课选 6 位优秀作品,送经典款 Logo 周边。
+成功提交作业的同学,可以在 Unity 社区里分享作业心得,并把心得链接发在 PlasticHub 活动作业征集贴中.这次有 6 门课,每门课选 6 位优秀作品,送经典款 Logo 周边.
 
 * 提交作业步骤如下
 
@@ -42,13 +42,13 @@ PlasticHub Homework LearnId:123456789012345678901234
 
 * 申请周边步骤如下
 
-大家完成中文课堂(learn.u3d.cn)如下6门课程后,将使用心得和经验总结成博客文章发表在官方社区中。并将文章链接,截图以及标题回复到该问题后面
+大家完成中文课堂(learn.u3d.cn)如下6门课程后,将使用心得和经验总结成博客文章发表在官方社区中.并将文章链接,截图以及标题回复到该问题后面
 
-回复格式参考：  
+回复格式参考:  
 [文章标题]  
 [链接]  
 [截图]  
-例如： 通过Addressable + CCD实现资源更新流程  
+例如: 通过Addressable + CCD实现资源更新流程  
 https://developer.unity.cn/projects/ccd-workshop  
 [截图]    
 
@@ -58,9 +58,9 @@ https://developer.unity.cn/projects/ccd-workshop
 
 作业如下
 ```
-在分支查看器中创建新分支,改变卡丁车的材质后,将改动上传到PlasticSCM仓库中,最后将该任务分支合并到主线分支。
-项目地址：https://plastichub.unity.cn/unity-tech-cn/PlasticTutorial_Karting
-贴心提示：将项目Fork(派生)到自己组织下完成提交
+在分支查看器中创建新分支,改变卡丁车的材质后,将改动上传到PlasticSCM仓库中,最后将该任务分支合并到主线分支.
+项目地址:https://plastichub.unity.cn/unity-tech-cn/PlasticTutorial_Karting
+贴心提示:将项目Fork(派生)到自己组织下完成提交
 ```
 
 于是,我按照作业要求,将内容`Fork`到自己的组织下,并使用`UnityHub`下载打开

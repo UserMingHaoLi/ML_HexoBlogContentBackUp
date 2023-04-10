@@ -19,10 +19,10 @@ tags:
 # base
 
 `base` 关键字用于从派生类中访问基类的成员
-* 调用基类上已被其他方法重写的方法。
-* 指定创建派生类实例时应调用的基类构造函数。
+* 调用基类上已被其他方法重写的方法.
+* 指定创建派生类实例时应调用的基类构造函数.
 
-所访问的基类是类声明中指定的基类。 例如,如果指定 `class ClassB : ClassA`,则从 `ClassB` 访问 `ClassA` 的成员,而不考虑 `ClassA` 的基类。
+所访问的基类是类声明中指定的基类. 例如,如果指定 `class ClassB : ClassA`,则从 `ClassB` 访问 `ClassA` 的成员,而不考虑 `ClassA` 的基类.
 
 ```CSharp
 public class Person

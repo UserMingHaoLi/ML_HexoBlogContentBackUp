@@ -41,9 +41,9 @@ public class AGenericClass<T> where T : IComparable<T> { }
 
 <!--more-->
 
-`where` 子句还可包括基类约束。 基类约束表明用作该泛型类型的类型参数的类型具有指定的类作为基类（或者是该基类）。 该基类约束一经使用,就必须出现在该类型参数的所有其他约束之前
+`where` 子句还可包括基类约束. 基类约束表明用作该泛型类型的类型参数的类型具有指定的类作为基类（或者是该基类）. 该基类约束一经使用,就必须出现在该类型参数的所有其他约束之前
 
-某些类型不允许作为基类约束：`Object`、`Array` 和 `ValueType`。   
+某些类型不允许作为基类约束:`Object`、`Array` 和 `ValueType`.   
 在 `C# 7.3` 之前,`Enum`、`Delegate` 和 `MulticastDelegate` 也不允许作为基类约束
 
 # 类型参数的约束

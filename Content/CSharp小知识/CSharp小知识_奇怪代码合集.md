@@ -211,7 +211,7 @@ static void Main()
 }
 ```
 
-`null 合并运算符`是右结合运算符。 也就是说,是窗体的表达式
+`null 合并运算符`是右结合运算符. 也就是说,是窗体的表达式
 ```CSharp
 a ?? b ?? c
 d ??= e ??= f
@@ -351,7 +351,7 @@ var nihil = abbaab - abbaab;
 Console.WriteLine(nihil is null);  // output: True
 ```
 
-如果右侧操作数的调用列表不是左侧操作数调用列表的正确连续子列表,则该操作的结果是左侧操作数。 例如,删除不属于多播委托的委托不会执行任何操作,从而导致不变的多播委托
+如果右侧操作数的调用列表不是左侧操作数调用列表的正确连续子列表,则该操作的结果是左侧操作数. 例如,删除不属于多播委托的委托不会执行任何操作,从而导致不变的多播委托
 ```CSharp
 Action a = () => Console.Write("a");
 Action b = () => Console.Write("b");
@@ -374,7 +374,7 @@ Console.WriteLine();
 Console.WriteLine(object.ReferenceEquals(aba, unchanged));  // output: True
 ```
 
-如果左侧操作数为 null,则操作结果为 null。 如果右侧操作数为 null,则操作的结果是左侧操作数
+如果左侧操作数为 null,则操作结果为 null. 如果右侧操作数为 null,则操作的结果是左侧操作数
 ```CSharp
 Action a = () => Console.Write("a");
 
@@ -623,7 +623,7 @@ class Foo
 }
 ```
 *可以进入*  
-*.NET 运行时,是先创建出对象,然后再调用对象的构造函数。而在创建出对象时,此对象就需要被加入垃圾回收,加入垃圾回收,自然就会调用到析构函数*
+*.NET 运行时,是先创建出对象,然后再调用对象的构造函数.而在创建出对象时,此对象就需要被加入垃圾回收,加入垃圾回收,自然就会调用到析构函数*
 
 因为构造函数也不一定是一句话都没有跑的, .Net会在前面跑很多其他内容.
 
@@ -752,10 +752,10 @@ public class A : IInternalSomething
 # 一个异步流
 
 ```CSharp
-作者：「已注销」
-链接：https://www.zhihu.com/question/27421302/answer/99752969
-来源：知乎
-著作权归作者所有。商业转载请联系作者获得授权,非商业转载请注明出处。
+作者:「已注销」
+链接:https://www.zhihu.com/question/27421302/answer/99752969
+来源:知乎
+著作权归作者所有.商业转载请联系作者获得授权,非商业转载请注明出处.
 
 private static BufferBlock<User> userFlow = new BufferBlock<User>();
 

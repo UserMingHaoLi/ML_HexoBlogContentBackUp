@@ -151,7 +151,7 @@ cmd输入 `ssh-keygen -t rsa -C "Github的注册邮箱地址"`
 	repo: 刚刚github创库地址.git
 	branch: master
 
-> **特别提醒,在每个参数的`：`后都要加一个空格**
+> **特别提醒,在每个参数的`:`后都要加一个空格**
 
 *建议此次修改以下信息即可,后续信息可以搭建完毕后重新修改(需重启Hexo服务)*
 
@@ -224,7 +224,7 @@ cmd输入 `ssh-keygen -t rsa -C "Github的注册邮箱地址"`
 git clone https://github.com/theme-next/hexo-theme-next themes/next
 ```
 
-然后在站点的配置文件 `_config.yml` 中找到 `theme` 后添加：
+然后在站点的配置文件 `_config.yml` 中找到 `theme` 后添加:
 
 ```yml
 theme: next  # 配置成刚下载的next主题
