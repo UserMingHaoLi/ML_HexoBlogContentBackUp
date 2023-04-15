@@ -11,7 +11,7 @@ tags:
 	- AssetBundle
 ---
 
-![AssetBundle学习路线图]
+![1][AssetBundle学习路线图]
 
 <!--more-->
 
@@ -472,8 +472,8 @@ public static void DoCollect(bool increment = true)
 本文来自 [ML-Blog][ML-Blog_Link]
 
 <!-- 图片 -->
-[AssetBundle学习路线图]:https://github.com/UserMingHaoLi/ML_HexoBlogContentImages/blob/main/Content/AssetBundle%E4%BD%BF%E7%94%A8%E5%A4%A7%E5%85%A8/AssetBundle%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.png?raw=true `AssetBundle学习路线图`
+[AssetBundle学习路线图]:https://github.com/UserMingHaoLi/ML_HexoBlogContentImages/blob/main/Content/AssetBundle%E4%BD%BF%E7%94%A8%E5%A4%A7%E5%85%A8/AssetBundle%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.png?raw=true "AssetBundle学习路线图"
 <!-- 链接 -->
 
 <!-- 水印 -->
-[ML-Blog_Link]:https://userminghaoli.github.io/ `我的博客`
+[ML-Blog_Link]:https://userminghaoli.github.io/ "我的博客"
