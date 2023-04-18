@@ -62,7 +62,7 @@ tags:
 
 将这些顶点和线组装成三角形, 然后就可以开始处理光栅化的流程  
 裁剪屏幕外三角形, 计算三条边的方程等  
-然后送入`Resterizer`  
+然后送入`Rasterizer`  
 此步骤称为`图元组装单元(Primitive Assembler)`
 
 同一个几何体, 可以变换位置与角度.  
@@ -116,6 +116,87 @@ GPU擅长在大量数据上做相对简单的并行处理
 
 
 # 逻辑上的模块划分
+
+## 细分
+
+随需求又有新的`GeometryShader`, 相当于拆开`图元组装单元(Primitive Assembler)`  
+此Shader可以单入多出, 即一个Primitive变为多个Primitive  
+由此可将三角形移动或切成多个(自定义个数)  
+开启了GPU可处理非均匀输入输出的任务先例  
+但此Shader并非必须, 可退化为Primitive Assembler  
+
+然后, GeometryShader可以直接导出数据到内存, 这也相等于其前置工序`Early Primitive Assembler`也同时拥有这项能力  
+提供了从流水线中直接导出数据的能力  
+典型的应用场景是, 存储中间数据, 减少重复计算
+
+但是使用后发现, 性能是很低的  
+因为灵活, 硬件难以做出针对性优化, 实现的非常保守  
+硬件在执行之前甚至不知道你要处理的是三角形
+
+于是, 随着三角形细分需求的增加, 逐渐衍生出在VertexShader之后的`Tessellator`工序  
+
+* `Hull Shader` 指定图元如何细分
+  * 内部分出多少分
+  * 每条边分成多少段
+* `Tessellator`
+  * 细分算法
+* `domain Shader` 计算细分后的顶点信息
+
+这个工序也是可选的
+
+## 通用计算
+
+于是之后GPU做通用计算的能力开始大幅发展  
+最早是先渲染一个覆盖屏幕的大三角形, 在PixelShader内做并行计算  
+但是这还是单入淡出, 且需要经过整条流水线, 存在浪费, 而且学习成本也很高  
+此方向称为`GPGPU`, 即`通用图形处理器（General-purpose computing on graphics processing units)`
+
+后续催生出可多入多出, 可任意读取写入的, 不经过流水线的单元`Comppute Shader`  
+独立于流水线单独存在
+
+## 自动生成
+
+后续优化方向是, 少数入甚至不输入数据, GPU可以自行生成顶点  
+于是有了`Amplification Shader`, `Mesh Shader`  
+其中AmplificationShader负责指定执行多少次MeshShader  
+MeshShader负责产生几何体  
+此时渲染的不再是图元, 而是一小块网格, 称为`meshlet`
+
+## 光线追踪
+
+再后面就是光线追踪, 这是一条独立的流水线, 包含多个新的Shader  
+* `Ray Generation Shader` 生成光线
+* `Intersection Shader` 判定光线与物体是否相交
+* `Any Hit Shader` 光线打到物体上时是否可继续前进
+* `Closest Hit Shader` 光线打到物体的最近点计算颜色
+* `Miss Shader` 光线未打到任意点时计算颜色
+* `Callable Shader` 动态调用
+
+## 更多流水线
+
+同样的流水线扩展思路, 还可用于更多领域
+* `Tensor Core` 神经网络计算, 张量核
+* `Video Codec` 视频编码解码
+* 等...
+
+## 更多展望
+
+CPU是一个通用模块  
+GPU则有多条专用流水线, 需要有具体了解才能再程序中开发  
+目前GPU各个流水线不能互相调用, 如果有这种需要, 则需经过内存中转
+
+目前GPU有区分为图像计算(GPU)和神经网络计算(GPGPU)  
+实际上图像计算单元也可作为通用计算单元的高效补充  
+比如Rasterizer可作为高效的插值器  
+OutputMerger可作为高效的数据累加器
+
+> GPU连连看是否可能实现? 硬件层面如何处理
+
+## 小结
+
+本节讲解了GPU多重流水线的扩展过程  
+但是目前有如此之多的Shader, 很容易遇到负载均衡问题  
+而且流水线复杂度提高, 硬件的生产成本也是个问题
 
 # 部署到硬件
 
