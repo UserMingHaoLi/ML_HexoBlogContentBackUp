@@ -462,6 +462,14 @@ public static void DoCollect(bool increment = true)
 }
 ```
 
+# 整点小Tips
+
+
+1. Built-In Shader在AssetBundle模式下, 被打包到每个引用它的材质AssetBundle里, 造成包变大且多次编译的错误, 导致运行时致命的编译时间, 所以使用AssetBundle的情况要把内置Shader下载来放到工程里使用, 避免这种情况. 并且经过测试ShaderVariantsCollection记录的变体对它无效, 仍然被强行编译了.
+2. 模型导入时的默认材质, 也是Standard的, 即使设定Import Materials为false仍然在AssetBundle打包的时候会自动包含在包里, 在读取资源完成的时候就自动创建出来了, 跟1的情况一样, 导致包变大多次编译, 所以模型导入后要创建给Prefab用的新材质, 把默认材质删除掉.
+3. ShaderVariantsCollection很强大, 用好了直接省了Shader编译了
+4. 虽然很少项目直接用内置Shader, 不过一个程序天空盒就要编译几十毫秒, 注意一下还是很香的
+
 # ~~Addressable(可寻址资源)~~
 
 待续
