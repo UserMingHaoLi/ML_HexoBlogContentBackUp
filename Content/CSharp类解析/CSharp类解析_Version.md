@@ -14,12 +14,31 @@ tags:
 
 `Version` 在`DotNet`版本信息类型,在System中被广泛应用  
 
+> TODO 新版本还新增了 `IFormattable  ISpanFormattable`接口实现, 
+
 <!--more-->
 
+官方文档定义: 表示程序集、操作系统或公共语言运行时的版本号。 此类不能被继承
 
-`Version` 在`DotNet`版本信息类型,在System中被广泛应用    
-他是`Public`的, 所以外部也可以使用  
-> 是`sealed`的, 不能派生
+其参数的必要性`major.minor[.build[.revision]]`
+
+组件按约定使用，如下所示：
+* 主要：名称相同但主版本不同的程序集不可互换。 较高的版本号可能表示无法假定向后兼容性的产品发生重大重写。
+* 次要：如果两个程序集的名称和主版本号相同，但次要版本号不同，则表示具有向后兼容性的显著增强。 此较高的次要版本号可能表示产品的点版本或产品的完全向后兼容新版本。
+* 生成：生成号的差异表示对同一源的重新编译。 处理器、平台或编译器更改时，可能会使用不同的内部版本号。
+* 修订版：具有相同名称、主版本号和次要版本号但不同修订的程序集旨在完全可互换。 在修复以前发布的程序集中的安全漏洞的版本中，可能会使用更高的修订号。
+
+> 从 `.NET Framework 2.0` 开始， `MajorRevision` 和 `MinorRevision` 属性使你能够识别应用程序的临时版本，例如，可以更正问题，直到可以发布永久解决方案。 此外，`Windows NT操作系统`使用 `MajorRevision` 属性对 `Service Pack` 编号进行编码
+
+
+以下示例演示了一些最常见的方案
+*  `OperatingSystem.Version` 属性检索操作系统的版本号
+*  `Environment.Version` 属性检索有关公共语言运行时的版本信息
+*  `AssemblyName.Version` 检索程序集版本信息
+*  `ApplicationDeployment.CurrentVersion`属性检索`ClickOnce`应用程序的发布版本
+
+---
+
 
 **注意, 其`HashCode`有可能相同, 详见`GetHashCode()`函数**  
 如需使用其`HashCode`作为唯一凭证, 需统计+测试用例以防止重复  
