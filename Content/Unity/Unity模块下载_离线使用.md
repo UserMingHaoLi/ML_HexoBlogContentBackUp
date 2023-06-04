@@ -76,9 +76,20 @@ MacEditorTargetInstaller/UnitySetup-Windows-Mono-Support-for-Editor-2019.4.40f1.
 
 其内有本地安装, 部署内网包缓存等方法
 
-# VisualStudio本体和模块离线安装
+Unity 打开项目时，Unity Package Manager 会读取`项目清单文件 (1)` 以确定要在项目中加载的包。然后会向每个包（在清单中显示为依赖项）的`包注册表服务器 (2)` 发送一个请求
+
+1.  Unity 项目根文件夹下的 Packages 文件夹中找到名为 `manifest.json` 的项目清单文件
+2.  范围注册表允许 Unity 将任何自定义包注册表服务器的位置传达给 Package Manager，以便用户可以同时访问多个包集合
+    1.  在 Unity 的 Package Manager 窗口中，当您选择 `Unity Registry` 上下文时，所有在 Unity 注册表中注册的包都出现在列表视图中
+    2.  项目清单使用一个 `scopedRegistries` 属性，其中包含一个范围注册表配置对象数组
+
+# VisualStudio本体和工作负载离线安装
 
 查阅文档[Visual Studio 管理员指南](https://learn.microsoft.com/en-us/visualstudio/install/create-a-network-installation-of-visual-studio?view=vs-2022)
+
+其内有本体及其工作负载的离线安装方式
+
+
 
 # 完毕
 
