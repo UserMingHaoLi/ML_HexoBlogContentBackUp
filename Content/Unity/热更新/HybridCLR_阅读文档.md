@@ -121,6 +121,14 @@ tags:
 
 一键执行打包前必须的生成操作。
 
+* Compile Dll
+* Il2CppDef
+* LinkXml
+* AotDlls
+* MethodBridge
+* ReversePInvokeWrapper
+* AOTGenericReference
+
 ## HybridCLR 配置
 
 ### enable
