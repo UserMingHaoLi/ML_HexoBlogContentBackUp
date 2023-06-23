@@ -86,9 +86,11 @@ public string FullName => $"{FirstName} {LastName}";
 
 ```CSharp
 var first = person?.FirstName; 
+A?.B?.Do(C);
+A?.B?[C];
 ```
 
-还可以将 null 条件运算符用于数组或索引器访问. 将索引表达式中的 [] 替换为 ?[]\
+还可以将 null 条件运算符用于数组或索引器访问. 将索引表达式中的 [] 替换为 ?[]
 
 此时如果`person`为null, 返回null, 而不是引发空引用异常.
 
@@ -136,6 +138,10 @@ private Dictionary<int, string> webErrors = new Dictionary<int, string>
 ```
 
 类似于集合初始化访问器, 不过这次是字典.
+
+实现 `IEnumerable` 的集合类型  
+如果集合有合适的 `Add` 方法均可如此初始化  
+每一行实际相当于调用一次`Add`
 
 ## Catch/Finally 块中的 Await
 

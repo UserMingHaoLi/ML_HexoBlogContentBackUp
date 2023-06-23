@@ -219,8 +219,9 @@ Console.WriteLine($"Distance to {destination} is {distance} kilometers.");
 现在使用`_`关键字表示你并不需要这个元. 就叫弃元  
 ~~实际上是声明了一个隐式的只写变量帮你藏起来了~~  
 并不是,编辑器现在提供了优化,不会实际声明这个变量.  
-*但是只在同时又两个`_`在场的时候生效,如果只有一个,还是会声明一个名为`_`的变量,这是因为一个`_`是可以被程序元定义的合法名称*  
+*但是只在同时有两个`_`在场的时候生效,如果只有一个,还是会声明一个名为`_`的变量,这是因为一个`_`是可以被程序定义的合法名称*  
 **如果上下文中有定义过如`int _ = 0;`这种就很麻烦了**
+~~谁会取这种名字~~
 
 ```csharp
 var (_,_,_,pop1,_,pop2) = QueryCityDataForYears("New York City", 1960, 2010);
@@ -229,6 +230,8 @@ var (_,_,_,pop1,_,pop2) = QueryCityDataForYears("New York City", 1960, 2010);
 这样你就只拿到了你想要的两个元.
 
 > 可以在7.0以前的版本中使用元组和弃元,只要编译器支持即可,但是效果会差一点.*不推荐吧*
+
+> 语法糖还是CLR变更, 是编辑器支持还是运行时支持, 决定了某些特性是否可以支持过去的版本
 
 ## 模式匹配
 
@@ -272,7 +275,7 @@ public static int SumPositiveNumbers(IEnumerable<object> sequence)
                     sum += (item > 0) ? item : 0;
                 break;
             }
-            case int n when n > 0://新的when语法,后面将
+            case int n when n > 0://新的when语法,后面讲
                 sum += n;
                 break;
             case null:
@@ -296,7 +299,7 @@ switch (num)
         break;
     case int n when n > 0:
         break;
-    case int n when n <= 0: //同时判断两个`int`,但是又when语句做筛选条件
+    case int n when n <= 0: //同时判断两个`int`,但是有when语句做筛选条件
         break;
 }
 ```
@@ -329,6 +332,10 @@ public static IEnumerable<char> AlphabetSubset3(char start, char end)
 
 > 这对于`async`方法很有用,可以先检查,再开始真正的异步.  
 > ~~本地函数如果很简单,~~也可以使用lambda表达式
+
+> 注意，当本地函数捕获封闭范围中的变量时，本地函数将作为委托类型实现
+
+> 不捕获参数的本地函数性能比匿名委托稍好一些
 
 ## 更多 expression-bodied 成员
 
@@ -389,7 +396,7 @@ public string Name
 
 ## 通用的异步返回类型
 
-你可与在`async`和`await`静态中返回其他类型了
+你可以在`async`和`await`静态中返回其他类型了
 
 ## 数字文本语法改进
 
@@ -500,8 +507,9 @@ r可能是arr或otherArr的第一个参数的引用.~~很快,但是不要滥用~
 static void M(S arg);
 static void M(in S arg);
 ```
-`in`关键字表示只读引用  
-> 微软文档说不推荐使用~~那你为啥要做出来~~
+`in`关键字表示只读引用 
+
+> 性能敏感的结构可以考虑
 
 # 完毕
 

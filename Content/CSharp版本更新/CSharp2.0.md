@@ -114,6 +114,8 @@ public T GetNode<T, T2>(T2 index) where T : class where T2 : class
 但是引用类型的栈上空间是相同的, 都是一个引用而已, 所以只需要替换引用地址, 即可达成更换引用泛型的目的.  
 最终结果其实还是因为CIL直接面对内存, 使用指针实现这种操作.
 
+> 可知泛型是使用时候生成的, 也就是`JIT`, 但类似iOS平台, 或il2cpp编译都仅支持`AOT`, 也就是对于泛型支持度不高, 通常都需要特殊处理, 常见的有提前声明, 解释执行, 补充元数据
+
 # 分部类型
 
 使用关键字`partial`可以用于定义分布的类, 接口, 方法.  
@@ -145,20 +147,19 @@ public partial class Employee
 ```
 
 ```CSharp
-class Container
+// Definition in file1.cs
+partial void OnNameChanged();
+
+// Implementation in file2.cs
+partial void OnNameChanged()
 {
-    partial class Nested
-    {
-        void Test() { }
-    }
-    partial class Nested
-    {
-        void Test2() { }
-    }
+  // method body
 }
 ```
 
 上面两段代码表示了如何显示使用分布类和分布方法.
+
+> 分布方法来自C#3.0
 
 # 匿名方法
 
@@ -446,6 +447,8 @@ public string FirstName
 由于定义`FirstName`时, 指定了其访问修饰符为`public`,默认get,set都是这个级别
 
 所以不能定义两个方法都为其他级别, 只能定义一个或者都不定义.
+
+> 实际上是封装了两个方法, 性能及其敏感场合还是用字段
 
 # 方法组转换（委托）
 

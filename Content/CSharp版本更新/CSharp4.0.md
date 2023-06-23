@@ -39,6 +39,8 @@ dynamic 的实现是基于`IDynamicObject`接口和`DynamicObject`抽象类.而�
 
 > `DLR(Dynamic Language Runtime)`提供了`Microsoft.CSharp.RuntimeBinder`命名空间
 
+动态绑定存在出错的可能性，不过同时也为你提供了强大的语言功能。
+
 ## 命名参数/可选参数
 
 ### 命名参数
@@ -67,6 +69,8 @@ public void ExampleMethod(int required, string optionalstr = "default string",in
 anExample.ExampleMethod(3, optionalint: 4);
 ```
 
+> 很多编译器(插件)已支持对非命名参数显示参数名称, 填写参数时自动使用命名参数等功能
+
 ## 泛型协变和逆变
 
 上次讲了.
@@ -74,6 +78,9 @@ anExample.ExampleMethod(3, optionalint: 4);
 其实,做这些本质上都是要在保证运行时类型安全的前提下提高代码的可重用性和灵活性
 
 > 要理解这些,只要记住**宽进严出**, 进入参数可以使用子类,出去的返回值要明确.
+
+有规则, 有限制, 才能收束,预测, 然后才能优化  
+如果所有类型都是obj, 甚至是直接是二进制, 各种开发效率提升, 性能优化都无从谈起
 
 ## 嵌入的互操作类型
 

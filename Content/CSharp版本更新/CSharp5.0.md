@@ -24,7 +24,7 @@ tags:
 
 ## 异步成员
 
-`await`和`async`关键字
+`await`和`async`关键字, 这是`.Net`的核心功能
 
 `async`是访问修饰符, 表示这是一个异步方法.
 
@@ -57,11 +57,13 @@ public class Example
 > 任何异步操作都可以使用,多用于Task<>  
 > 好东西,可以用来做PRC
 
+本质是编译成状态机一步步向下执行
+
 ## 调用方信息特性
 
 可以通过特性获得调用自己的其他程序信息.
 
-```
+```CSharp
 public void DoProcessing()
 {
     TraceMessage("Something happened.");
@@ -79,13 +81,28 @@ public void TraceMessage(string message,
 }
 ```
 
+```CSharp
+public static void ValidateArgument(string parameterName, bool condition, [CallerArgumentExpression("condition")] string? message=null)
+{
+    if (!condition)
+    {
+        throw new ArgumentException($"Argument failed validation: <{message}>", parameterName);
+    }
+}
+public void Operation(Action func)
+{
+    ValidateArgument(nameof(func), func is not null);
+}
+```
+
 |特性| 	描述 |	类型|
 |---|---|---|
 |CallerFilePathAttribute |	包含调用方的源文件的完整路径. 这是编译时的文件路径. |String
 |CallerLineNumberAttribute |	源文件中调用方法的行号. 	|Integer
 |CallerMemberNameAttribute |	调用方的方法或属性名称. 请参阅本主题后面的成员名称. 	|String
+|CallerArgumentExpressionAttribute|	参数表达式的字符串表示形式|	String
 
-
+调用方信息特性让你可以轻松检索上下文的信息，不需要采用大量样本反射代码。 这在诊断和日志记录任务中也很有用
 
 # 完毕
 

@@ -25,7 +25,7 @@ int Myint { get; set;}
 ```
 
 以更简单的方式生成一条属性, 其背后的字段交给编辑器,  
-这种属性由于没有编写代码, 默认实现和一下代码相当
+这种属性由于没有编写代码, 默认实现和以下代码相当
 
 ```CSharp
 int myint;
@@ -67,11 +67,11 @@ var v = new { Amount = 108, Message = "Hello" };
 用来初始化属性的表达式不能为 null、匿名函数或指针类型.
 
 编辑器为我们创建一个隐形的类.  
-再CLI看来, 它和我们自己写的完全体类是一样的.
+在CLI看来, 它和我们自己写的完全体类是一样的.
 
 # 查询表达式
 
-也就是大名鼎鼎的`Linq`, 看本段之前, 先看完后面的其他所有.
+也就是大名鼎鼎的`Linq`, 如果看不懂本段, 建议先看完后面的其他所有.
 
 查询表达式实际上是很多扩展方法组成的用于表述数据源组织形态的一系列方法.  
 微软还为他做了些关键字, 让他看起来像是SQL一样.  
@@ -145,7 +145,7 @@ private static void ShowValue(Func<int,int> op)
 # 表达式树
 
 表达式树其实就是上面说的那个`Action<string> action = a => Console.WriteLine(a);`  
-因为`lambda`表达式只包含了左半部分, 右半部分的声明和中间的赋值, 与他一起组合成为一个表达式树.  
+因为`lambda`表达式只包含了右半部分, 左半部分的声明和中间的赋值, 与他一起组合成为一个表达式树.  
 也就是匿名函数赋值.
 
 当然 , 还可以使用`Expression`类来动态拼凑表达式.  
@@ -155,7 +155,7 @@ private static void ShowValue(Func<int,int> op)
 # 扩展方法
 
 一个语法糖, 将你自己写的一个静态方法放置到已经完成的类中.  
-比如, 我想要一个 `double.TOInt()`这么一个方法, 实际是没有的.  
+比如, 我想要一个 `double.ToInt()`这么一个方法, 实际是没有的.  
 这时候, 就可以使用扩展方法, 使自己写的方法像原生方法一样使用.
 
 ```CSharp
@@ -177,6 +177,8 @@ d.ToInt();
 
 > 对于CIL来说, 你仍然是调用的静态方法. 编辑器的障眼法而已.  
 与接口或类方法具有相同名称和签名的扩展方法永远不会被调用
+
+组合使用查询表达式和扩展方法让各种数字变得智能多了
 
 # 隐式类型本地变量
 
@@ -243,6 +245,70 @@ var identity = new Matrix
     [2, 1] = 0.0,
     [2, 2] = 1.0,
 };
+```
+
+> 注意: 所有声明过索引器的类型都支持此方式设置索引器, 包括自定义类型
+
+实现 `IEnumerable` 的集合类型  
+如果集合有合适的 `Add` 方法
+
+```CSharp
+List<Cat?> moreCats = new List<Cat?>
+{
+    new Cat{ Name = "Furrytail", Age=5 },
+    new Cat{ Name = "Peaches", Age=4 },
+    null
+};
+```
+
+下面是一个自定义类型的例子
+```CSharp
+MyClass m = new MyClass()
+{
+    1,
+    5,//实际是调用Add
+};
+class MyClass:IEnumerable<int>
+{
+    public void Add(int a)
+    {
+
+    }
+    public IEnumerator<int> GetEnumerator()
+    {
+        throw new NotImplementedException();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        throw new NotImplementedException();
+    }
+}
+```
+
+如果声明只读的集合, 也可以赋值, 因为只读只针对声明单位本身, 还是可以正常调用其内方法的
+
+```CSharp
+public class CatOwner
+{
+    public IList<Cat> Cats { get; } = new List<Cat>();
+}
+CatOwner owner = new CatOwner
+{
+    Cats =
+    {
+        new Cat{ Name = "Sylvester", Age=8 },
+        new Cat{ Name = "Whiskers", Age=2 },
+        new Cat{ Name = "Sasha", Age=14 }
+    }
+};
+```
+等价于
+```CSharp
+CatOwner owner = new CatOwner();
+owner.Cats.Add(new Cat{ Name = "Sylvester", Age=8 });
+owner.Cats.Add(new Cat{ Name = "Whiskers", Age=2 });
+owner.Cats.Add(new Cat{ Name = "Sasha", Age=14 });
 ```
 
 [link1]: https://docs.microsoft.com/zh-cn/dotnet/csharp/expression-trees "表达式树"
