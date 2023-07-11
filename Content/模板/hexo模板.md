@@ -1,7 +1,7 @@
 ---
 title: hexo模板
 date: 2021-03-12 22:52:00
-updated: 2021-08-06 00:35:00
+updated: 2023-07-11 00:35:00
 id: ml-20210415-213300-g1
 categories:
 	- Hexo
@@ -16,7 +16,7 @@ tags:
 <!--more-->
 
 <!-- 
-ml-20230618-233800-g193
+ml-20230711-223500-g194
 每次使用自觉+1.
 TODO https://blog.uwa4d.com/archives/USparkle_RoadMap.html 上线路径图
 
